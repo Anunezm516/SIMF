@@ -1,0 +1,107 @@
+﻿
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+    @using Microsoft.AspNetCore.Http
+
+    <div data-simplebar class="h-100">
+
+        @{
+            var menu = Newtonsoft.Json.JsonConvert.DeserializeObject<List<FRIO.MAR.APPLICATION.CORE.DTOs.AppServices.Menu>>((@Context.Session.GetString("Menu") ?? ""));
+            //int IdRol = @Context.Session.GetInt32("IdRol") ?? 0;
+
+            string url = "";
+            string urlBase = @Url.Action("Index", "Dashboard");
+            if (urlBase != "/")
+            {
+                urlBase += "/";
+            }
+        }
+        @{
+            var userClaim = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.UserData);
+            var user = Newtonsoft.Json.JsonConvert.DeserializeObject<FRIO.MAR.APPLICATION.CORE.DTOs.AppServices.LoginAppResultDto>(userClaim.Value);
+        }
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+                @if (menu != null && menu.Any())
+                {
+                    @*<li class="mm-active">
+                            <a asp-controller="Dashboard" asp-action="Index" class="waves-effect">
+                                <i class="mdi mdi-google-analytics"></i>
+                                <span>Tablero</span>
+                            </a>
+                        </li>
+
+                        <li class="mm-active">
+                            <a asp-controller="Profile" asp-action="Index" class="waves-effect">
+                                <i class="fas fa-user"></i>
+                                <span>Mi Cuenta</span>
+                            </a>
+                        </li>*@
+
+                    @foreach (var item in menu)
+                    {
+                        url = urlBase + item.Url;
+                        if (item.SubMenu.Count() == 0)
+                        {
+                            <li>
+                                <a href="@url" class="waves-effect">
+                                    <i class="@item.Icon"></i>
+                                    <span>@item.Label</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="@item.Icon"></i>
+                                    <span>@item.Label</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    @foreach (var subitem in item.SubMenu)
+                                    {
+                                        url = urlBase + subitem.Url;
+                                        @if (subitem.SubMenu.Count() == 0)
+                                        {
+                                            <li id="id-li-100">
+                                                <a href="@url" class="waves-effect">
+                                                    <span>@subitem.Label</span>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                                    <span>@subitem.Label</span>
+                                                </a>
+                                                <ul class="sub-menu" aria-expanded="true">
+                                                    @foreach (var subitem2 in subitem.SubMenu)
+                                                    {
+                                                        url = urlBase + subitem2.Url;
+                                                        <li>
+                                                            <a href="@url" class="waves-effect">
+                                                                <span>@subitem2.Label</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+                    }
+                }
+            </ul>
+
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->

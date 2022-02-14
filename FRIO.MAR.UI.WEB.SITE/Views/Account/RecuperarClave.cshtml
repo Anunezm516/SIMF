@@ -1,0 +1,97 @@
+﻿@model FRIO.MAR.UI.WEB.SITE.Models.UsuarioRecuperaClave
+
+@using FRIO.MAR.APPLICATION.CORE.Constants;
+@{
+    ViewBag.Title = "Recuperar Clave";
+    Layout = "~/Views/Shared/_BlankLayout.cshtml";
+}
+
+<div class="account-pages my-5 pt-sm-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card overflow-hidden">
+                    <div class="bg-primary bg-soft">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="text-primary p-4">
+                                    <h5 class="text-primary">Welcome Back !</h5>
+                                    <p>Sign in to continue to Skote.</p>
+                                </div>
+                            </div>
+                            <div class="col-5 align-self-end">
+                                <img src="~/assets/images/profile-img.png" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="login-wrapper">
+                        <div class="popup-header" style="background: #1D76BB;">
+                        </div>
+                        <div class="popup-header" style="background: #B1D137;color:white;padding: 5px 5px 5px 5px;text-align:center">
+                            <span class="text-semibold">
+                                Recuperar Contraseña
+                            </span>
+                        </div>
+                        <br />
+                        <form asp-action="RecuperarClave" method="post" autocomplete="off">
+                            <div class="p-2">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Ingrese el usuario
+                                    </label>
+                                    <div ID="UpdatePanel4">
+                                        <input type="text" asp-for="Usuario" Class="form-control" placeholder="Usuario" required>
+                                        <span asp-validation-for="Usuario" class="text-danger"></span>
+                                    </div>
+                                    <span class="glyphicon glyphicon-lock form-control-feedback" />
+                                </div>
+                                <br />
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Ingrese su correo
+                                    </label>
+                                    <div ID="UpdatePanel4">
+                                        <input type="email" asp-for="CorreoElectronico" Class="form-control" placeholder="Correo Electronico" required>
+                                        <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                                    </div>
+                                    <span class="glyphicon glyphicon-lock form-control-feedback" />
+                                </div>
+                                <br />
+                                <div class='form-group text-center'>
+                                    <div class="row">
+                                        <div class="form-group text-center">
+                                            <button Id="BtnConfirmar" type="submit" class="btn btn-info btn-block btn-login">Enviar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 8pt; padding-top: 15px; color: #000000; text-align: center;">
+                                    
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 text-center">
+                <div>
+                    <p>
+                        <partial name="../Shared/_footer" />
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?hl=es&onload=onloadCallback&render=explicit" async defer></script>
+
+    @Html.Raw(TempData["msg"])
+}
