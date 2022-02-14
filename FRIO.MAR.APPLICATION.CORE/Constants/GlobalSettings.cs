@@ -18,9 +18,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Contants
 
         public static string TelegramToken { get; set; }
 
-        public static string PortalSoporteUrl { get; set; }
-        public static string PortalPymeUrl { get; set; }
-        public static string PortalNominaUrl { get; set; }
 
         public static int NumeroIntentosEnvioBloqueo { get; set; }
     }

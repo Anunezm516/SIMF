@@ -16,6 +16,8 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; }
         public virtual DbSet<AccesoUsuario> AccesoUsuario { get; set; }
+        public virtual DbSet<Parametros> Parametros { get; set; }
+
 
         partial void OnModelCreatingPartialSeguridad(ModelBuilder modelBuilder) 
         {
@@ -169,6 +171,46 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
                     .HasMaxLength(5)
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<Parametros>(entity =>
+            {
+                entity.HasKey(e => e.Codigo);
+
+                entity.ToTable("Parametros");
+
+                entity.Property(e => e.Codigo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaEliminacion).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.UsuarioCreacion)
+                    .IsRequired()
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsuarioEliminacion)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsuarioModificacion)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Valor)
+                    .IsRequired()
+                    .IsUnicode(false);
+            });
+
 
         }
 

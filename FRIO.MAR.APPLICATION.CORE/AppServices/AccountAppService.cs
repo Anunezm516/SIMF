@@ -4,6 +4,8 @@ using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Utilities;
 using GS.TOOLS;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,17 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 {
     public class AccountAppService : IAccountAppService
     {
+        private readonly IAccountRepository _accountRepository;
+        private readonly IRolRepository _rolRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
+
+        public AccountAppService(IRolRepository rolRepository, IAccountRepository accountRepository, IUsuarioRepository usuarioRepository)
+        {
+            _rolRepository = rolRepository;
+            _accountRepository = accountRepository;
+            _usuarioRepository = usuarioRepository;
+        }
+
         public MethodResponseDto CambiarPassword(long id, string ClaveActual, string ClaveNueva, string ClaveNuevaConfirma, bool EsCorreoRecuperacion)
         {
             throw new NotImplementedException();
@@ -33,8 +46,8 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 string error = null;
                 responseDto.Mensaje = AppConstants.MensajeUsuarioLogin;
 
-                /*
-                Spusuario usuario = _accountRepository.GetFirstOrDefault(x => x.Usuario == username && (x.Estado == ((int)EstadoUsuario.Activo) || x.Estado == ((int)EstadoUsuario.Bloqueado)));
+                
+                Usuario usuario = _accountRepository.GetFirstOrDefault(x => x.Username == username && (x.Estado == ((int)EstadoUsuario.Activo) || x.Estado == ((int)EstadoUsuario.Bloqueado)));
                 if (usuario == null) return responseDto;
 
                 if (usuario.Estado == ((int)EstadoUsuario.Bloqueado))
@@ -61,7 +74,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     return responseDto;
                 }
 
-                var resultVentana = _loginQueryService.ConsultarVentana(usuario.IdUsuario, ref error);
+                var resultVentana = _accountRepository.ConsultarVentana(usuario.IdUsuario, ref error);
                 var roles = _rolRepository.GetRolesUsuario(usuario.IdUsuario);
 
                 var correoAdmin = _usuarioRepository.GetUsuariosAdministrador().Select(c => c.CorreoElectronico);
@@ -69,7 +82,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 var login = new LoginAppResultDto
                 {
                     IdUsuario = usuario.IdUsuario,
-                    Usuario = usuario.Usuario,
+                    Usuario = usuario.Username,
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Correo = usuario.CorreoElectronico,
@@ -91,35 +104,35 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 usuario.FechaUltimaConexion = fechaActual;
                 usuario.IntentosFallidos = 0;
-                */
+               
 
                 var acceso = new AccesoUsuario
                 {
-                    //Fecha = usuario.FechaUltimaConexion ?? fechaActual,
-                    //IdUsuario = usuario.IdUsuario,
+                    Fecha = usuario.FechaUltimaConexion ?? fechaActual,
+                    IdUsuario = usuario.IdUsuario,
                     Ip = ip,
                     SitioWeb = DomainConstants.COMPONENTE_NAME
                 };
 
-                //_accountRepository.Update(usuario);
-                //_accountRepository.Save();
+                _accountRepository.Update(usuario);
+                _accountRepository.Save();
 
-                var login = new LoginAppResultDto
-                {
-                    Nombre = "Bolivar",
-                    Apellido = "Cardenas",
-                    Correo = "bolivar.cardenas@gmail.com",
-                    CorreosAdministrador = "",
-                    FechaUltimaConexion = Utilities.Utilidades.GetHoraActual(),
-                    ForzarCambioClave = false,
-                    IdUsuario = 1,
-                    IPLogin = "",
-                    Menu = new List<Menu>(),
-                    Rol =  ((int)Roles.SuperAdministrador),
-                    TimeZoneId = "",
-                    Usuario = "bolivar.cardenas",
-                    VentanasActivasConcat = ""
-                };
+                //var login = new LoginAppResultDto
+                //{
+                //    Nombre = "Bolivar",
+                //    Apellido = "Cardenas",
+                //    Correo = "bolivar.cardenas@gmail.com",
+                //    CorreosAdministrador = "",
+                //    FechaUltimaConexion = Utilities.Utilidades.GetHoraActual(),
+                //    ForzarCambioClave = false,
+                //    IdUsuario = 1,
+                //    IPLogin = "",
+                //    Menu = new List<Menu>(),
+                //    Rol =  ((int)Roles.SuperAdministrador),
+                //    TimeZoneId = "",
+                //    Usuario = "bolivar.cardenas",
+                //    VentanasActivasConcat = ""
+                //};
 
                 responseDto.Data = login;
                 responseDto.Estado = true; // _accountRepository.RegistrarAccesoUsuario(acceso);

@@ -13,6 +13,8 @@ using NLog;
 using FRIO.MAR.APPLICATION.CORE.Parameters;
 using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.AppServices;
+using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 
 namespace FRIO.MAR.UI.WEB.SITE.Extensions
 {
@@ -20,7 +22,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
     {
         public static void AddRepositorys(this IServiceCollection services)
         {
-
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IRolRepository, RolRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUtilidadRepository, UtilidadRepository>();
+            
         }
 
         public static void AddServices(this IServiceCollection services)

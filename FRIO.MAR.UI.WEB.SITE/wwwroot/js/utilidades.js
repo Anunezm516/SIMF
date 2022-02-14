@@ -67,7 +67,7 @@ function MensajeGrowlSwal(Mensaje) {
     DetenerLoading();
     Swal.fire({
         icon: 'error',
-        title: 'EDOCPYME',
+        title: 'SIFM',
         html: Mensaje,
         type: "error",
         confirmButtonText: 'OK',
