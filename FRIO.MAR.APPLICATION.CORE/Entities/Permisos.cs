@@ -11,7 +11,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
     {
         public Permisos()
         {
-            SprolPermiso = new HashSet<RolPermiso>();
+            RolPermiso = new HashSet<RolPermiso>();
         }
 
         public long IdPermiso { get; set; }
@@ -30,6 +30,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public string NombreAbreviado { get; set; }
         public string Icono { get; set; }
 
-        public virtual ICollection<RolPermiso> SprolPermiso { get; set; }
+        public virtual ICollection<RolPermiso> RolPermiso { get; set; }
     }
 }

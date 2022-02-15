@@ -1,0 +1,94 @@
+﻿@model List<FRIO.MAR.APPLICATION.CORE.DTOs.AppServices.PermisoAppResultDto>
+
+@{
+    ViewBag.Title = "Permisos";
+    ViewBag.pTitle = "Permisos";
+    ViewBag.pageTitle = "Configuración";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-body">
+        <p>
+            <a class="btn btn-primary" asp-controller="Permisos" asp-action="Registrar">
+                Nuevo
+            </a>
+        </p>
+
+        <table class="table table-bordered table-responsive table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th>Acción</th>
+                    <th>Codigo</th>
+                    <th>NombreAbreviado</th>
+                    <th>Url</th>
+                    <th>Icono</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-dark" asp-controller="Permisos" asp-action="Registrar" asp-route-Id="@item.Id">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-eliminar" value="@item.Id">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        @item.Codigo
+                    </td>
+                    <td>
+                        @item.NombreAbreviado
+                    </td>
+
+                    <td >
+                        @item.Url
+                    </td>
+                    <td class="text-center">
+                        @if (!string.IsNullOrEmpty(@item.Icono))
+                        {
+                            <span class="badge badge-info"><i class="@item.Icono fa-2x"></i></span>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+<script>
+        $(document).ready(function () {
+            var table = $(".table").DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                "pageLength": 5,
+                "columnDefs": [
+                    {
+
+                    }
+                ]
+            });
+
+            $(".btn-eliminar").click(function () {
+                var id = $(this).attr("value");
+                ConfirmacionEliminar("@Url.Action("Eliminar", "Permisos")", '@Url.Action("Index", "Permisos")', { Id: id } );
+            });
+        });
+
+    
+</script>
+    @Html.Raw(TempData["msg"])
+}

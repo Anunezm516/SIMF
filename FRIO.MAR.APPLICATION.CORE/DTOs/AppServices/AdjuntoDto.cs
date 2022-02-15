@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
+{
+    public class AdjuntoDto
+    {
+        public long Id { get; set; }
+        public string Nombre { get; set; }
+        public string Archivo { get; set; }
+        public string Ruta { get; set; }
+        public string Identificador { get; set; }
+    }
+}

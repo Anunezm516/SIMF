@@ -1,5 +1,7 @@
 ﻿
 using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Entities;
+using FRIO.MAR.APPLICATION.CORE.Utilities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -32,10 +34,10 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
         {
 
         }
-        /*
-        public UsuariosAppResultDto(Spusuario usuario, List<SpusuarioRol> usuarioRol)
+        
+        public UsuariosAppResultDto(Usuario usuario, List<UsuarioRol> usuarioRol)
         {
-            Sprol rol = null;
+            Rol rol = null;
 
             if (usuarioRol != null && usuarioRol.Any())
             {
@@ -47,12 +49,12 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
 
             IdUsuario = Crypto.CifrarId(usuario.IdUsuario);
             Nombre = usuario.Nombre;
-            Usuario = usuario.Usuario;
+            Usuario = usuario.Username;
             CorreoElectronico = usuario.CorreoElectronico;
             Apellido = usuario.Apellido;
             Telefono = usuario.Telefono;
             IdTelegram = usuario.IdTelegram;
         }
-    */
+    
     }
 }

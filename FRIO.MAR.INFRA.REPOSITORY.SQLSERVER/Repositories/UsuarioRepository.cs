@@ -59,16 +59,16 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         public List<Usuario> ConsultarUsuarios()
         {
             return _context.Usuario
-                .Include(x => x.SpusuarioRol)
-                .Include(x => x.SpusuarioRol).ThenInclude(x => x.IdRolNavigation)
+                .Include(x => x.UsuarioRol)
+                .Include(x => x.UsuarioRol).ThenInclude(x => x.IdRolNavigation)
                 .Where(x => x.Estado != ((int)EstadoUsuario.Eliminado)).ToList();
         }
 
         public Usuario ObtenerUsuario(long id)
         {
             return _context.Usuario
-                .Include(x => x.SpusuarioRol)
-                .Include(x => x.SpusuarioRol).ThenInclude(x => x.IdRolNavigation)
+                .Include(x => x.UsuarioRol)
+                .Include(x => x.UsuarioRol).ThenInclude(x => x.IdRolNavigation)
                 .Where(x => x.IdUsuario == id && x.Estado != ((int)EstadoUsuario.Eliminado)).FirstOrDefault();
         }
 

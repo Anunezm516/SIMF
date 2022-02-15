@@ -1,4 +1,5 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
+using FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using System.Collections.Generic;
 

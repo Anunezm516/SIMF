@@ -1,0 +1,79 @@
+﻿
+
+@model IEnumerable<FRIO.MAR.APPLICATION.CORE.DTOs.AppServices.UsuariosAppResultDto>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+@{
+    ViewBag.Title = "Usuarios";
+    ViewBag.pTitle = "Usuarios";
+    ViewBag.pageTitle = "Index";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Nuevo</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>@Html.DisplayNameFor(model => model.NombreRol)</th>
+                    <th>@Html.DisplayNameFor(model => model.Usuario)</th>
+                    <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                    <th>@Html.DisplayNameFor(model => model.Apellido)</th>
+                    <th>@Html.DisplayNameFor(model => model.CorreoElectronico)</th>
+                    <th>@Html.DisplayNameFor(model => model.Telefono)</th>
+                    <th>@Html.DisplayNameFor(model => model.IdTelegram)</th>
+                </tr>
+            </thead>
+            <thebody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.IdUsuario" class="btn btn-dark"><i class="fa fa-edit"></i></a>
+                            <button type="button" class="btn btn-danger btn-eliminar" value="@item.IdUsuario"><i class="fa fa-trash"></i></button>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.NombreRol)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Usuario)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CorreoElectronico)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IdTelegram)</td>
+                    </tr>
+                }
+            </thebody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            var table = $(".table").DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                "pageLength": 6,
+                "columnDefs": [
+                    {
+
+                    }
+                ]
+            });
+
+            $(".btn-eliminar").click(function () {
+                var id = $(this).attr("value");
+                console.log(id)
+                ConfirmacionEliminar("@Url.Action("Eliminar", "Usuarios")", '@Url.Action("Index", "Usuarios")', { Id: id } );
+            });
+        });
+    </script>
+    @Html.Raw(TempData["msg"])
+}

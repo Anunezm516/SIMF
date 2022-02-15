@@ -1,0 +1,27 @@
+﻿
+using FRIO.MAR.APPLICATION.CORE.Constants;
+using System.ComponentModel.DataAnnotations;
+
+namespace FRIO.MAR.UI.WEB.SITE.Models
+{
+    public class PermisoModel
+    {
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        public string NombreAbreviado { get; set; }
+
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        public long Codigo { get; set; }
+
+        public string Icono { get; set; }
+
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        public string Descripcion { get; set; }
+
+        public string Url { get; set; }
+
+        public long? IdPadre { get; set; }
+        public string Id { get; set; }
+
+        
+    }
+}

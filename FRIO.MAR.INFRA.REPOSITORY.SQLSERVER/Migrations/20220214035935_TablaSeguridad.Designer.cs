@@ -207,7 +207,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("IdRol")
-                        .HasName("PK__SPRol__2A49584CB35FDE7B");
+                        .HasName("PK__Rol__2A49584CB35FDE7B");
 
                     b.ToTable("Rol");
                 });
@@ -361,27 +361,27 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.RolPermiso", b =>
                 {
                     b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Permisos", "IdPermisoNavigation")
-                        .WithMany("SprolPermiso")
+                        .WithMany("RolPermiso")
                         .HasForeignKey("IdPermiso")
-                        .HasConstraintName("FK__SPRolPerm__IdPer__3F466844");
+                        .HasConstraintName("FK__RolPerm__IdPer__3F466844");
 
                     b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Rol", "IdRolNavigation")
-                        .WithMany("SprolPermiso")
+                        .WithMany("RolPermiso")
                         .HasForeignKey("IdRol")
-                        .HasConstraintName("FK__SPRolPerm__IdRol__3E52440B");
+                        .HasConstraintName("FK__RolPerm__IdRol__3E52440B");
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.UsuarioRol", b =>
                 {
                     b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Rol", "IdRolNavigation")
-                        .WithMany("SpusuarioRol")
+                        .WithMany("UsuarioRol")
                         .HasForeignKey("IdRol")
-                        .HasConstraintName("FK__SPUsuario__IdRol__3C69FB99");
+                        .HasConstraintName("FK__Usuario__IdRol__3C69FB99");
 
                     b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Usuario", "IdUsuarioNavigation")
-                        .WithMany("SpusuarioRol")
+                        .WithMany("UsuarioRol")
                         .HasForeignKey("IdUsuario")
-                        .HasConstraintName("FK__SPUsuario__IdUsu__3B75D760");
+                        .HasConstraintName("FK__Usuario__IdUsu__3B75D760");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,4 @@
-﻿namespace FRIO.MAR.APPLICATION.CORE.DTOs.Repositories
+﻿namespace FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices
 {
     public sealed class VentanaLoginQueryDto
     {

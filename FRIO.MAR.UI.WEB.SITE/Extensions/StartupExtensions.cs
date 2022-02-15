@@ -15,6 +15,10 @@ using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.AppServices;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.DomainServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices;
+using FRIO.MAR.INFRA.QUERY.QueryServices;
 
 namespace FRIO.MAR.UI.WEB.SITE.Extensions
 {
@@ -24,6 +28,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IRolRepository, RolRepository>();
+            services.AddScoped<IPermisoRepository, PermisoRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUtilidadRepository, UtilidadRepository>();
             
@@ -33,6 +38,19 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
         {
             services.AddScoped<IUsuarioAppService, UsuarioAppService>();
             services.AddScoped<IAccountAppService, AccountAppService>();
+            services.AddScoped<IMailDomainService, MailDomainService>();
+            services.AddScoped<IPermisoAppService, PermisoAppService>();
+
+
+        //    private readonly IRolQueryService _rolQueryService;
+        //private readonly IRolRepository _rolRepository;
+        //private readonly IPortalQueryService _portalQueryService;
+
+            services.AddScoped<IPortalQueryService, PortalQueryService>();
+            services.AddScoped<IRolQueryService, RolQueryService>();
+            services.AddScoped<IUsuarioAppService, UsuarioAppService>();
+            services.AddScoped<IRolAppService, RolAppService>();
+            services.AddScoped<IUsuarioQueryService, UsuarioQueryService>();
         }
 
         public static void AddServicesMediate(this IServiceCollection services, IConfiguration Configuration)

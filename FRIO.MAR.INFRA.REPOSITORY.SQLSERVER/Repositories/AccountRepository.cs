@@ -1,5 +1,6 @@
 ﻿
 using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
+using FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;

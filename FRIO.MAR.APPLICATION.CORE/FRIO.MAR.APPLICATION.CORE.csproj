@@ -10,13 +10,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-    <Folder Include="DomainServices\" />
-  </ItemGroup>
-
-	<ItemGroup>
 	  <Reference Include="GS.TOOLS">
 	    <HintPath>..\Libraries\GS.TOOLS.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="DTOs\Repositories\" />
 	</ItemGroup>
 
 </Project>

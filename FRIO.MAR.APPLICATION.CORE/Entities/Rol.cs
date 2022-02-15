@@ -11,8 +11,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
     {
         public Rol()
         {
-            SprolPermiso = new HashSet<RolPermiso>();
-            SpusuarioRol = new HashSet<UsuarioRol>();
+            RolPermiso = new HashSet<RolPermiso>();
+            UsuarioRol = new HashSet<UsuarioRol>();
         }
 
         public long IdRol { get; set; }
@@ -26,7 +26,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public long? UsuarioEliminacion { get; set; }
         public bool? Estado { get; set; }
 
-        public virtual ICollection<RolPermiso> SprolPermiso { get; set; }
-        public virtual ICollection<UsuarioRol> SpusuarioRol { get; set; }
+        public virtual ICollection<RolPermiso> RolPermiso { get; set; }
+        public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
     }
 }

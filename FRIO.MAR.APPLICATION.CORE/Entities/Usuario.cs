@@ -11,7 +11,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
     {
         public Usuario()
         {
-            SpusuarioRol = new HashSet<UsuarioRol>();
+            UsuarioRol = new HashSet<UsuarioRol>();
         }
 
         public long IdUsuario { get; set; }
@@ -35,6 +35,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public bool? Bloqueado { get; set; }
         public string Password { get; set; }
 
-        public virtual ICollection<UsuarioRol> SpusuarioRol { get; set; }
+        public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
     }
 }

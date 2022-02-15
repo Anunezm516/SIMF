@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace FRIO.MAR.UI.WEB.SITE
@@ -25,7 +26,13 @@ namespace FRIO.MAR.UI.WEB.SITE
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.ConfigureHttpsDefaults(co =>
+                        {
+                            co.SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13;
+                        });
+                    }).UseStartup<Startup>();
                 });
     }
 }

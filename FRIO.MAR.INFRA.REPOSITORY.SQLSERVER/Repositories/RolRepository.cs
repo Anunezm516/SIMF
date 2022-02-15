@@ -1,6 +1,7 @@
 ﻿
 
 using FRIO.MAR.APPLICATION.CORE.Entities;
+using FRIO.MAR.APPLICATION.CORE.Entities.StoreProcedures;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using GS.TOOLS;
@@ -26,7 +27,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             return _context.Rol.ToList();
         }
 
-        public bool ActualizaRol(Rol rol, ref string mensaje)
+        public bool ActualizaRol(SPRol rol, ref string mensaje)
         {
             try
             {
@@ -45,7 +46,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             }
         }
 
-        public bool RegistrarRol(Rol rol, ref string mensaje)
+        public bool RegistrarRol(SPRol rol, ref string mensaje)
         {
             try
             {
@@ -76,8 +77,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                 {
                     using (var edocCmdContext = scope.ServiceProvider.GetRequiredService<SIFMContext>())
                     {
-                        return 0;
-                        //return edocCmdContext.AsignarVentanas(idRol, idPermisos, usuarioAuditoria);
+                        return edocCmdContext.AsignarVentanas(idRol, idPermisos, usuarioAuditoria);
                     }
                 }
             }

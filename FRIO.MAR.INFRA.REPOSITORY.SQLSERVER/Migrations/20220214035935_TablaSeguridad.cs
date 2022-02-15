@@ -88,7 +88,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__SPRol__2A49584CB35FDE7B", x => x.IdRol);
+                    table.PrimaryKey("PK__Rol__2A49584CB35FDE7B", x => x.IdRol);
                 });
 
             migrationBuilder.CreateTable(
@@ -140,13 +140,13 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                 {
                     table.PrimaryKey("PK_RolPermiso", x => x.Id);
                     table.ForeignKey(
-                        name: "FK__SPRolPerm__IdPer__3F466844",
+                        name: "FK__RolPerm__IdPer__3F466844",
                         column: x => x.IdPermiso,
                         principalTable: "Permisos",
                         principalColumn: "IdPermiso",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__SPRolPerm__IdRol__3E52440B",
+                        name: "FK__RolPerm__IdRol__3E52440B",
                         column: x => x.IdRol,
                         principalTable: "Rol",
                         principalColumn: "IdRol",
@@ -167,13 +167,13 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                 {
                     table.PrimaryKey("PK_UsuarioRol", x => x.Id);
                     table.ForeignKey(
-                        name: "FK__SPUsuario__IdRol__3C69FB99",
+                        name: "FK__Usuario__IdRol__3C69FB99",
                         column: x => x.IdRol,
                         principalTable: "Rol",
                         principalColumn: "IdRol",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__SPUsuario__IdUsu__3B75D760",
+                        name: "FK__Usuario__IdUsu__3B75D760",
                         column: x => x.IdUsuario,
                         principalTable: "Usuario",
                         principalColumn: "IdUsuario",

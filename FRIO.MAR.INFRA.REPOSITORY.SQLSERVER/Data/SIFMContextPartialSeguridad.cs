@@ -58,7 +58,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
             modelBuilder.Entity<Rol>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
-                    .HasName("PK__SPRol__2A49584CB35FDE7B");
+                    .HasName("PK__Rol__2A49584CB35FDE7B");
 
                 entity.ToTable("Rol");
 
@@ -86,14 +86,14 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
                 entity.Property(e => e.FechaEliminacion).HasColumnType("datetime");
 
                 entity.HasOne(d => d.IdPermisoNavigation)
-                    .WithMany(p => p.SprolPermiso)
+                    .WithMany(p => p.RolPermiso)
                     .HasForeignKey(d => d.IdPermiso)
-                    .HasConstraintName("FK__SPRolPerm__IdPer__3F466844");
+                    .HasConstraintName("FK__RolPerm__IdPer__3F466844");
 
                 entity.HasOne(d => d.IdRolNavigation)
-                    .WithMany(p => p.SprolPermiso)
+                    .WithMany(p => p.RolPermiso)
                     .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK__SPRolPerm__IdRol__3E52440B");
+                    .HasConstraintName("FK__RolPerm__IdRol__3E52440B");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
@@ -147,14 +147,14 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
                 entity.ToTable("UsuarioRol");
 
                 entity.HasOne(d => d.IdRolNavigation)
-                    .WithMany(p => p.SpusuarioRol)
+                    .WithMany(p => p.UsuarioRol)
                     .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK__SPUsuario__IdRol__3C69FB99");
+                    .HasConstraintName("FK__Usuario__IdRol__3C69FB99");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.SpusuarioRol)
+                    .WithMany(p => p.UsuarioRol)
                     .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK__SPUsuario__IdUsu__3B75D760");
+                    .HasConstraintName("FK__Usuario__IdUsu__3B75D760");
             });
 
             modelBuilder.Entity<AccesoUsuario>(entity =>

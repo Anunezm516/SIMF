@@ -25,4 +25,19 @@ namespace FRIO.MAR.APPLICATION.CORE.Contants
         Alerta = 2
     }
 
+    public enum TipoMail
+    {
+        Bienvenida = 1,
+        RecuperarContraseña = 2
+    }
+
+    public enum EstadosEnvioMail
+    {
+        ErrorProceso = -4,
+        DevueltaSMTP = -2,
+        Devuelta = -1,
+        PendienteEnvio = 0,
+        Enviado = 1
+    }
+
 }
