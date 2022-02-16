@@ -2,6 +2,7 @@
 using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Parameters;
 using GS.TOOLS;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Settings
         {
             var settings = GSUtilities.LeerAppSettings<WebSiteSettings>(typeof(Program), ref mensaje);
 
-            //GlobalSettings.EnvioMailClave = GSCrypto.DescifrarClave(_utilidadRepository.GetParametro("MAIL_CLAVE")?.Valor ?? "", DomainConstants.ENCRIPTA_KEY);
-            //GlobalSettings.EnvioMailCorreoMostrar = _utilidadRepository.GetParametro("MAIL_CORREO_MOSTRAR")?.Valor ?? "";
-            //GlobalSettings.EnvioMailNombreMostrar = _utilidadRepository.GetParametro("MAIL_NOMBRE_MOSTRAR")?.Valor ?? "";
-            //GlobalSettings.TelegramToken = _utilidadRepository.GetParametro("TELEGRAM_TOKEN")?.Valor ?? "";
+            GlobalSettings.ConfiguracionMailUser = _utilidadRepository.GetParametro("CONFIGURACION_MAIL_USER")?.Valor ?? "";
+            GlobalSettings.ConfiguracionMailPassword = _utilidadRepository.GetParametro("CONFIGURACION_MAIL_PASSWORD")?.Valor ?? "";
+            GlobalSettings.ConfiguracionMailPort = int.Parse(_utilidadRepository.GetParametro("CONFIGURACION_MAIL_PORT")?.Valor ?? "0");
+            GlobalSettings.ConfiguracionMailSsl = (_utilidadRepository.GetParametro("CONFIGURACION_MAIL_SSL")?.Valor ?? "") == "1";
+            GlobalSettings.ConfiguracionMailHost = _utilidadRepository.GetParametro("CONFIGURACION_MAIL_HOST")?.Valor ?? "";
 
             GlobalSettings.LoginAppNumeroIntentoBloqueo = int.Parse(_utilidadRepository.GetParametro("NUMERO_INTENTOS_BLOQUEO")?.Valor ?? "5");
             GlobalSettings.LoginAppDiasForzarCambioPassword = int.Parse(_utilidadRepository.GetParametro("NUMERO_DIAS_FORZAR_CAMBIO_PASSWORD")?.Valor ?? "90");

@@ -19,6 +19,8 @@ using FRIO.MAR.APPLICATION.CORE.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices;
 using FRIO.MAR.INFRA.QUERY.QueryServices;
+using FRIO.MAR.INFRA.SERVICE.MAIL.Services;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 
 namespace FRIO.MAR.UI.WEB.SITE.Extensions
 {
@@ -51,6 +53,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IUsuarioAppService, UsuarioAppService>();
             services.AddScoped<IRolAppService, RolAppService>();
             services.AddScoped<IUsuarioQueryService, UsuarioQueryService>();
+
+
+            services.AddScoped<IEnvioMail, EnvioMail>();
         }
 
         public static void AddServicesMediate(this IServiceCollection services, IConfiguration Configuration)

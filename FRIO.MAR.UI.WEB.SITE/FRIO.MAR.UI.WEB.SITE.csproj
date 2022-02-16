@@ -18,6 +18,7 @@
     <ProjectReference Include="..\FRIO.MAR.CROSSCUTTING.LOG\FRIO.MAR.CROSSCUTTING.LOG.csproj" />
     <ProjectReference Include="..\FRIO.MAR.CROSSCUTTING\FRIO.MAR.CROSSCUTTING.csproj" />
     <ProjectReference Include="..\FRIO.MAR.INFRA.REPOSITORY.SQLSERVER\FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.csproj" />
+    <ProjectReference Include="..\FRIO.MAR.INFRA.SERVICE.MAIL\FRIO.MAR.INFRA.SERVICE.MAIL.csproj" />
   </ItemGroup>
 
 
