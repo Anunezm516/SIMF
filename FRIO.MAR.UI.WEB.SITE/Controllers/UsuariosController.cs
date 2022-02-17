@@ -19,6 +19,8 @@ using FRIO.MAR.UI.WEB.SITE.Constants;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Filters.MenuFilter(Constants.VentanasSoporte.Usuarios)]
     public class UsuariosController : BaseController
     {
         private readonly IUsuarioAppService usuarioAppService;
@@ -56,8 +58,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         {
             try
             {
-                var rol = rolRepository.ObtenerCodigoRol();
-                ViewData["rol"] = new SelectList(rol, "IdRol", "Nombre");
+                ViewData["rol"] = new SelectList(rolRepository.ObtenerCodigoRol(), "IdRol", "Nombre");
             }
             catch (Exception ex)
             {
@@ -73,8 +74,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         {
             try
             {
-                var rol = rolRepository.ObtenerCodigoRol();
-                ViewData["rol"] = new SelectList(rol, "IdRol", "Nombre");
+                ViewData["rol"] = new SelectList(rolRepository.ObtenerCodigoRol(), "IdRol", "Nombre");
 
                 if (ModelState.IsValid)
                 {
@@ -118,8 +118,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         {
             try
             {
-                var rol = rolRepository.ObtenerCodigoRol();
-                ViewData["rol"] = new SelectList(rol, "IdRol", "Nombre");
+                ViewData["rol"] = new SelectList(rolRepository.ObtenerCodigoRol(), "IdRol", "Nombre");
 
                 long Idc = long.Parse(Crypto.DescifrarId(Id));
                 var result = usuarioAppService.ObtenerUsuario(Idc);
@@ -143,8 +142,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         {
             try
             {
-                var rol = rolRepository.ObtenerCodigoRol();
-                ViewData["rol"] = new SelectList(rol, "IdRol", "Nombre");
+                ViewData["rol"] = new SelectList(rolRepository.ObtenerCodigoRol(), "IdRol", "Nombre");
 
                 if (ModelState.IsValid)
                 {

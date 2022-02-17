@@ -24,7 +24,6 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
         public string CorreoElectronico { get; set; }
         public string Telefono { get; set; }
-        public string IdTelegram { get; set; }
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
         public long IdRol { get; set; }
@@ -53,7 +52,6 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
             CorreoElectronico = usuario.CorreoElectronico;
             Apellido = usuario.Apellido;
             Telefono = usuario.Telefono;
-            IdTelegram = usuario.IdTelegram;
         }
     
     }

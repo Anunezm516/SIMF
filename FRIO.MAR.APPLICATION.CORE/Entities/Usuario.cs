@@ -20,7 +20,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Telefono { get; set; }
-        public string IdTelegram { get; set; }
         public DateTime? FechaUltimaConexion { get; set; }
         public int? IntentosFallidos { get; set; }
         public DateTime? FechaActualizarPassword { get; set; }
@@ -32,7 +31,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public DateTime? FechaEliminacion { get; set; }
         public long? UsuarioEliminacion { get; set; }
         public int? Estado { get; set; }
-        public bool? Bloqueado { get; set; }
         public string Password { get; set; }
 
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }

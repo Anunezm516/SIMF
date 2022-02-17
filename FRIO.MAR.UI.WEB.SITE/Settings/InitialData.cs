@@ -41,37 +41,25 @@ namespace FRIO.MAR.UI.WEB.SITE.Settings
             var roles = _utilidadRepository.GetRolesPrincipales();
             if (roles == null || !roles.Any())
             {
-                _utilidadRepository.AddRol(((int)Roles.SuperAdministrador), Roles.SuperAdministrador.ToString());
-                _utilidadRepository.AddRol(((int)Roles.Agente), Roles.Agente.ToString());
                 _utilidadRepository.AddRol(((int)Roles.Administrador), Roles.Administrador.ToString());
-                _utilidadRepository.AddRol(((int)Roles.Seguimiento), Roles.Seguimiento.ToString());
+                _utilidadRepository.AddRol(((int)Roles.Empleado), Roles.Empleado.ToString());
             }
             else
             {
-                if (roles.FirstOrDefault(x => x.Nombre == Roles.SuperAdministrador.ToString()) == null)
-                {
-                    _utilidadRepository.AddRol(((int)Roles.SuperAdministrador), Roles.SuperAdministrador.ToString());
-                }
-
                 if (roles.FirstOrDefault(x => x.Nombre == Roles.Administrador.ToString()) == null)
                 {
                     _utilidadRepository.AddRol(((int)Roles.Administrador), Roles.Administrador.ToString());
                 }
 
-                if (roles.FirstOrDefault(x => x.Nombre == Roles.Agente.ToString()) == null)
+                if (roles.FirstOrDefault(x => x.Nombre == Roles.Empleado.ToString()) == null)
                 {
-                    _utilidadRepository.AddRol(((int)Roles.Agente), Roles.Agente.ToString());
-                }
-
-                if (roles.FirstOrDefault(x => x.Nombre == Roles.Seguimiento.ToString()) == null)
-                {
-                    _utilidadRepository.AddRol(((int)Roles.Seguimiento), Roles.Seguimiento.ToString());
+                    _utilidadRepository.AddRol(((int)Roles.Empleado), Roles.Empleado.ToString());
                 }
             }
             #endregion
 
             #region Crear usuario SuperAdministrador
-            _utilidadRepository.AgregarUsuarioSuperAdministrador();
+            _utilidadRepository.AgregarUsuarioAdministrador();
             #endregion
 
             #region Asignar Permisos SuperAdministrador

@@ -17,10 +17,38 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; }
         public virtual DbSet<AccesoUsuario> AccesoUsuario { get; set; }
         public virtual DbSet<Parametros> Parametros { get; set; }
+        public virtual DbSet<Notificacion> Notificaciones { get; set; }
 
 
         partial void OnModelCreatingPartialSeguridad(ModelBuilder modelBuilder) 
         {
+
+            modelBuilder.Entity<Notificacion>(entity =>
+            {
+                entity.HasKey(e => e.IdNotificacion)
+                    .HasName("PK_EVNotificacion");
+
+                entity.ToTable("Notificaciones");
+
+                entity.Property(e => e.CodigoTicket)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaNotificacionLeida).HasColumnType("datetime");
+
+                entity.Property(e => e.Mensaje)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Titulo)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+            });
+
+
             modelBuilder.Entity<Permisos>(entity =>
             {
                 entity.HasKey(e => e.IdPermiso)
@@ -120,10 +148,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
                 entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
 
                 entity.Property(e => e.FechaUltimaConexion).HasColumnType("datetime");
-
-                entity.Property(e => e.IdTelegram)
-                    .HasMaxLength(25)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.Ip)
                     .HasMaxLength(20)

@@ -29,7 +29,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     join usuarioRol in _context.UsuarioRol on usuario.IdUsuario equals usuarioRol.IdUsuario
                             join rol in _context.Rol on usuarioRol.IdRol equals rol.IdRol
                             where 
-                                rol.IdRol == ((int)Roles.SuperAdministrador) || rol.IdRol == ((int)Roles.Administrador)
+                                rol.IdRol == ((int)Roles.Administrador)
                             select usuario
                             ).ToList();
         }

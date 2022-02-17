@@ -1,22 +1,29 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
+using GS.TOOLS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
-    [Authorize]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Filters.MenuFilter(Constants.VentanasSoporte.Dashboard)]
     public class DashboardController : BaseController
     {
+        private readonly INotificacionAppService _notificacionAppService;
         private readonly IAccountAppService _accountAppService;
 
-        public DashboardController(IAccountAppService accountAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
+        public DashboardController(
+            INotificacionAppService notificacionAppService,
+            IAccountAppService accountAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _notificacionAppService = notificacionAppService;
             _accountAppService = accountAppService;
         }
 
@@ -42,5 +49,29 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
             return View();
         }
+
+        public PartialViewResult GetNotificaciones()
+        {
+            List<NotificacionAppResultDto> notificaciones = new List<NotificacionAppResultDto>();
+
+            try
+            {
+                var usr = GetUserLogin();
+                var result = _notificacionAppService.GetNotificaciones(usr.IdUsuario, true);
+                if (result.TieneErrores) throw new Exception(result.MensajeError);
+
+                if (result.Estado)
+                {
+                    notificaciones = result.Data;
+                }
+            }
+            catch (Exception ex)
+            {
+                RegistrarLogError(this.GetCaller(), ex);
+            }
+
+            return PartialView("_notificacion", notificaciones);
+        }
+
     }
 }

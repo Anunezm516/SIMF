@@ -65,7 +65,6 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                     CorreoElectronico = usuariosApp.CorreoElectronico,
                     Telefono = usuariosApp.Telefono,
-                    IdTelegram = usuariosApp.IdTelegram,
                     FechaActualizarPassword = Utilidades.GetHoraActual().AddDays(GlobalSettings.LoginAppDiasForzarCambioPassword),
                     
                     Ip = Ip,
@@ -154,7 +153,6 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 usuario.CorreoElectronico = usuariosApp.CorreoElectronico;
                 usuario.Telefono = usuariosApp.Telefono;
-                usuario.IdTelegram = usuariosApp.IdTelegram;
 
                 usuario.Ip = Ip;
                 usuario.UsuarioModificacion = IdUsuarioCreacion;

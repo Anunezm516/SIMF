@@ -45,28 +45,26 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         {
             List<string> rolesPrincipales = new List<string>
             {
-                Roles.SuperAdministrador.ToString(),
                 Roles.Administrador.ToString(),
-                Roles.Agente.ToString(),
-                Roles.Seguimiento.ToString()
+                Roles.Empleado.ToString(),
             };
 
             return _context.Rol.Where(x => rolesPrincipales.Contains(x.Nombre)).ToList();
         }
 
-        public void AgregarUsuarioSuperAdministrador()
+        public void AgregarUsuarioAdministrador()
         {
             var usuarios = _context.UsuarioRol
                 .Include(x => x.IdUsuarioNavigation)
-                .Where(x => x.IdRol == ((int)Roles.SuperAdministrador));
+                .Where(x => x.IdRol == ((int)Roles.Administrador));
 
             if (usuarios == null || !usuarios.Any())
             {
                 var usuarioAdmin = new Usuario
                 {
                     Username = "Admin",
-                    Nombre = "SuperAdministrador",
-                    Apellido = "SuperAdministrador",
+                    Nombre = "Administrador",
+                    Apellido = "Administrador",
                     Estado = ((int)EstadoUsuario.Activo),
                     CorreoElectronico = "",
                     FechaCreacion = APPLICATION.CORE.Utilities.Utilidades.GetHoraActual(),
@@ -82,7 +80,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     _context.UsuarioRol.Add(new UsuarioRol
                     {
                         Estado = true,
-                        IdRol = ((int)Roles.SuperAdministrador),
+                        IdRol = ((int)Roles.Administrador),
                         IdUsuario = usuarioAdmin.IdUsuario
                     });
 
@@ -99,7 +97,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                                 FechaCreacion = APPLICATION.CORE.Utilities.Utilidades.GetHoraActual(),
                                 UsuarioCreacion = usuarioAdmin.IdUsuario,
                                 IdPermiso = permiso.IdPermiso,
-                                IdRol = ((int)Roles.SuperAdministrador)
+                                IdRol = ((int)Roles.Administrador)
                             });
                         }
 

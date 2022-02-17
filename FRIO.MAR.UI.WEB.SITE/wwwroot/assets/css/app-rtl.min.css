@@ -137,7 +137,7 @@ File: Main Css File
   content: "\ea3f"; }
 
 body[data-topbar="dark"] #page-topbar {
-  background-color: #2a3042; }
+  background-color: #0b1c3c; }
 
 body[data-topbar="dark"] .navbar-header .dropdown .show.header-item {
   background-color: rgba(255, 255, 255, 0.05); }
@@ -171,7 +171,7 @@ body[data-topbar="dark"] .app-search input.form-control::-webkit-input-placehold
   color: rgba(255, 255, 255, 0.5); }
 
 body[data-sidebar="dark"] .navbar-brand-box {
-  background: #2a3042; }
+  background: #0b1c3c; }
 
 body[data-sidebar="dark"] .logo-dark {
   display: none; }
@@ -508,7 +508,7 @@ body[data-layout="horizontal"] .footer {
       color: #f8f9fa; }
 
 body[data-sidebar="dark"] .vertical-menu {
-  background: #2a3042; }
+  background: #0b1c3c; }
 
 body[data-sidebar="dark"] #sidebar-menu ul li a {
   color: #a6b0cf; }
@@ -536,7 +536,7 @@ body[data-sidebar="dark"].vertical-collpsed {
     body[data-sidebar="dark"].vertical-collpsed .vertical-menu #sidebar-menu > ul > li:hover > ul a:hover {
       color: #ffffff; }
   body[data-sidebar="dark"].vertical-collpsed .vertical-menu #sidebar-menu > ul ul {
-    background-color: #2a3042; }
+    background-color: #0b1c3c; }
   body[data-sidebar="dark"].vertical-collpsed .vertical-menu #sidebar-menu ul li.mm-active .active {
     color: #ffffff !important; }
     body[data-sidebar="dark"].vertical-collpsed .vertical-menu #sidebar-menu ul li.mm-active .active i {
@@ -3652,7 +3652,7 @@ div.dataTables_wrapper div.dataTables_filter {
 
 .landing-footer {
   padding: 80px 0 40px;
-  background-color: #2a3042;
+  background-color: #0b1c3c;
   color: rgba(255, 255, 255, 0.5); }
   .landing-footer .footer-list-title {
     color: rgba(255, 255, 255, 0.9); }

@@ -13,10 +13,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Contants
     public enum Roles
     {
         Estandar,
-        SuperAdministrador = 1,
-        Administrador = 2,
-        Agente,
-        Seguimiento
+        Administrador = 1,
+        Empleado,
     }
 
     public enum TipoNotificacion

@@ -1,0 +1,132 @@
+﻿body {
+    font-family: Poppins;
+    background-color: #fff;
+    color: #666;
+}
+
+/*STYLE LOGIN*/
+
+.account-pages {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #666666;
+}
+
+.mainContent {
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.6);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.6);
+    border-radius: 15px;
+    overflow: hidden;
+    min-height: 60vh;
+}
+
+.logoLogin {
+    background-image: url('../images/frio-mar/logo-lg.jpeg');
+    background-size: cover;
+    background-position: bottom center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: start;
+}
+
+.mainLogo {
+    width: 50%;
+    padding-top: 50px;
+}
+
+.mainLogo img {
+    width: 100%;
+}
+
+.contentRight {
+    background-color: #e6e6e6;
+    padding: 80px 50px;
+}
+
+.titleLogin {
+    font-size: 25pt;
+    font-weight: 600;
+}
+
+.login label {
+    font-weight: 600;
+}
+
+.login input, .login input:focus, .login input:active {
+    background-color: rgba(0,0,0,0);
+    border: 0;
+    border-bottom: 1px solid #999;
+    border-radius: 0;
+}
+
+.login .btn-info {
+    background-color: #03a8b5;
+    border: none;
+    width: 60%;
+    padding: 15px;
+    border-radius: 11px;
+}
+
+.login .btn-rounded {
+    color: #666;
+    font-size: 8pt;
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.footer {
+    width: 100%;
+    height: 35px;
+    font-size: 8pt;
+    left: 0;
+    bottom: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    background-color: #f2f2f2;
+}
+
+/*END STYLE LOGIN*/
+
+/*STYLE DASHBOARD*/
+.simplebar-content-wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
+#sidebar-menu ul li a:hover, #sidebar-menu ul li a:active, #sidebar-menu ul li a:focus, .mm-active .active {
+    background-color: rgba(242,116,5,1);
+}
+
+.card {
+    background-color: #f2f2f2;
+}
+
+    .card-body, .card .col-sm-12, .renderbody .col-12 {
+        padding: 0;
+    }
+
+.odd {
+    background-color: #e6e6e6;
+    border-style: none;
+    border-spacing: 1;
+}
+
+
+@media (min-width: 1200px) {
+    /*STYLE LOGIN*/
+
+    .login .container, .login .container-lg, .login .container-md, .login .container-sm, .login .container-xl, .login .container-xxl {
+        max-width: 960px;
+    }
+
+    /*END STYLE LOGIN*/
+}

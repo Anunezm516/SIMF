@@ -55,18 +55,11 @@
                         <span asp-validation-for="Telefono" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="IdTelegram" class="control-label">Id Telegram </label>
-                        <input asp-for="IdTelegram" class="form-control"  />
-                        <span asp-validation-for="IdTelegram" class="text-danger"></span>
-                    </div>
-                </div>
+                
                 <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="IdRol">Rol <span class="text-danger">*</span></label>
-                        <select asp-for="IdRol" class=" form-control"
-                                asp-items="ViewBag.rol">
+                        <select asp-for="IdRol" class=" form-control" asp-items="ViewBag.rol">
                             <option value="" selected disabled>Elige un Rol...</option>
                         </select>
                         <span asp-validation-for="IdRol" class="text-danger"></span>

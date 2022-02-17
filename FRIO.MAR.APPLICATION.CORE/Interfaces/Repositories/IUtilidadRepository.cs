@@ -8,7 +8,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
         Parametros GetParametro(string Codigo);
         List<Rol> GetRolesPrincipales();
         bool AddRol(int Id, string Nombre);
-        void AgregarUsuarioSuperAdministrador();
+        void AgregarUsuarioAdministrador();
     }
 }
     

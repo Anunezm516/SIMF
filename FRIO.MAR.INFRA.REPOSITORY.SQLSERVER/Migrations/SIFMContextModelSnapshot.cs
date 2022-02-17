@@ -247,6 +247,62 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.ToTable("RolPermiso");
                 });
 
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Spnotificacion", b =>
+                {
+                    b.Property<long>("IdNotificacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CodigoTicket")
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<bool>("EsNotificacionLeida")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("FechaNotificacionLeida")
+                        .HasColumnType("datetime");
+
+                    b.Property<long?>("IdTicket")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IdTicketDetalle")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdUsuario")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Mensaje")
+                        .IsRequired()
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<int>("TipoCriticidad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoNotificacion")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)")
+                        .HasMaxLength(500)
+                        .IsUnicode(false);
+
+                    b.HasKey("IdNotificacion")
+                        .HasName("PK_EVNotificacion");
+
+                    b.ToTable("Notificaciones");
+                });
+
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Usuario", b =>
                 {
                     b.Property<long>("IdUsuario")
@@ -258,9 +314,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("varchar(100)")
                         .HasMaxLength(100)
                         .IsUnicode(false);
-
-                    b.Property<bool?>("Bloqueado")
-                        .HasColumnType("bit");
 
                     b.Property<string>("CorreoElectronico")
                         .HasColumnType("varchar(100)")
@@ -284,11 +337,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 
                     b.Property<DateTime?>("FechaUltimaConexion")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("IdTelegram")
-                        .HasColumnType("varchar(25)")
-                        .HasMaxLength(25)
-                        .IsUnicode(false);
 
                     b.Property<int?>("IntentosFallidos")
                         .HasColumnType("int");

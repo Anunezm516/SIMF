@@ -123,7 +123,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     if (Url.IsLocalUrl(returnUrl))
                         return Redirect(returnUrl);
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard");
                 }
             }
             catch (Exception ex)

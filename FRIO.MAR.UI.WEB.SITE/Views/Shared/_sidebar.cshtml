@@ -7,7 +7,6 @@
 
         @{
             var menu = Newtonsoft.Json.JsonConvert.DeserializeObject<List<FRIO.MAR.APPLICATION.CORE.DTOs.AppServices.Menu>>((@Context.Session.GetString("Menu") ?? ""));
-            //int IdRol = @Context.Session.GetInt32("IdRol") ?? 0;
 
             string url = "";
             string urlBase = @Url.Action("Index", "Dashboard");
@@ -27,20 +26,6 @@
                 <li class="menu-title">Menu</li>
                 @if (menu != null && menu.Any())
                 {
-                    @*<li class="mm-active">
-                            <a asp-controller="Dashboard" asp-action="Index" class="waves-effect">
-                                <i class="mdi mdi-google-analytics"></i>
-                                <span>Tablero</span>
-                            </a>
-                        </li>
-
-                        <li class="mm-active">
-                            <a asp-controller="Profile" asp-action="Index" class="waves-effect">
-                                <i class="fas fa-user"></i>
-                                <span>Mi Cuenta</span>
-                            </a>
-                        </li>*@
-
                     @foreach (var item in menu)
                     {
                         url = urlBase + item.Url;

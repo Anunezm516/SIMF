@@ -33,6 +33,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IPermisoRepository, PermisoRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUtilidadRepository, UtilidadRepository>();
+            services.AddScoped<INotificacionRepository, NotificacionRepository>();
             
         }
 
@@ -56,6 +57,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
 
 
             services.AddScoped<IEnvioMail, EnvioMail>();
+            services.AddScoped<INotificacionAppService, NotificacionAppService>();
         }
 
         public static void AddServicesMediate(this IServiceCollection services, IConfiguration Configuration)

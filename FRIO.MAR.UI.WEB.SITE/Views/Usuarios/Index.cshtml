@@ -20,13 +20,12 @@
             <thead>
                 <tr>
                     <th>Acción</th>
-                    <th>@Html.DisplayNameFor(model => model.NombreRol)</th>
-                    <th>@Html.DisplayNameFor(model => model.Usuario)</th>
-                    <th>@Html.DisplayNameFor(model => model.Nombre)</th>
-                    <th>@Html.DisplayNameFor(model => model.Apellido)</th>
-                    <th>@Html.DisplayNameFor(model => model.CorreoElectronico)</th>
-                    <th>@Html.DisplayNameFor(model => model.Telefono)</th>
-                    <th>@Html.DisplayNameFor(model => model.IdTelegram)</th>
+                    <th>Rol</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo Electrónico</th>
+                    <th>Teléfono</th>
                 </tr>
             </thead>
             <thebody>
@@ -43,7 +42,6 @@
                         <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
                         <td>@Html.DisplayFor(modelItem => item.CorreoElectronico)</td>
                         <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
-                        <td>@Html.DisplayFor(modelItem => item.IdTelegram)</td>
                     </tr>
                 }
             </thebody>

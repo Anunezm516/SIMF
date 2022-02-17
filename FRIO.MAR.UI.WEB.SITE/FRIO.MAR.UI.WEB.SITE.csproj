@@ -32,12 +32,5 @@
 			<HintPath>..\Libraries\GS.TOOLS.dll</HintPath>
 		</Reference>
 	</ItemGroup>
-
-
-	
-
-	<ItemGroup>
-	  <Folder Include="wwwroot\assets\images\" />
-	</ItemGroup>
 	
 </Project>

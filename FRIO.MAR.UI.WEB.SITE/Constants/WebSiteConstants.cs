@@ -21,32 +21,25 @@ namespace FRIO.MAR.UI.WEB.SITE.Constants
 
     public enum VentanasSoporte
     {
-        DashboardInterno = 101,
+        Dashboard = 100,
 
         Configuracion=200,
-        Rol,
         Usuarios,
-        Permisos,
+        Permisos, 
+        Rol,
+        
 
         Mantenimiento=300,
-        DiasLaborales,
-        DiasFestivos,
-        Paises,
-        UsuariosStandBy,
-        MantenimientoSLA,
+        Clientes,
+        Proveedores,
 
-        Reportes=400,
-        TicketsCerrados,
-        TicketsAbiertos
+        Ventas=400,
 
-        //AdmClave = 110,
-        //AdmRol = 121,
-        //AdmUsuarioInterno = 122,
-        //AdmUsuarioExterno = 130,
-        //AdmNotificacion = 140,
-        //RptDocEmitidosGeneral = 252,
-        //RptDocEmitidosCriterio = 253,
-        //CorreosEnviados = 401,
-        //NotificaEnviadas = 440
+        Compras=500,
+
+        Inventario=600,
+
+        Reportes=700,
+        
     }
 }

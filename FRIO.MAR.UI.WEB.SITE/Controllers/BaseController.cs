@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         protected readonly ILogInfraServices _logInfraServices;
 
