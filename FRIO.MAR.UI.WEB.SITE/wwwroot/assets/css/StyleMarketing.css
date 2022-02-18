@@ -1,9 +1,9 @@
-﻿body {
+﻿/*body {
     font-family: Poppins;
     background-color: #fff;
     color: #666;
 }
-
+*/
 /*STYLE LOGIN*/
 
 .account-pages {
@@ -103,14 +103,14 @@
 }
 
 #sidebar-menu ul li a:hover, #sidebar-menu ul li a:active, #sidebar-menu ul li a:focus, .mm-active .active {
-    background-color: rgba(242,116,5,1);
+    background-color: rgba(28, 51, 94,1);
 }
 
-.card {
+/*.card {
     background-color: #f2f2f2;
 }
-
-    .card-body, .card .col-sm-12, .renderbody .col-12 {
+*/
+/*    .card-body, .card .col-sm-12, .renderbody .col-12 {
         padding: 0;
     }
 
@@ -118,7 +118,7 @@
     background-color: #e6e6e6;
     border-style: none;
     border-spacing: 1;
-}
+}*/
 
 
 @media (min-width: 1200px) {

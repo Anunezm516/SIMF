@@ -30,10 +30,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
 
                 entity.ToTable("Notificaciones");
 
-                entity.Property(e => e.CodigoTicket)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
 
                 entity.Property(e => e.FechaNotificacionLeida).HasColumnType("datetime");

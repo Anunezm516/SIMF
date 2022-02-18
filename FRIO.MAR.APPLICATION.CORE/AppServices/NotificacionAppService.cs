@@ -31,7 +31,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 if (Todo)
                 {
-                    result = notificacionRepository.Find(x => x.Estado == 1).ToList();
+                    result = notificacionRepository.Find(x => x.Estado == 1 && x.EsNotificacionLeida == Leidas).ToList();
                 }
                 else
                 {
@@ -49,6 +49,28 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 }).ToList();
 
                 responseDto.Estado = true;
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
+        }
+
+        public MethodResponseDto MarcarLeido(long Id)
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+            try
+            {
+                var result = notificacionRepository.Get(Id);
+                result.EsNotificacionLeida = true;
+                result.FechaNotificacionLeida = Utilities.Utilidades.GetHoraActual();
+
+                notificacionRepository.Update(result);
+
+                responseDto.Estado = notificacionRepository.Save() > 0;
             }
             catch (Exception ex)
             {

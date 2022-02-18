@@ -73,5 +73,31 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return PartialView("_notificacion", notificaciones);
         }
 
+        public PartialViewResult MarcarNotificacion(long Id)
+        {
+            List<NotificacionAppResultDto> notificaciones = new List<NotificacionAppResultDto>();
+
+            try
+            {
+                var usr = GetUserLogin();
+                var resultMarca = _notificacionAppService.MarcarLeido(Id);
+                if (resultMarca.TieneErrores) throw new Exception(resultMarca.MensajeError);
+
+                var result = _notificacionAppService.GetNotificaciones(usr.IdUsuario, true);
+                if (result.TieneErrores) throw new Exception(result.MensajeError);
+
+                if (result.Estado)
+                {
+                    notificaciones = result.Data;
+                }
+            }
+            catch (Exception ex)
+            {
+                RegistrarLogError(this.GetCaller(), ex);
+            }
+
+            return PartialView("_notificacion", notificaciones);
+        }
+
     }
 }

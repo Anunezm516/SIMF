@@ -86,11 +86,19 @@
             },
             data: { "__RequestVerificationToken": $('[name= "__RequestVerificationToken"]').val() }
         });
-        $("#page-header-notifications-dropdown").click(function () {
-            $.get("@Url.Action("GetNotificaciones", "Dashboard")", function (result) {
-                $("#div-notificaciones").empty().html(result);
-            }).fail(function (error) { MsgAjaxError(error); });
+
+        $(document).ready(function(){
+            $("#page-header-notifications-dropdown").click(function () {
+                $.get("@Url.Action("GetNotificaciones", "Dashboard")", function (result) {
+                    $("#div-notificaciones").empty().html(result);
+                }).fail(function (error) { MsgAjaxError(error); });
+            });
+
+            
         });
+
+        
+
     </script>
 
     @RenderSection("Scripts", required: false)

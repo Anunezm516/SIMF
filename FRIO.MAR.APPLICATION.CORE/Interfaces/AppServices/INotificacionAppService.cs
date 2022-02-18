@@ -8,5 +8,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices
     public interface INotificacionAppService
     {
         MethodResponseDto GetNotificaciones(long IdUsuario, bool Todo = false, bool Leidas = false);
+        MethodResponseDto MarcarLeido(long Id);
     }
 }

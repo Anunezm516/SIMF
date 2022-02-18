@@ -3,8 +3,8 @@
 
 
 
-<div class="p-3">
-    <div class="row align-items-center">
+<div class="p-3 ">
+    <div class="row align-items-center ">
         <div class="col">
             <h6 class="m-0" key="t-notifications"> Notificaciones </h6>
         </div>
@@ -18,23 +18,51 @@
     {
         @foreach (var item in Model)
         {
-            <a href="javascript: void(0);" class="text-reset notification-item">
-                <div class="d-flex">
-                    <div class="avatar-xs me-3">
-                        <span class="avatar-title bg-primary rounded-circle font-size-16">
-                            <i class="bx bx-cart"></i>
-                        </span>
-                    </div>
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1" key="t-your-order">@item.Titulo</h6>
-                        <div class="font-size-12 text-muted">
-                            <p class="mb-1" key="t-grammer">@item.Cuerpo</p>
-                            <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">@item.Fecha</span></p>
+            <div id="div-notificacion-@item.Id">
+                <a href="javascript: void(0);" class="text-reset notification-item">
+                    <div class="d-flex">
+                        <div class="avatar-xs me-3">
+                            <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                <i class="bx bx-cart"></i>
+                            </span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1" key="t-your-order">@item.Titulo</h6>
+                            <div class="font-size-12 text-muted">
+                                <p class="mb-1 text-justify">
+                                    @Html.Raw(@item.Cuerpo)
+                                </p>
+                                @*<p class="mb-1" key="t-grammer">@item.Cuerpo</p>*@
+                                <div class="row">
+                                    <p class="col-9 mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">@item.Fecha.ToString("yyyy-MM-dd HH:mm:ss")</span></p>
+                                    @if (!item.NotificacionLeida)
+                                    {
+                                        <button value="@item.Id" class="col-2 float-left btn btn-outline-success btn-ver-notificacion fas fa-check-circle">
+                                        </button>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         }
+    }
+    else
+    {
+        <div >
+                <a href="javascript: void(0);" class="text-reset notification-item">
+                    <div class="d-flex">
+                        <div class="media-body">
+                            <h6 class="mt-0 mb-1">Información</h6>
+                            <div class="font-size-12 text-muted">
+                                <p class="mb-1">La compañia no tienes notificaciones registradas para mostrar.</p>
+                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
     }
 </div>
 <div class="p-2 border-top d-grid">
@@ -43,3 +71,14 @@
     </a>*@
 </div>
 
+<script>
+    $(document).ready(function(){
+        $(".btn-ver-notificacion").click(function(){
+            var val = $(this).val();
+            $.get("@Url.Action("MarcarNotificacion", "Dashboard")", { Id: val },  function (result) {
+                $("#div-notificaciones").empty().html(result);
+            }).fail(function (error) { MsgAjaxError(error); });
+        });
+    });
+
+</script>

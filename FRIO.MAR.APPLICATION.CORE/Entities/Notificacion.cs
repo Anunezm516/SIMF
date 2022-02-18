@@ -16,9 +16,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public int TipoCriticidad { get; set; }
         public bool EsNotificacionLeida { get; set; }
         public DateTime? FechaNotificacionLeida { get; set; }
-        public long? IdTicket { get; set; }
-        public long? IdTicketDetalle { get; set; }
-        public string CodigoTicket { get; set; }
         public long IdUsuario { get; set; }
         public DateTime FechaCreacion { get; set; }
         public int Estado { get; set; }
