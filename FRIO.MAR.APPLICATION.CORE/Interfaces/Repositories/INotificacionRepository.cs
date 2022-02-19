@@ -7,5 +7,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
 {
     public interface INotificacionRepository : IRepository<Notificacion>
     {
+        List<Notificacion> GetNotificaciones(long IdUsuario, bool Leidas);
     }
 }

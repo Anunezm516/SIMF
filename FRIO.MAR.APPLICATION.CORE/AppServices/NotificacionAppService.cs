@@ -21,34 +21,28 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             this.notificacionRepository = notificacionRepository;
         }
 
-        public MethodResponseDto GetNotificaciones(long IdUsuario, bool Todo = false, bool Leidas = false)
+        public MethodResponseDto GetNotificaciones(long IdUsuario, bool Leidas = false)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 List<NotificacionAppResultDto> notificacionDtos = new List<NotificacionAppResultDto>();
-                List<Notificacion> result;
 
-                if (Todo)
+                var result = notificacionRepository.GetNotificaciones(IdUsuario, Leidas);
+                if (result != null)
                 {
-                    result = notificacionRepository.Find(x => x.Estado == 1 && x.EsNotificacionLeida == Leidas).ToList();
+                    responseDto.Data = result.Select(c => new NotificacionAppResultDto
+                    {
+                        Id = c.IdNotificacion,
+                        Titulo = c.Titulo,
+                        Cuerpo = c.Mensaje,
+                        TipoNotificacion = (TipoNotificacion)c.TipoNotificacion,
+                        Fecha = c.FechaCreacion,
+                        NotificacionLeida = c.EsNotificacionLeida
+                    }).ToList();
+
+                    responseDto.Estado = true;
                 }
-                else
-                {
-                    result = notificacionRepository.Find(x => x.IdUsuario == IdUsuario && x.Estado == 1 && x.EsNotificacionLeida == Leidas ).ToList();
-                }
-
-                responseDto.Data = result.Select(c => new NotificacionAppResultDto 
-                {
-                    Id = c.IdNotificacion,
-                    Titulo = c.Titulo ,
-                    Cuerpo = c.Mensaje,
-                    TipoNotificacion = (TipoNotificacion)c.TipoNotificacion,
-                    Fecha = c.FechaCreacion,
-                    NotificacionLeida = c.EsNotificacionLeida
-                }).ToList();
-
-                responseDto.Estado = true;
             }
             catch (Exception ex)
             {

@@ -57,12 +57,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 var usr = GetUserLogin();
-                var result = _notificacionAppService.GetNotificaciones(usr.IdUsuario, true);
+                var result = _notificacionAppService.GetNotificaciones(usr.IdUsuario, false);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
 
                 if (result.Estado)
                 {
                     notificaciones = result.Data;
+                    HttpContext.Session.SetInt32("CantidadNotificaciones", notificaciones.Count());
                 }
             }
             catch (Exception ex)
@@ -83,12 +84,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 var resultMarca = _notificacionAppService.MarcarLeido(Id);
                 if (resultMarca.TieneErrores) throw new Exception(resultMarca.MensajeError);
 
-                var result = _notificacionAppService.GetNotificaciones(usr.IdUsuario, true);
+                var result = _notificacionAppService.GetNotificaciones(usr.IdUsuario, false);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
 
                 if (result.Estado)
                 {
                     notificaciones = result.Data;
+                    HttpContext.Session.SetInt32("CantidadNotificaciones", notificaciones.Count());
                 }
             }
             catch (Exception ex)

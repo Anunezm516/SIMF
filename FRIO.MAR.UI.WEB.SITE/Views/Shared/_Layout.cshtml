@@ -94,10 +94,15 @@
                 }).fail(function (error) { MsgAjaxError(error); });
             });
 
-            
+            setInterval(MostrarNotificaciones, 300000);
         });
 
-        
+        function MostrarNotificaciones() {
+            console.log("MostrarNotificaciones");
+            $.get("@Url.Action("GetNotificaciones", "Dashboard")", function (result) {
+                $("#div-notificaciones").empty().html(result);
+            }).fail(function (error) { MsgAjaxError(error); });
+        }
 
     </script>
 

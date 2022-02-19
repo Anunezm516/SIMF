@@ -22,9 +22,11 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
         private readonly IRolRepository _rolRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMailDomainService _envioMailService;
+        private readonly INotificacionRepository _notificacionRepository;
 
-        public AccountAppService(IMailDomainService envioMailService, IRolRepository rolRepository, IAccountRepository accountRepository, IUsuarioRepository usuarioRepository)
+        public AccountAppService(INotificacionRepository notificacionRepository, IMailDomainService envioMailService, IRolRepository rolRepository, IAccountRepository accountRepository, IUsuarioRepository usuarioRepository)
         {
+            _notificacionRepository = notificacionRepository;
             _envioMailService = envioMailService;
             _rolRepository = rolRepository;
             _accountRepository = accountRepository;
@@ -181,6 +183,8 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 //    Usuario = "bolivar.cardenas",
                 //    VentanasActivasConcat = ""
                 //};
+
+                login.CantidadNotificaciones = _notificacionRepository.GetNotificaciones(usuario.IdUsuario, false).Count();
 
                 responseDto.Data = login;
                 responseDto.Estado = true; // _accountRepository.RegistrarAccesoUsuario(acceso);

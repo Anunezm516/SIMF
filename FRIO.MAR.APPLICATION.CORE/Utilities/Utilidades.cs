@@ -1,4 +1,5 @@
 ﻿
+using FRIO.MAR.APPLICATION.CORE.Contants;
 using GS.TOOLS;
 using Microsoft.VisualBasic;
 using System;
@@ -39,6 +40,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Utilities
 
         public static DateTime GetHoraActual(string TimeZone = "")
         {
+            if (string.IsNullOrEmpty(TimeZone))
+                TimeZone = GlobalSettings.TimeZoneId;
+
             if (string.IsNullOrEmpty(TimeZone))
             {
                 return DateTime.Now;

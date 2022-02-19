@@ -87,6 +87,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                         LoginAppResultDto loginAppResult = resultLogin.Data;
 
                         HttpContext.Session.SetString("Menu", JsonConvert.SerializeObject(loginAppResult.Menu));
+                        HttpContext.Session.SetInt32("CantidadNotificaciones", loginAppResult.CantidadNotificaciones);
+
                         loginAppResult.Menu = null;
 
                         string RolStr = "";
@@ -138,6 +140,10 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         public async Task<IActionResult> LogOff()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("Menu");
+            HttpContext.Session.Remove("CantidadNotificaciones");
+            HttpContext.Session.Clear();
+            GS.TOOLS.GSUtilities.ClearMemory();
             return RedirectToAction("Login");
         }
 

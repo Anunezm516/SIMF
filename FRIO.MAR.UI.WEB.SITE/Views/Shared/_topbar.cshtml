@@ -1,4 +1,8 @@
 ﻿
+@using Microsoft.AspNetCore.Http
+@{ 
+    int CantidadNotificaciones = Context.Session.GetInt32("CantidadNotificaciones") ?? 0;
+}
 
 <header id="page-topbar">
     <div class="navbar-header">
@@ -36,10 +40,9 @@
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bx bx-bell bx-tada"></i>
-                    <span class="badge bg-danger rounded-pill">3</span>
+                    <span id="span-cantidad-notificaciones" class="badge bg-danger rounded-pill">@CantidadNotificaciones</span>
                 </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" id="div-notificaciones"
-                     aria-labelledby="page-header-notifications-dropdown">
+                <div id="div-notificaciones" style="border-top-left-radius: 15px" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
                     
                 </div>
             </div>
@@ -56,7 +59,7 @@
                     <!-- item-->
                     <a class="dropdown-item" asp-controller="Perfil" asp-action="Index"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Mi Perfil</span></a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" asp-controller="Account" asp-action="LogOff"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Logout</span></a>
+                    <a class="dropdown-item text-danger" asp-controller="Account" asp-action="LogOff"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Cerrar sesión</span></a>
                 </div>
             </div>
 

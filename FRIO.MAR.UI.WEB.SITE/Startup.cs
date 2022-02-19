@@ -106,13 +106,13 @@ namespace FRIO.MAR.UI.WEB.SITE
 
             services.AddDbContext<SIFMContext>(options => options.UseSqlServer(CadenaConexion));
 
+            GlobalSettings.TimeZoneId = settings.SITIOWEB.TimeZoneId;
             WebSiteParameters.WebLimiteConsulta = settings.SITIOWEB.LimiteConsulta;
             WebSiteParameters.WebFooter = string.Format("{0} v{1}", settings.SITIOWEB.Footer, AppConstants.Version).Replace("{AnioActual}", APPLICATION.CORE.Utilities.Utilidades.GetHoraActual().Year.ToString());
             WebSiteParameters.WebReCaptchaClaveSitioWeb = GSCrypto.DescifrarClave(settings.SITIOWEB.Recaptcha.ClaveSitioWeb, DomainConstants.ENCRIPTA_KEY);
             WebSiteParameters.WebReCaptchaClaveComGoogle = GSCrypto.DescifrarClave(settings.SITIOWEB.Recaptcha.ClaveComGoogle, DomainConstants.ENCRIPTA_KEY);
-
+            
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
-
 
         }
 

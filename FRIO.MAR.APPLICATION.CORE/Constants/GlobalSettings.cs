@@ -20,5 +20,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Contants
         public static bool ConfiguracionMailSsl { get; set; }
 
         public static int NumeroIntentosEnvioBloqueo { get; set; }
+
+        public static string TimeZoneId { get; set; }
     }
 }

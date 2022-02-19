@@ -84,12 +84,12 @@ function MensajeErrorSwal(mensaje, modulo) {
     });
 }
 
-function MensajeExitoso(Mensaje) {
+function MensajeExitoso(Mensaje, position = 'top-right') {
     DetenerLoading();
     $.toast({
         heading: 'Exitoso',
         text: Mensaje,
-        position: 'top-right',
+        position: position,
         stack: 5,
         showHideTransition: 'fade',
         icon: 'success'

@@ -17,6 +17,7 @@
         }
         internal sealed class SitioWebSettings
         {
+            public string TimeZoneId { get; set; }
             public string NitCiaNube { get; set; }
             public string Footer { get; set; }
             public string LimiteConsulta { get; set; }
