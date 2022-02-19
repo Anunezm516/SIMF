@@ -217,7 +217,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
                     .IsUnicode(false);
 
                 entity.Property(e => e.SitioWeb)
-                    .HasMaxLength(5)
+                    .HasMaxLength(25)
                     .IsUnicode(false);
             });
 

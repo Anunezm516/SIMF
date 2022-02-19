@@ -13,7 +13,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public DateTime Fecha { get; set; }
         public string Ip { get; set; }
         public long IdUsuario { get; set; }
-        public long? IdCompania { get; set; }
         public string SitioWeb { get; set; }
     }
 }

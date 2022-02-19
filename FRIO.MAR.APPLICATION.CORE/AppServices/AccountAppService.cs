@@ -164,25 +164,10 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     SitioWeb = DomainConstants.COMPONENTE_NAME
                 };
 
+                _accountRepository.RegistrarAccesoUsuario(acceso);
+
                 _accountRepository.Update(usuario);
                 _accountRepository.Save();
-
-                //var login = new LoginAppResultDto
-                //{
-                //    Nombre = "Bolivar",
-                //    Apellido = "Cardenas",
-                //    Correo = "bolivar.cardenas@gmail.com",
-                //    CorreosAdministrador = "",
-                //    FechaUltimaConexion = Utilities.Utilidades.GetHoraActual(),
-                //    ForzarCambioClave = false,
-                //    IdUsuario = 1,
-                //    IPLogin = "",
-                //    Menu = new List<Menu>(),
-                //    Rol =  ((int)Roles.SuperAdministrador),
-                //    TimeZoneId = "",
-                //    Usuario = "bolivar.cardenas",
-                //    VentanasActivasConcat = ""
-                //};
 
                 login.CantidadNotificaciones = _notificacionRepository.GetNotificaciones(usuario.IdUsuario, false).Count();
 
