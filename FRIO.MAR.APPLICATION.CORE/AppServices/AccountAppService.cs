@@ -213,20 +213,25 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 usuario.Password = GSCrypto.ComputeHashV1(Password);
                 usuario.FechaUltimaConexion = null;
 
-                MailDto mail = new MailDto
-                {
-                    Mensaje = Password,
-                    Correos = usuario.CorreoElectronico,
-                    FechaIngreso = Utilidades.GetHoraActual(),
-                    Tipo = TipoMail.RecuperarContraseña,
-                    Copias = "",
-                    CopiasOcultas = ""
-                };
+                //MailDto mail = new MailDto
+                //{
+                //    Mensaje = Password,
+                //    Correos = usuario.CorreoElectronico,
+                //    FechaIngreso = Utilidades.GetHoraActual(),
+                //    Tipo = TipoMail.RecuperarContraseña,
+                //    Copias = "",
+                //    CopiasOcultas = ""
+                //};
 
                 _accountRepository.Update(usuario);
                 responseDto.Estado = _accountRepository.Save() > 0;
 
-                _envioMailService.EnviarMail(mail);
+                _envioMailService.EnviarMailRecuperarPassword(
+                    usuario.CorreoElectronico,
+                    usuario.Nombre + " " + usuario.Apellido,
+                    Password
+                    );
+                //_envioMailService.EnviarMail(mail);
             }
             catch (Exception ex)
             {
@@ -239,31 +244,6 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
 
         #region metodos privados
-        //private void GenerarSubMenu(List<VentanaLoginQueryDto> ventanasDto, long IdNivelSuperior, ref string MenuConcat)
-        //{
-        //    var rows = ventanasDto.FindAll(x => x.IdPadre == IdNivelSuperior);
-        //    if (rows != null)
-        //    {
-        //        foreach (var ItemNivelSub in rows)
-        //        {
-        //            if (ItemNivelSub.Url != null)
-        //            {
-        //                string MenuHref = "<li><a href='../" + ItemNivelSub.Url + "'>" + ItemNivelSub.NombreAbreviado + "</a></li>";
-        //                MenuConcat += MenuHref;
-        //            }
-        //            else
-        //            {
-        //                string MenuSubInicio = "<li class='dropdown'>";
-        //                MenuSubInicio += "<a class='dropdown-toggle' href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" + ItemNivelSub.NombreAbreviado + "</a>";
-        //                MenuSubInicio += "<ul class='dropdown-menu' aria-labelledby='navbarDropdown'>";
-        //                MenuConcat += MenuSubInicio;
-        //                GenerarSubMenu(ventanasDto, ItemNivelSub.IdPermiso, ref MenuConcat);
-        //                string MenuSubFin = "</ul></li>";
-        //                MenuConcat += MenuSubFin;
-        //            }
-        //        }
-        //    }
-        //}
 
         private List<Menu> GenerarVentanaHabilitadas(List<VentanaLoginQueryDto> ventanasMaestra, long? IdPadre)
         {

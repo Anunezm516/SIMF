@@ -27,14 +27,22 @@ namespace FRIO.MAR.INFRA.SERVICE.MAIL.Services
             };
         }
 
-        public void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
+        public (bool, string) EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
-            email = new MailMessage(GlobalSettings.ConfiguracionMailUser, destinatario, asunto, mensaje);
-            email.IsBodyHtml = esHtlm;
-            //email.Bcc = new MailAddressCollection();
+            try
+            {
+                email = new MailMessage(GlobalSettings.ConfiguracionMailUser, destinatario, asunto, mensaje);
+                email.IsBodyHtml = esHtlm;
+                //email.Bcc = new MailAddressCollection();
 
 
-            cliente.Send(email);
+                cliente.Send(email);
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
         }
 
         public void EnviarCorreo(MailMessage message)

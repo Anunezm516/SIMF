@@ -18,10 +18,39 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<AccesoUsuario> AccesoUsuario { get; set; }
         public virtual DbSet<Parametros> Parametros { get; set; }
         public virtual DbSet<Notificacion> Notificaciones { get; set; }
+        public virtual DbSet<Correo> Correos { get; set; }
 
 
         partial void OnModelCreatingPartialSeguridad(ModelBuilder modelBuilder) 
         {
+            modelBuilder.Entity<Correo>(entity =>
+            {
+                entity.HasKey(e => e.IdCorreo)
+                    .HasName("PK__Correo__872F8EAEDC7FA84E");
+
+                entity.ToTable("Correo");
+
+                entity.Property(e => e.Asunto)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Copias)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Correos)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaEnvio).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaIngreso).HasColumnType("datetime");
+
+                entity.Property(e => e.Mensaje)
+                    .HasMaxLength(5000)
+                    .IsUnicode(false);
+            });
+
 
             modelBuilder.Entity<Notificacion>(entity =>
             {

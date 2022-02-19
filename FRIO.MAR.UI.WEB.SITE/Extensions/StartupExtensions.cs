@@ -34,6 +34,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUtilidadRepository, UtilidadRepository>();
             services.AddScoped<INotificacionRepository, NotificacionRepository>();
+            services.AddScoped<IMailRepository, MailRepository>();
             
         }
 

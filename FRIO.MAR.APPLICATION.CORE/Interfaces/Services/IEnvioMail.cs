@@ -8,7 +8,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Services
 {
     public interface IEnvioMail
     {
-        void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false);
+        (bool, string) EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false);
         void EnviarCorreo(MailMessage message);
         Task EnviarCorreoAsync(MailMessage message);
     }

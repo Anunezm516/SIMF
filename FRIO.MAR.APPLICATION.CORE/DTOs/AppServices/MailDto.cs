@@ -9,8 +9,8 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
     {
         public DateTime? FechaIngreso { get; set; }
         public DateTime? FechaEnvio { get; set; }
-        public string NombreMostrar { get; set; }
-        public string CorreoMostrar { get; set; }
+        //public string NombreMostrar { get; set; }
+        //public string CorreoMostrar { get; set; }
         public string Correos { get; set; }
         public string Copias { get; set; }
         public string CopiasOcultas { get; set; }

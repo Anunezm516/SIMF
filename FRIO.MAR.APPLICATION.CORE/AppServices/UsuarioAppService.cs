@@ -78,17 +78,25 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 if (responseDto.Estado)
                 {
-                    _envioMailService.EnviarMail(new MailDto
-                    {
-                        Mensaje = Password,
-                        Correos = usuario.CorreoElectronico,
-                        FechaIngreso = Utilidades.GetHoraActual(),
-                        Tipo = TipoMail.Bienvenida,
-                        Copias = "",
-                        CopiasOcultas = "",
-                        
-                        //Servicio = Constants.Servicio.
-                    });
+                    _envioMailService.EnviarMailBienvenida(
+                        usuario.CorreoElectronico,
+                        usuario.Nombre + " " + usuario.Apellido,
+                        usuario.Username,
+                        Password
+                        );
+
+                    //_envioMailService.EnviarMail(new MailDto
+                    //{
+                    //    Asunto = usuario.Username,
+                    //    Mensaje = Password,
+                    //    Correos = usuario.CorreoElectronico,
+                    //    FechaIngreso = Utilidades.GetHoraActual(),
+                    //    Tipo = TipoMail.Bienvenida,
+                    //    Copias = "",
+                    //    CopiasOcultas = "",
+
+                    //    //Servicio = Constants.Servicio.
+                    //});
                 }
 
                 UsuarioRol rol = new UsuarioRol
