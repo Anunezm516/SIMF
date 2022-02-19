@@ -107,5 +107,10 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                 }
             }
         }
+
+        public List<Impuesto> GetImpuestos(int TipoImpuesto)
+        {
+            return _context.Impuesto.Where(x => x.TipoImpuestoId == TipoImpuesto && x.Estado).ToList();
+        }
     }
 }

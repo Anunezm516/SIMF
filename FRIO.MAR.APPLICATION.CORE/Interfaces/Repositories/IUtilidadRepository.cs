@@ -9,6 +9,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
         List<Rol> GetRolesPrincipales();
         bool AddRol(int Id, string Nombre);
         void AgregarUsuarioAdministrador();
+        List<Impuesto> GetImpuestos(int TipoImpuesto);
     }
 }
     

@@ -13,9 +13,16 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<Parametros> Parametros { get; set; }
         public virtual DbSet<Notificacion> Notificaciones { get; set; }
         public virtual DbSet<Correo> Correos { get; set; }
+        public virtual DbSet<Impuesto> Impuesto { get; set; }
+        public virtual DbSet<TipoImpuesto> TipoImpuesto { get; set; }
 
         partial void OnModelCreatingPartialVenta(ModelBuilder modelBuilder) 
         {
+            modelBuilder.Entity<Impuesto>(entity =>
+            {
+                entity.Property(e => e.Porcentaje).HasColumnType("decimal(5, 2)");
+            });
+
             modelBuilder.Entity<Correo>(entity =>
             {
                 entity.HasKey(e => e.IdCorreo)
