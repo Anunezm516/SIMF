@@ -11,6 +11,14 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         public const string ENCRIPTA_KEY = "-L4gRa(3*.!,";
         public const string COMPONENTE_NAME = "FRIO_MAR";
 
+        public const string ERROR_CLIENTE_ANONIMO = "P101";
+        public const string ERROR_CLIENTE_REGISTRADO_IDENTIFICACION = "P102";
+
+        public const string ERROR_PROVEEDOR_ANONIMO = "P201";
+        public const string ERROR_PROVEEDOR_REGISTRADO_IDENTIFICACION = "P202";
+
+
+
         public const string ERROR_USUARIO_REGISTRADO_MAIL = "P501";
         public const string ERROR_USUARIO_REGISTRADO_USERNAME = "P502";
         public const string ERROR_USUARIO_NO_REGISTRADO = "P503";
@@ -36,6 +44,13 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
             ERROR_USUARIO_NO_REGISTRADO => $"{CodigoError}: El usuario no se encuentra registrado.",
             ERROR_USUARIO_ANONIMO => $"{CodigoError}: El usuario o el correo electrónico no encontrado.",
             ERROR_ENVIAR_MAIL => $"{CodigoError}: Error al enviar el mail.",
+
+
+            ERROR_CLIENTE_ANONIMO => $"{CodigoError}: El cliente no se encuetra registrado.",
+            ERROR_CLIENTE_REGISTRADO_IDENTIFICACION => $"{CodigoError}: La identificación del cliente ya se encuentra registrada.",
+
+            ERROR_PROVEEDOR_ANONIMO => $"{CodigoError}: El proveedor no se encuetra registrado.",
+            ERROR_PROVEEDOR_REGISTRADO_IDENTIFICACION => $"{CodigoError}: La identificación del proveedor ya se encuentra registrada.",
         };
     }
 

@@ -1,7 +1,71 @@
-﻿
+﻿@model List<FRIO.MAR.APPLICATION.CORE.Models.ClienteModel>
+
 @{
     ViewBag.Title = "Clientes";
     ViewBag.pTitle = "Clientes";
     ViewBag.pageTitle = "Configuración";
 
+}
+
+<div class="card">
+    <div class="card-body">
+        <p>
+            <a asp-action="Registrar" class="btn btn-primary">Nuevo</a>
+        </p>
+        <table class="datatable table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Razón Social</th>
+                    <th>Tipo Identificación</th>
+                    <th>Identificación</th>
+                    <th>Teléfono</th>
+                    <th>Correo Electrónico</th>
+                </tr>
+            </thead>
+            <thebody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Registrar" asp-route-id="@item.Id" class="btn btn-dark"><i class="fa fa-edit"></i></a>
+                            <button type="button" class="btn btn-danger btn-eliminar" value="@item.Id"><i class="fa fa-trash"></i></button>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.RazonSocial)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TipoIdentificacion)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Identificacion)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CorreoElectronico)</td>
+                    </tr>
+                }
+            </thebody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            var table = $(".table").DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                "pageLength": 6,
+                "columnDefs": [
+                    {
+
+                    }
+                ]
+            });
+
+            $(".btn-eliminar").click(function () {
+                var id = $(this).val();
+                console.log(id)
+                ConfirmacionEliminar("@Url.Action("Eliminar", "Clientes")", '@Url.Action("Index", "Clientes")', { Id: id } );
+            });
+        });
+    </script>
+    @Html.Raw(TempData["msg"])
 }

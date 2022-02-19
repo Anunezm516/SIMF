@@ -35,6 +35,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IUtilidadRepository, UtilidadRepository>();
             services.AddScoped<INotificacionRepository, NotificacionRepository>();
             services.AddScoped<IMailRepository, MailRepository>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IProveedorRepository, ProveedorRepository>();
             
         }
 
@@ -45,11 +47,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IMailDomainService, MailDomainService>();
             services.AddScoped<IPermisoAppService, PermisoAppService>();
 
-
-        //    private readonly IRolQueryService _rolQueryService;
-        //private readonly IRolRepository _rolRepository;
-        //private readonly IPortalQueryService _portalQueryService;
-
             services.AddScoped<IPortalQueryService, PortalQueryService>();
             services.AddScoped<IRolQueryService, RolQueryService>();
             services.AddScoped<IUsuarioAppService, UsuarioAppService>();
@@ -59,6 +56,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
 
             services.AddScoped<IEnvioMail, EnvioMail>();
             services.AddScoped<INotificacionAppService, NotificacionAppService>();
+
+            services.AddScoped<IClienteAppService, ClienteAppService>();
+            services.AddScoped<IProveedorAppService, ProveedorAppService>();
         }
 
         public static void AddServicesMediate(this IServiceCollection services, IConfiguration Configuration)

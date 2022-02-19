@@ -41,10 +41,16 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         {
             OnModelCreatingPartial(modelBuilder);
             OnModelCreatingPartialSeguridad(modelBuilder);
+            OnModelCreatingPartialVenta(modelBuilder);
+            OnModelCreatingPartialUtilidad(modelBuilder);
+            OnModelCreatingPartialCompra(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
         partial void OnModelCreatingPartialSeguridad(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartialVenta(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartialUtilidad(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartialCompra(ModelBuilder modelBuilder);
 
     }
 }

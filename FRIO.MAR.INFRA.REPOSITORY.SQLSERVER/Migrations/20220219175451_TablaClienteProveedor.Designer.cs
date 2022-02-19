@@ -4,18 +4,20 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220219175451_TablaClienteProveedor")]
+    partial class TablaClienteProveedor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.21")
+                .HasAnnotation("ProductVersion", "3.1.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -68,10 +70,10 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaEliminacion")
+                    b.Property<DateTime>("FechaEliminacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaModificacion")
+                    b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Identificacion")
@@ -93,14 +95,13 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("TipoIdentificacion")
-                        .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                    b.Property<int>("TipoIdentificacion")
+                        .HasColumnType("int");
 
                     b.Property<long>("UsuarioCreacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioEliminacion")
+                    b.Property<long>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UsuarioModificacion")
@@ -347,10 +348,10 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaEliminacion")
+                    b.Property<DateTime>("FechaEliminacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaModificacion")
+                    b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Identificacion")
@@ -372,14 +373,13 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("TipoIdentificacion")
-                        .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                    b.Property<int>("TipoIdentificacion")
+                        .HasColumnType("int");
 
                     b.Property<long>("UsuarioCreacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioEliminacion")
+                    b.Property<long>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UsuarioModificacion")
