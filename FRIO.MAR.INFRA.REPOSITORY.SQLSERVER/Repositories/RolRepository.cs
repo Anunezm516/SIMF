@@ -69,17 +69,37 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             }
         }
 
-        public short? AsignarVentanas(long idRol, string idPermisos, long usuarioAuditoria, ref string mensaje)
+        public int? AsignarVentanas(long idRol, string idPermisos, long usuarioAuditoria, ref string mensaje)
         {
             try
             {
-                using (var scope = serviceScopeFactory.CreateScope())
+                var permisos = idPermisos.Split(";").Where(x => !string.IsNullOrEmpty(x)).Select(x => long.Parse(x)).ToArray();
+
+                List<RolPermiso> permisosRol = _context.RolPermiso.Where(x => x.IdRol == idRol && x.Estado == true).ToList();
+                permisosRol.ForEach(x => x.Estado = false);
+                _context.RolPermiso.UpdateRange(permisosRol);
+                _context.SaveChanges();
+
+                 permisosRol = permisos.Select(c => new RolPermiso
                 {
-                    using (var edocCmdContext = scope.ServiceProvider.GetRequiredService<SIFMContext>())
-                    {
-                        return edocCmdContext.AsignarVentanas(idRol, idPermisos, usuarioAuditoria);
-                    }
-                }
+                    IdRol = idRol,
+                    IdPermiso = c,
+                    Estado = true,
+                    UsuarioCreacion = usuarioAuditoria,
+                    FechaCreacion = APPLICATION.CORE.Utilities.Utilidades.GetHoraActual()
+                }).ToList();
+
+
+                _context.RolPermiso.AddRange(permisosRol);
+                return _context.SaveChanges();
+
+                //using (var scope = serviceScopeFactory.CreateScope())
+                //{
+                //    using (var edocCmdContext = scope.ServiceProvider.GetRequiredService<SIFMContext>())
+                //    {
+                //        return edocCmdContext.AsignarVentanas(idRol, idPermisos, usuarioAuditoria);
+                //    }
+                //}
             }
             catch (Exception ex)
             {

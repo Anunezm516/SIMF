@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    [Migration("20220219044458_TablaCorreo")]
-    partial class TablaCorreo
+    [Migration("20220220173319_DB")]
+    partial class DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.14")
+                .HasAnnotation("ProductVersion", "3.1.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -31,9 +31,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime");
 
-                    b.Property<long?>("IdCompania")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("IdUsuario")
                         .HasColumnType("bigint");
 
@@ -43,13 +40,112 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("SitioWeb")
-                        .HasColumnType("varchar(5)")
-                        .HasMaxLength(5)
+                        .HasColumnType("varchar(25)")
+                        .HasMaxLength(25)
                         .IsUnicode(false);
 
                     b.HasKey("Id");
 
                     b.ToTable("AccesoUsuario");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Bodega", b =>
+                {
+                    b.Property<long>("BodegaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaEliminacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<long>("UsuarioCreacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UsuarioEliminacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UsuarioModificacion")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("BodegaId");
+
+                    b.ToTable("Bodega");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Cliente", b =>
+                {
+                    b.Property<long>("ClienteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CorreoElectronico")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Direccion")
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaEliminacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Identificacion")
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("NombreComercial")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("RazonSocial")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Telefono")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("TipoIdentificacion")
+                        .HasColumnType("varchar(3)");
+
+                    b.Property<long>("UsuarioCreacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UsuarioEliminacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UsuarioModificacion")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ClienteId");
+
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Correo", b =>
@@ -104,6 +200,32 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasName("PK__Correo__872F8EAEDC7FA84E");
 
                     b.ToTable("Correo");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Impuesto", b =>
+                {
+                    b.Property<int>("ImpuestoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal>("Porcentaje")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<int>("TipoImpuestoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImpuestoId");
+
+                    b.HasIndex("TipoImpuestoId");
+
+                    b.ToTable("Impuesto");
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Notificacion", b =>
@@ -267,6 +389,126 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.ToTable("Permisos");
                 });
 
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Producto", b =>
+                {
+                    b.Property<long>("ProductoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaEliminacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("IvaCodigo")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal?>("IvaPorcentaje")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("Marca")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Modelo")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal>("PrecioUnitario")
+                        .HasColumnType("decimal(18, 6)");
+
+                    b.Property<int>("TipoProducto")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<long>("UsuarioCreacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UsuarioEliminacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UsuarioModificacion")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ProductoId");
+
+                    b.ToTable("Producto");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Proveedor", b =>
+                {
+                    b.Property<long>("ProveedorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CorreoElectronico")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Direccion")
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaEliminacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Identificacion")
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("NombreComercial")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("RazonSocial")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Telefono")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("TipoIdentificacion")
+                        .HasColumnType("varchar(3)");
+
+                    b.Property<long>("UsuarioCreacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UsuarioEliminacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UsuarioModificacion")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ProveedorId");
+
+                    b.ToTable("Proveedores");
+                });
+
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Rol", b =>
                 {
                     b.Property<long>("IdRol")
@@ -346,6 +588,136 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.HasIndex("IdRol");
 
                     b.ToTable("RolPermiso");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Sucursal", b =>
+                {
+                    b.Property<long>("SucursalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaEliminacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<long>("UsuarioCreacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UsuarioEliminacion")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UsuarioModificacion")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SucursalId");
+
+                    b.ToTable("Sucursal");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.SucursalBodega", b =>
+                {
+                    b.Property<long>("SucursalBodegaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("BodegaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SucursalId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SucursalBodegaId");
+
+                    b.HasIndex("BodegaId");
+
+                    b.HasIndex("SucursalId");
+
+                    b.ToTable("SucursalBodega");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.TipoIdentificacion", b =>
+                {
+                    b.Property<long>("TipoIdentificacionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("varchar(5)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("TipoIdentificacionId");
+
+                    b.ToTable("TipoIdentificacion");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.TipoImpuesto", b =>
+                {
+                    b.Property<int>("TipoImpuestoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("varchar(4)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("TipoImpuestoId");
+
+                    b.ToTable("TipoImpuesto");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.UnidadMedida", b =>
+                {
+                    b.Property<int>("UnidadMedidaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comentario")
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<bool?>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("Simbolo")
+                        .HasColumnType("varchar(max)");
+
+                    b.HasKey("UnidadMedidaId");
+
+                    b.ToTable("UnidadMedida");
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Usuario", b =>
@@ -449,6 +821,15 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.ToTable("UsuarioRol");
                 });
 
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Impuesto", b =>
+                {
+                    b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.TipoImpuesto", "TipoImpuesto")
+                        .WithMany("Impuestos")
+                        .HasForeignKey("TipoImpuestoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.RolPermiso", b =>
                 {
                     b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Permisos", "IdPermisoNavigation")
@@ -460,6 +841,21 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .WithMany("RolPermiso")
                         .HasForeignKey("IdRol")
                         .HasConstraintName("FK__RolPerm__IdRol__3E52440B");
+                });
+
+            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.SucursalBodega", b =>
+                {
+                    b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Bodega", "Bodega")
+                        .WithMany("SucursalBodega")
+                        .HasForeignKey("BodegaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Sucursal", "Sucursal")
+                        .WithMany("SucursalBodega")
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.UsuarioRol", b =>

@@ -28,16 +28,16 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             _portalQueryService = portalQueryService;
         }
 
-        public (IEnumerable<RolAppResultDto>, string) ConsultarRoles(long idCompania)
+        public (List<RolAppResultDto>, string) ConsultarRoles(long idCompania)
         {
-            IEnumerable<RolAppResultDto> rolesAppDto = null;
+            List<RolAppResultDto> rolesAppDto = null;
             string mensaje = null;
             try
             {
                 var roles = _rolRepository.GetRoles().Select(c => new RolesQueryDto { Estado = c.Estado ?? false, IdRol = c.IdRol, Nombre = c.Nombre });
 
                 if (string.IsNullOrEmpty(mensaje))
-                    rolesAppDto = roles.Select(fc => fc.MapToRolesAppResultDto());
+                    rolesAppDto = roles.Select(fc => fc.MapToRolesAppResultDto()).ToList();
                 else
                     mensaje = string.Format("{0} => {1}", this.GetCaller(), mensaje);
             }
@@ -87,7 +87,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             }
         }
 
-        public (IEnumerable<IdQueryDto>, string) ConsultarRolVentanas(short IdRol, string UsuarioAuditoria)
+        public (List<IdQueryDto>, string) ConsultarRolVentanas(short IdRol, string UsuarioAuditoria)
         {
             string mensaje = null;
             try
@@ -103,7 +103,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             }
         }
 
-        public (IEnumerable<AsignarRolVentanaAppResultDto>, string) ConsultarVentanasActivas(string UsuarioAuditoria)
+        public (List<AsignarRolVentanaAppResultDto>, string) ConsultarVentanasActivas(string UsuarioAuditoria)
         {
             string mensaje = null;
             try
@@ -144,7 +144,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             }
         }
 
-        public (short?, string) Asignar(long idRol, string idPermisos, long usuarioAuditoria)
+        public (int?, string) Asignar(long idRol, string idPermisos, long usuarioAuditoria)
         {
             string mensaje = null;
             try

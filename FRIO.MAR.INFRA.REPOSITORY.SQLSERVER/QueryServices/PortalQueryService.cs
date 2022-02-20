@@ -6,13 +6,17 @@ using GS.TOOLS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FRIO.MAR.INFRA.QUERY.QueryServices
 {
     public sealed class PortalQueryService : BaseQueryService, IPortalQueryService
     {
-        public PortalQueryService(IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
+        private readonly SIFMContext context;
+
+        public PortalQueryService(SIFMContext context, IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
         {
+            this.context = context;
         }
 
         public CredencialQueryDto ConsultarCredencialXNit(string nitCompania, ref string mensaje)
@@ -34,7 +38,7 @@ namespace FRIO.MAR.INFRA.QUERY.QueryServices
             }
         }
 
-        public IEnumerable<ParametroQueryDto> ConsultarParametroXCodigoXNit(string nitCompania, string codigos, ref string mensaje)
+        public List<ParametroQueryDto> ConsultarParametroXCodigoXNit(string nitCompania, string codigos, ref string mensaje)
         {
             try
             {
@@ -53,17 +57,20 @@ namespace FRIO.MAR.INFRA.QUERY.QueryServices
             }
         }
 
-        public IEnumerable<PermisosQueryDto> ConsultarVentanasActivas(ref string mensaje)
+        public List<PermisosQueryDto> ConsultarVentanasActivas(ref string mensaje)
         {
             try
             {
-                using (var scope = serviceScopeFactory.CreateScope())
+                return context.Permisos.Where(x => x.Estado == 1).Select(c => new PermisosQueryDto
                 {
-                    using (var edocQueryContext = scope.ServiceProvider.GetRequiredService<SIFMContext>())
-                    {
-                        return edocQueryContext.ConsultarVentanasActivas();
-                    };
-                };
+                    Codigo = c.Codigo,
+                    Descripcion = c.Descripcion,
+                    IdPermiso = c.IdPermiso,
+                    Icono = c.Icono,
+                    IdPadre = c.IdPadre,
+                    NombreAbreviado = c.NombreAbreviado,
+                    Url = c.Url,
+                }).ToList();
             }
             catch (Exception ex)
             {

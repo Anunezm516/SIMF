@@ -7,11 +7,11 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices
 {
     public interface IRolAppService
     {
-        (IEnumerable<RolAppResultDto>, string) ConsultarRoles(long idCompania);
+        (List<RolAppResultDto>, string) ConsultarRoles(long idCompania);
         (bool, string) RegistrarRol(long IdUsuario, string nombre, bool estado);
         (bool, string) ActualizarRol(long idrol, string nombre, bool estado, long IdUsuario);
-        (IEnumerable<IdQueryDto>, string) ConsultarRolVentanas(short IdRol, string UsuarioAuditoria);
-        (IEnumerable<AsignarRolVentanaAppResultDto>, string) ConsultarVentanasActivas(string UsuarioAuditoria);
-        (short?, string) Asignar(long idRol, string idPermisos, long usuarioAuditoria);
+        (List<IdQueryDto>, string) ConsultarRolVentanas(short IdRol, string UsuarioAuditoria);
+        (List<AsignarRolVentanaAppResultDto>, string) ConsultarVentanasActivas(string UsuarioAuditoria);
+        (int?, string) Asignar(long idRol, string idPermisos, long usuarioAuditoria);
     }
 }

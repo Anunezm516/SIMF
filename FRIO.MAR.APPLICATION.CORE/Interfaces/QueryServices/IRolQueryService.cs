@@ -5,8 +5,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices
 {
     public interface IRolQueryService
     {
-        IEnumerable<RolesQueryDto> ConsultaRolesXCompania(long idCompania, ref string mensaje);
+        List<RolesQueryDto> ConsultaRolesXCompania(long idCompania, ref string mensaje);
 
-        IEnumerable<IdQueryDto> ConsultarRolVentanas(short IdRol, ref string mensaje);
+        List<IdQueryDto> ConsultarRolVentanas(short IdRol, ref string mensaje);
     }
 }

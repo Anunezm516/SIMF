@@ -6,22 +6,26 @@ using GS.TOOLS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FRIO.MAR.INFRA.QUERY.QueryServices
 {
     public class RolQueryService : BaseQueryService, IRolQueryService
     {
-        public RolQueryService(IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
+        private readonly SIFMContext context;
+
+        public RolQueryService(SIFMContext context, IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
         {
+            this.context = context;
         }
 
-        public IEnumerable<RolesQueryDto> ConsultaRolesXCompania(long idCompania, ref string mensaje)
+        public List<RolesQueryDto> ConsultaRolesXCompania(long idCompania, ref string mensaje)
         {
             try
             {
                 using var scope = serviceScopeFactory.CreateScope();
                 using var edocQueryContext = scope.ServiceProvider.GetRequiredService<SIFMContext>();
-                return edocQueryContext.ConsultaRolesXCompania(idCompania);
+                return edocQueryContext.ConsultaRolesXCompania(idCompania).ToList();
             }
             catch (Exception ex)
             {
@@ -30,17 +34,11 @@ namespace FRIO.MAR.INFRA.QUERY.QueryServices
             }
         }
 
-        public IEnumerable<IdQueryDto> ConsultarRolVentanas(short IdRol, ref string mensaje)
+        public List<IdQueryDto> ConsultarRolVentanas(short IdRol, ref string mensaje)
         {
             try
             {
-                using (var scope = serviceScopeFactory.CreateScope())
-                {
-                    using (var edocQueryContext = scope.ServiceProvider.GetRequiredService<SIFMContext>())
-                    {
-                        return edocQueryContext.ConsultarRolVentanas(IdRol);
-                    };
-                };
+                return context.RolPermiso.Where(x => x.IdRol == IdRol).Select(c => new IdQueryDto { Id = (int)(c.IdPermiso ?? 0) }).ToList();
             }
             catch (Exception ex)
             {

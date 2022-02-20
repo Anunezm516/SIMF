@@ -54,6 +54,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 
         public void AgregarUsuarioAdministrador()
         {
+
             var usuarios = _context.UsuarioRol
                 .Include(x => x.IdUsuarioNavigation)
                 .Where(x => x.IdRol == ((int)Roles.Administrador));

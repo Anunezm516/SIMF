@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace FRIO.MAR.APPLICATION.CORE.Entities
 {
-    public partial class RolPermiso
+    public class RolPermiso
     {
         public long Id { get; set; }
         public long? IdRol { get; set; }
