@@ -1,4 +1,5 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,5 +30,23 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
         public string Ip { get; set; }
         public long Usuario { get; set; }
+
+        public ClienteModel()
+        {
+
+        }
+
+        public ClienteModel(Cliente cliente)
+        {
+            Id = Utilities.Crypto.CifrarId(cliente.ClienteId);
+            TipoIdentificacion = cliente.TipoIdentificacion;
+            Identificacion = cliente.Identificacion;
+            RazonSocial = cliente.RazonSocial;
+            NombreComercial = cliente.NombreComercial;
+            CorreoElectronico = cliente.CorreoElectronico;
+            Direccion = cliente.Direccion;
+            Telefono = cliente.Telefono;
+        }
+
     }
 }

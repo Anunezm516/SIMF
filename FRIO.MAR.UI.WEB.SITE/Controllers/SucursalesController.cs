@@ -13,26 +13,26 @@ using System.Collections.Generic;
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [Filters.MenuFilter(Constants.VentanasSoporte.Proveedores)]
-    public class ProveedoresController : BaseController
+    [Filters.MenuFilter(Constants.VentanasSoporte.Sucursales)]
+    public class SucursalesController : BaseController
     {
-        private readonly IProveedorAppService _proveedorAppService;
+        private readonly ISucursalAppService _SucursalAppService;
 
-        public ProveedoresController(IProveedorAppService proveedorAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
+        public SucursalesController(ISucursalAppService SucursalAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
-            _proveedorAppService = proveedorAppService;
+            _SucursalAppService = SucursalAppService;
         }
 
         public IActionResult Index()
         {
-            List<ProveedorModel> proveedores = new List<ProveedorModel>();
+            List<SucursalModel> Sucursales = new List<SucursalModel>();
             try
             {
-                var result = _proveedorAppService.ConsultarProveedores();
+                var result = _SucursalAppService.ConsultarSucursales();
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
                 {
-                    proveedores = result.Data;
+                    Sucursales = result.Data;
                 }
             }
             catch (Exception ex)
@@ -40,7 +40,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 TempData["msg"] = WebSiteConstants.MENSAJE_SWEET_ALERT_ERROR.Replace("{Mensaje_Respuesta}", DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex));
             }
 
-            return View(proveedores);
+            return View(Sucursales);
         }
 
         [HttpGet]
@@ -48,13 +48,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         {
             ViewBag.EsNuevo = true;
 
-            ProveedorModel model = new ProveedorModel();
+            SucursalModel model = new SucursalModel();
             try
             {
                 if (!string.IsNullOrEmpty(Id))
                 {
                     ViewBag.EsNuevo = false;
-                    var result = _proveedorAppService.ConsultarProveedor(Id);
+                    var result = _SucursalAppService.ConsultarSucursal(Id);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
                     {
@@ -68,7 +68,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
             catch (System.Exception ex)
             {
-                model = new ProveedorModel();
+                model = new SucursalModel();
                 ModelState.AddModelError(string.Empty, DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex));
             }
 
@@ -76,7 +76,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registrar(ProveedorModel model)
+        public IActionResult Registrar(SucursalModel model)
         {
             ViewBag.EsNuevo = true;
             try
@@ -89,11 +89,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                     if (string.IsNullOrEmpty(model.Id))
                     {
-                        var result = _proveedorAppService.CrearProveedor(model);
+                        var result = _SucursalAppService.CrearSucursal(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)
                         {
-                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Proveedor registrado con éxito");
+                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Sucursal registrado con éxito");
                             return RedirectToAction("Index");
                         }
                         else
@@ -104,11 +104,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     else
                     {
                         ViewBag.EsNuevo = false;
-                        var result = _proveedorAppService.EditarProveedor(model);
+                        var result = _SucursalAppService.EditarSucursal(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)
                         {
-                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Proveedor actualizado con éxito");
+                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Sucursal actualizado con éxito");
                             return RedirectToAction("Index");
                         }
                         else
@@ -132,15 +132,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 var usr = GetUserLogin();
-                var result = _proveedorAppService.EliminarProveedor(Id, usr.IPLogin, usr.IdUsuario);
+                var result = _SucursalAppService.EliminarSucursal(Id, usr.IPLogin, usr.IdUsuario);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
                 {
-                    return Json(new ResponseToViewDto { Estado = true, Mensaje = "Proveedor eliminado con éxito" });
+                    return Json(new ResponseToViewDto { Estado = true, Mensaje = "Sucursal eliminado con éxito" });
                 }
                 else
                 {
-                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "Error al eliminar el Proveedor" });
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "Error al eliminar el Sucursal" });
                 }
             }
             catch (Exception ex)

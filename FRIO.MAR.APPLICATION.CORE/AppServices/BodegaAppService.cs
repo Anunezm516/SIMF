@@ -12,23 +12,23 @@ using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.AppServices
 {
-    public class ProveedorAppService : IProveedorAppService
+    public class BodegaAppService : IBodegaAppService
     {
-        private readonly IProveedorRepository _proveedorRepository;
+        private readonly IBodegaRepository _bodegaRepository;
 
-        public ProveedorAppService(IProveedorRepository proveedorRepository)
+        public BodegaAppService(IBodegaRepository bodegaRepository)
         {
-            _proveedorRepository = proveedorRepository;
+            _bodegaRepository = bodegaRepository;
         }
 
-        public MethodResponseDto ConsultarProveedores()
+        public MethodResponseDto ConsultarBodegas()
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                var result = _proveedorRepository.GetProveedores();
+                var result = _bodegaRepository.GetBodegas();
 
-                responseDto.Data = result.Select(Proveedor => new ProveedorModel(Proveedor)).ToList();
+                responseDto.Data = result.Select(Bodega => new BodegaModel(Bodega)).ToList();
 
                 responseDto.Estado = true;
             }
@@ -40,16 +40,16 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto ConsultarProveedor(string ID)
+        public MethodResponseDto ConsultarBodega(string ID)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
 
-                Proveedor Proveedor = _proveedorRepository.Get(Id);
+                Bodega Bodega = _bodegaRepository.Get(Id);
 
-                responseDto.Data = new ProveedorModel(Proveedor);
+                responseDto.Data = new BodegaModel(Bodega);
 
                 responseDto.Estado = true;
             }
@@ -61,36 +61,32 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto CrearProveedor(ProveedorModel model)
+        public MethodResponseDto CrearBodega(BodegaModel model)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                Proveedor Proveedor = _proveedorRepository.GetFirstOrDefault(x => x.Identificacion == model.Identificacion && x.Estado);
-                if (Proveedor != null)
+                Bodega Bodega = _bodegaRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado);
+                if (Bodega != null)
                 {
-                    responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_REGISTRADO_IDENTIFICACION;
+                    responseDto.CodigoError = DomainConstants.ERROR_BODEGA_REGISTRADO_CODIGO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
                 }
 
-                Proveedor = new Proveedor
+                Bodega = new Bodega
                 {
-                    TipoIdentificacion = model.TipoIdentificacion,
-                    Identificacion = model.Identificacion,
-                    RazonSocial = model.RazonSocial,
-                    NombreComercial = model.NombreComercial,
-                    Direccion = model.Direccion,
-                    CorreoElectronico = model.CorreoElectronico,
-                    Telefono = model.Telefono,
+                    Codigo = model.Codigo,
+                    Nombre = model.Nombre,
+                    
                     Ip = model.Ip,
                     UsuarioCreacion = model.Usuario,
                     FechaCreacion = Utilities.Utilidades.GetHoraActual(),
                     Estado = true
                 };
 
-                _proveedorRepository.Add(Proveedor);
-                responseDto.Estado = _proveedorRepository.Save() > 0;
+                _bodegaRepository.Add(Bodega);
+                responseDto.Estado = _bodegaRepository.Save() > 0;
             }
             catch (Exception ex)
             {
@@ -100,45 +96,41 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto EditarProveedor(ProveedorModel model)
+        public MethodResponseDto EditarBodega(BodegaModel model)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(model.Id));
 
-                Proveedor Proveedor = _proveedorRepository.Get(Id);
-                if (Proveedor == null)
+                Bodega Bodega = _bodegaRepository.Get(Id);
+                if (Bodega == null)
                 {
-                    responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_ANONIMO;
+                    responseDto.CodigoError = DomainConstants.ERROR_BODEGA_ANONIMO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
                 }
 
-                if (Proveedor.Identificacion != model.Identificacion)
+                if (Bodega.Codigo != model.Codigo)
                 {
-                    var existe = _proveedorRepository.GetFirstOrDefault(x => x.Identificacion == model.Identificacion && x.Estado && x.ProveedorId != Id);
+                    var existe = _bodegaRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado && x.BodegaId != Id);
                     if (existe != null)
                     {
-                        responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_REGISTRADO_IDENTIFICACION;
+                        responseDto.CodigoError = DomainConstants.ERROR_BODEGA_REGISTRADO_CODIGO;
                         responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                         return responseDto;
                     }
                 }
 
-                Proveedor.TipoIdentificacion = model.TipoIdentificacion;
-                Proveedor.Identificacion = model.Identificacion;
-                Proveedor.RazonSocial = model.RazonSocial;
-                Proveedor.NombreComercial = model.NombreComercial;
-                Proveedor.Direccion = model.Direccion;
-                Proveedor.CorreoElectronico = model.CorreoElectronico;
-                Proveedor.Telefono = model.Telefono;
-                Proveedor.Ip = model.Ip;
-                Proveedor.UsuarioModificacion = model.Usuario;
-                Proveedor.FechaModificacion = Utilities.Utilidades.GetHoraActual();
+                Bodega.Codigo = model.Codigo;
+                Bodega.Nombre = model.Nombre;
 
-                _proveedorRepository.Update(Proveedor);
-                responseDto.Estado = _proveedorRepository.Save() > 0;
+                Bodega.Ip = model.Ip;
+                Bodega.UsuarioModificacion = model.Usuario;
+                Bodega.FechaModificacion = Utilities.Utilidades.GetHoraActual();
+
+                _bodegaRepository.Update(Bodega);
+                responseDto.Estado = _bodegaRepository.Save() > 0;
             }
             catch (Exception ex)
             {
@@ -148,27 +140,27 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto EliminarProveedor(string ID, string Ip, long Usuario)
+        public MethodResponseDto EliminarBodega(string ID, string Ip, long Usuario)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
-                Proveedor Proveedor = _proveedorRepository.Get(Id);
-                if (Proveedor == null)
+                Bodega Bodega = _bodegaRepository.Get(Id);
+                if (Bodega == null)
                 {
-                    responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_ANONIMO;
+                    responseDto.CodigoError = DomainConstants.ERROR_BODEGA_ANONIMO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
                 }
 
-                Proveedor.Ip = Ip;
-                Proveedor.UsuarioEliminacion = Usuario;
-                Proveedor.FechaCreacion = Utilities.Utilidades.GetHoraActual();
-                Proveedor.Estado = false;
+                Bodega.Ip = Ip;
+                Bodega.UsuarioEliminacion = Usuario;
+                Bodega.FechaCreacion = Utilities.Utilidades.GetHoraActual();
+                Bodega.Estado = false;
 
-                _proveedorRepository.Update(Proveedor);
-                responseDto.Estado = _proveedorRepository.Save() > 0;
+                _bodegaRepository.Update(Bodega);
+                responseDto.Estado = _bodegaRepository.Save() > 0;
             }
             catch (Exception ex)
             {

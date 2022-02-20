@@ -32,6 +32,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Constants
         Mantenimiento=300,
         Clientes,
         Proveedores,
+        Bodegas,
+        Sucursales,
 
         Ventas=400,
 

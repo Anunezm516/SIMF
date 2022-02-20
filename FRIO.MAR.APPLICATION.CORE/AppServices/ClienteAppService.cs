@@ -28,17 +28,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             {
                 var result = _clienteRepository.GetClientes();
 
-                responseDto.Data = result.Select(cliente => new ClienteModel
-                {
-                    Id = Utilities.Crypto.CifrarId(cliente.ClienteId),
-                    TipoIdentificacion = cliente.TipoIdentificacion,
-                    Identificacion = cliente.Identificacion,
-                    RazonSocial = cliente.RazonSocial,
-                    NombreComercial = cliente.NombreComercial,
-                    CorreoElectronico = cliente.CorreoElectronico,
-                    Direccion = cliente.Direccion,
-                    Telefono = cliente.Telefono
-                }).ToList();
+                responseDto.Data = result.Select(cliente => new ClienteModel(cliente)).ToList();
 
                 responseDto.Estado = true;
             }
@@ -59,17 +49,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 Cliente cliente = _clienteRepository.Get(Id);
 
-                responseDto.Data = new ClienteModel
-                {
-                    Id = Utilities.Crypto.CifrarId(cliente.ClienteId),
-                    TipoIdentificacion = cliente.TipoIdentificacion,
-                    Identificacion = cliente.Identificacion,
-                    RazonSocial = cliente.RazonSocial,
-                    NombreComercial = cliente.NombreComercial,
-                    CorreoElectronico = cliente.CorreoElectronico,
-                    Direccion = cliente.Direccion,
-                    Telefono = cliente.Telefono
-                };
+                responseDto.Data = new ClienteModel(cliente);
 
                 responseDto.Estado = true;
             }

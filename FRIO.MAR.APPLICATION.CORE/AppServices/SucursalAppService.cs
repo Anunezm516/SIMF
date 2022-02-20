@@ -12,23 +12,23 @@ using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.AppServices
 {
-    public class ProveedorAppService : IProveedorAppService
+    public class SucursalAppService : ISucursalAppService
     {
-        private readonly IProveedorRepository _proveedorRepository;
+        private readonly ISucursalRepository _SucursalRepository;
 
-        public ProveedorAppService(IProveedorRepository proveedorRepository)
+        public SucursalAppService(ISucursalRepository SucursalRepository)
         {
-            _proveedorRepository = proveedorRepository;
+            _SucursalRepository = SucursalRepository;
         }
 
-        public MethodResponseDto ConsultarProveedores()
+        public MethodResponseDto ConsultarSucursales()
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                var result = _proveedorRepository.GetProveedores();
+                var result = _SucursalRepository.GetSucursales();
 
-                responseDto.Data = result.Select(Proveedor => new ProveedorModel(Proveedor)).ToList();
+                responseDto.Data = result.Select(Sucursal => new SucursalModel(Sucursal)).ToList();
 
                 responseDto.Estado = true;
             }
@@ -40,16 +40,16 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto ConsultarProveedor(string ID)
+        public MethodResponseDto ConsultarSucursal(string ID)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
 
-                Proveedor Proveedor = _proveedorRepository.Get(Id);
+                Sucursal Sucursal = _SucursalRepository.Get(Id);
 
-                responseDto.Data = new ProveedorModel(Proveedor);
+                responseDto.Data = new SucursalModel(Sucursal);
 
                 responseDto.Estado = true;
             }
@@ -61,36 +61,32 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto CrearProveedor(ProveedorModel model)
+        public MethodResponseDto CrearSucursal(SucursalModel model)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                Proveedor Proveedor = _proveedorRepository.GetFirstOrDefault(x => x.Identificacion == model.Identificacion && x.Estado);
-                if (Proveedor != null)
+                Sucursal Sucursal = _SucursalRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado);
+                if (Sucursal != null)
                 {
-                    responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_REGISTRADO_IDENTIFICACION;
+                    responseDto.CodigoError = DomainConstants.ERROR_SUCURSAL_REGISTRADO_CODIGO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
                 }
 
-                Proveedor = new Proveedor
+                Sucursal = new Sucursal
                 {
-                    TipoIdentificacion = model.TipoIdentificacion,
-                    Identificacion = model.Identificacion,
-                    RazonSocial = model.RazonSocial,
-                    NombreComercial = model.NombreComercial,
-                    Direccion = model.Direccion,
-                    CorreoElectronico = model.CorreoElectronico,
-                    Telefono = model.Telefono,
+                    Codigo = model.Codigo,
+                    Nombre = model.Nombre,
+
                     Ip = model.Ip,
                     UsuarioCreacion = model.Usuario,
                     FechaCreacion = Utilities.Utilidades.GetHoraActual(),
                     Estado = true
                 };
 
-                _proveedorRepository.Add(Proveedor);
-                responseDto.Estado = _proveedorRepository.Save() > 0;
+                _SucursalRepository.Add(Sucursal);
+                responseDto.Estado = _SucursalRepository.Save() > 0;
             }
             catch (Exception ex)
             {
@@ -100,45 +96,41 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto EditarProveedor(ProveedorModel model)
+        public MethodResponseDto EditarSucursal(SucursalModel model)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(model.Id));
 
-                Proveedor Proveedor = _proveedorRepository.Get(Id);
-                if (Proveedor == null)
+                Sucursal Sucursal = _SucursalRepository.Get(Id);
+                if (Sucursal == null)
                 {
-                    responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_ANONIMO;
+                    responseDto.CodigoError = DomainConstants.ERROR_SUCURSAL_ANONIMO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
                 }
 
-                if (Proveedor.Identificacion != model.Identificacion)
+                if (Sucursal.Codigo != model.Codigo)
                 {
-                    var existe = _proveedorRepository.GetFirstOrDefault(x => x.Identificacion == model.Identificacion && x.Estado && x.ProveedorId != Id);
+                    var existe = _SucursalRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado && x.SucursalId != Id);
                     if (existe != null)
                     {
-                        responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_REGISTRADO_IDENTIFICACION;
+                        responseDto.CodigoError = DomainConstants.ERROR_SUCURSAL_REGISTRADO_CODIGO;
                         responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                         return responseDto;
                     }
                 }
 
-                Proveedor.TipoIdentificacion = model.TipoIdentificacion;
-                Proveedor.Identificacion = model.Identificacion;
-                Proveedor.RazonSocial = model.RazonSocial;
-                Proveedor.NombreComercial = model.NombreComercial;
-                Proveedor.Direccion = model.Direccion;
-                Proveedor.CorreoElectronico = model.CorreoElectronico;
-                Proveedor.Telefono = model.Telefono;
-                Proveedor.Ip = model.Ip;
-                Proveedor.UsuarioModificacion = model.Usuario;
-                Proveedor.FechaModificacion = Utilities.Utilidades.GetHoraActual();
+                Sucursal.Codigo = model.Codigo;
+                Sucursal.Nombre = model.Nombre;
+                
+                Sucursal.Ip = model.Ip;
+                Sucursal.UsuarioModificacion = model.Usuario;
+                Sucursal.FechaModificacion = Utilities.Utilidades.GetHoraActual();
 
-                _proveedorRepository.Update(Proveedor);
-                responseDto.Estado = _proveedorRepository.Save() > 0;
+                _SucursalRepository.Update(Sucursal);
+                responseDto.Estado = _SucursalRepository.Save() > 0;
             }
             catch (Exception ex)
             {
@@ -148,27 +140,27 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto EliminarProveedor(string ID, string Ip, long Usuario)
+        public MethodResponseDto EliminarSucursal(string ID, string Ip, long Usuario)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
-                Proveedor Proveedor = _proveedorRepository.Get(Id);
-                if (Proveedor == null)
+                Sucursal Sucursal = _SucursalRepository.Get(Id);
+                if (Sucursal == null)
                 {
-                    responseDto.CodigoError = DomainConstants.ERROR_PROVEEDOR_ANONIMO;
+                    responseDto.CodigoError = DomainConstants.ERROR_SUCURSAL_ANONIMO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
                 }
 
-                Proveedor.Ip = Ip;
-                Proveedor.UsuarioEliminacion = Usuario;
-                Proveedor.FechaCreacion = Utilities.Utilidades.GetHoraActual();
-                Proveedor.Estado = false;
+                Sucursal.Ip = Ip;
+                Sucursal.UsuarioEliminacion = Usuario;
+                Sucursal.FechaCreacion = Utilities.Utilidades.GetHoraActual();
+                Sucursal.Estado = false;
 
-                _proveedorRepository.Update(Proveedor);
-                responseDto.Estado = _proveedorRepository.Save() > 0;
+                _SucursalRepository.Update(Sucursal);
+                responseDto.Estado = _SucursalRepository.Save() > 0;
             }
             catch (Exception ex)
             {

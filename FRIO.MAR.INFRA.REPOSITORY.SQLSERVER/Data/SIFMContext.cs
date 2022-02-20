@@ -44,6 +44,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
             OnModelCreatingPartialVenta(modelBuilder);
             OnModelCreatingPartialUtilidad(modelBuilder);
             OnModelCreatingPartialCompra(modelBuilder);
+            OnModelCreatingPartialInventario(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
@@ -51,6 +52,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         partial void OnModelCreatingPartialVenta(ModelBuilder modelBuilder);
         partial void OnModelCreatingPartialUtilidad(ModelBuilder modelBuilder);
         partial void OnModelCreatingPartialCompra(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartialInventario(ModelBuilder modelBuilder);
 
     }
 }

@@ -1,10 +1,10 @@
-﻿@model List<FRIO.MAR.APPLICATION.CORE.Models.ClienteModel>
+﻿@model List<FRIO.MAR.APPLICATION.CORE.Models.BodegaModel>
 
 @{
-    ViewBag.Title = "Clientes";
-    ViewBag.pTitle = "Clientes";
+    ViewBag.Title = "Bodegas";
+    ViewBag.pTitle = "Bodegas";
     ViewBag.pageTitle = "Configuración";
-
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="card">
@@ -16,11 +16,8 @@
             <thead>
                 <tr>
                     <th>Acción</th>
-                    <th>Razón Social</th>
-                    <th>Tipo Identificación</th>
-                    <th>Identificación</th>
-                    <th>Teléfono</th>
-                    <th>Correo Electrónico</th>
+                    <th>Código</th>
+                    <th>Nombre</th>
                 </tr>
             </thead>
             <thebody>
@@ -31,11 +28,8 @@
                             <a asp-action="Registrar" asp-route-id="@item.Id" class="btn btn-dark"><i class="fa fa-edit"></i></a>
                             <button type="button" class="btn btn-danger btn-eliminar" value="@item.Id"><i class="fa fa-trash"></i></button>
                         </td>
-                        <td>@Html.DisplayFor(modelItem => item.RazonSocial)</td>
-                        <td>@Html.DisplayFor(modelItem => item.TipoIdentificacion)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Identificacion)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CorreoElectronico)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Codigo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                     </tr>
                 }
             </thebody>
@@ -63,7 +57,7 @@
             $(".btn-eliminar").click(function () {
                 var id = $(this).val();
                 console.log(id)
-                ConfirmacionEliminar("@Url.Action("Eliminar", "Clientes")", '@Url.Action("Index", "Clientes")', { Id: id } );
+                ConfirmacionEliminar("@Url.Action("Eliminar", "Bodegas")", '@Url.Action("Index", "Bodegas")', { Id: id } );
             });
         });
     </script>

@@ -1,0 +1,68 @@
+﻿@model FRIO.MAR.APPLICATION.CORE.Models.SucursalModel
+
+@{
+    ViewBag.Title = "Sucursales";
+    ViewBag.pTitle = "Sucursales";
+    ViewBag.pageTitle = "Configuración";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Registrar" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label asp-for="Codigo" class="control-label">Código <span class="text-danger">*</span></label>
+                        <input asp-for="Codigo" class="form-control"  />
+                        <span asp-validation-for="Codigo" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="control-label">Nombre <span class="text-danger">*</span></label>
+                        <input asp-for="Nombre" class="form-control"  />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+             <br />
+
+            <div class="row">
+               
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                @if (ViewBag.EsNuevo)
+                {
+                    <button class="btn btn-primary"  type="submit">Agregar</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary"  type="submit">Editar</button>
+                }
+                <a asp-action="Index" class="btn btn-dark">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+    </script>
+    @Html.Raw(TempData["msg"])
+}

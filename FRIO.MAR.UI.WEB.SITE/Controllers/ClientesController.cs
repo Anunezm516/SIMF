@@ -53,6 +53,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 if (!string.IsNullOrEmpty(Id))
                 {
+                    ViewBag.EsNuevo = false;
                     var result = _clienteAppService.ConsultarCliente(Id);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
@@ -102,6 +103,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     }
                     else
                     {
+                        ViewBag.EsNuevo = false;
                         var result = _clienteAppService.EditarCliente(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)
