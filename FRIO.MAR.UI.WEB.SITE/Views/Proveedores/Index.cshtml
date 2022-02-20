@@ -24,6 +24,9 @@
                 </tr>
             </thead>
             <thebody>
+                @{
+                    var TipoDocumento = ViewBag.tipoIdentificacion as List<FRIO.MAR.APPLICATION.CORE.Entities.TipoIdentificacion>;
+                }
                 @foreach (var item in Model)
                 {
                     <tr>
@@ -32,7 +35,7 @@
                             <button type="button" class="btn btn-danger btn-eliminar" value="@item.Id"><i class="fa fa-trash"></i></button>
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.RazonSocial)</td>
-                        <td>@Html.DisplayFor(modelItem => item.TipoIdentificacion)</td>
+                        <p>@(TipoDocumento?.FirstOrDefault(x => x.Codigo == item.TipoIdentificacion)?.Nombre ?? "Tipo no reconocido")</p>
                         <td>@Html.DisplayFor(modelItem => item.Identificacion)</td>
                         <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
                         <td>@Html.DisplayFor(modelItem => item.CorreoElectronico)</td>

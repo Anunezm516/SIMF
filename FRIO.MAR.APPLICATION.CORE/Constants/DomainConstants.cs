@@ -6,7 +6,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 {
     public static class DomainConstants
     {
-        public const string MENSAJE_CAMPO_REQUERIDO = "Este campo es requerido";
+        public const string MENSAJE_CAMPO_REQUIRED = "Este campo es requerido";
+        public const string MENSAJE_CAMPO_MAX_LENGTH = "Ha excedido la capacidad máxima de caracteres";
+
         public const string ERROR_GENERAL = "E999";
         public const string ENCRIPTA_KEY = "-L4gRa(3*.!,";
         public const string COMPONENTE_NAME = "FRIO_MAR";
@@ -23,13 +25,15 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         public const string ERROR_SUCURSAL_ANONIMO = "P401";
         public const string ERROR_SUCURSAL_REGISTRADO_CODIGO = "P402";
 
-
-
-
         public const string ERROR_USUARIO_REGISTRADO_MAIL = "P501";
         public const string ERROR_USUARIO_REGISTRADO_USERNAME = "P502";
         public const string ERROR_USUARIO_NO_REGISTRADO = "P503";
         public const string ERROR_USUARIO_ANONIMO = "P504";
+
+        public const string ERROR_PRODUCTO_ANONIMO = "P601";
+        public const string ERROR_PRODUCTO_REGISTRADO_CODIGO = "P602";
+
+
         public const string ERROR_ENVIAR_MAIL = "P018";
 
         public const string MAIL_BIENVENIDA_ASUNTO = "MAIL_BIENVENIDA_ASUNTO";
@@ -64,6 +68,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
             ERROR_SUCURSAL_ANONIMO => $"{CodigoError}: La sucursal no se encuetra registrado.",
             ERROR_SUCURSAL_REGISTRADO_CODIGO => $"{CodigoError}: El código de la sucursal ya se encuentra registrada.",
+
+            ERROR_PRODUCTO_ANONIMO => $"{CodigoError}: El producto no se encuetra registrado.",
+            ERROR_PRODUCTO_REGISTRADO_CODIGO => $"{CodigoError}: El código del producto ya se encuentra registrada.",
         };
     }
 
@@ -80,6 +87,12 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
     {
         Interno = 1,
         Externo = 2
+    }
+
+    public enum TipoProducto
+    {
+        Producto = 1,
+        Servicio = 2
     }
 
 

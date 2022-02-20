@@ -39,6 +39,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IProveedorRepository, ProveedorRepository>();
             services.AddScoped<IBodegaRepository, BodegaRepository>();
             services.AddScoped<ISucursalRepository, SucursalRepository>();
+            services.AddScoped<IProductoRepository, ProductoRepository>();
         }
 
         public static void AddServices(this IServiceCollection services)
@@ -62,6 +63,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IProveedorAppService, ProveedorAppService>();
             services.AddScoped<IBodegaAppService, BodegaAppService>();
             services.AddScoped<ISucursalAppService, SucursalAppService>();
+            services.AddScoped<IProductoAppService, ProductoAppService>();
+
         }
 
         public static void AddServicesMediate(this IServiceCollection services, IConfiguration Configuration)

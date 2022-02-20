@@ -1,6 +1,7 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using FRIO.MAR.UI.WEB.SITE.Constants;
@@ -16,10 +17,12 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     [Filters.MenuFilter(Constants.VentanasSoporte.Proveedores)]
     public class ProveedoresController : BaseController
     {
+        private readonly IUtilidadRepository _utilidadRepository;
         private readonly IProveedorAppService _proveedorAppService;
 
-        public ProveedoresController(IProveedorAppService proveedorAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
+        public ProveedoresController(IUtilidadRepository utilidadRepository, IProveedorAppService proveedorAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _utilidadRepository = utilidadRepository;
             _proveedorAppService = proveedorAppService;
         }
 
@@ -28,6 +31,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             List<ProveedorModel> proveedores = new List<ProveedorModel>();
             try
             {
+                ViewData["tipoIdentificacion"] = _utilidadRepository.GetTipoIdentificaciones();
+
                 var result = _proveedorAppService.ConsultarProveedores();
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
@@ -51,6 +56,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ProveedorModel model = new ProveedorModel();
             try
             {
+                ViewData["tipoIdentificacion"] = _utilidadRepository.GetTipoIdentificaciones();
+
                 if (!string.IsNullOrEmpty(Id))
                 {
                     ViewBag.EsNuevo = false;
@@ -81,6 +88,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ViewBag.EsNuevo = true;
             try
             {
+                ViewData["tipoIdentificacion"] = _utilidadRepository.GetTipoIdentificaciones();
+
                 if (ModelState.IsValid)
                 {
                     var usr = GetUserLogin();

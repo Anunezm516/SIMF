@@ -12,16 +12,18 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
     {
         public string Id { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string Codigo { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        [MaxLength(100, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string Nombre { get; set; }
 
         public string Ip { get; set; }
         public long Usuario { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public long[] Sucursales { get; set; }
 
         public BodegaModel()

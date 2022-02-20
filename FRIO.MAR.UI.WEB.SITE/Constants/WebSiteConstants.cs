@@ -34,6 +34,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Constants
         Proveedores,
         Bodegas,
         Sucursales,
+        ProductosInternos,
+        ProductosCliente,
 
         Ventas=400,
 

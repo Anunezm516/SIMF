@@ -13,6 +13,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<Bodega> Bodega { get; set; }
         public virtual DbSet<Sucursal> Sucursal { get; set; }
         public virtual DbSet<SucursalBodega> SucursalBodega { get; set; }
+        public virtual DbSet<Producto> Producto { get; set; }
 
 
         partial void OnModelCreatingPartialInventario(ModelBuilder modelBuilder) 

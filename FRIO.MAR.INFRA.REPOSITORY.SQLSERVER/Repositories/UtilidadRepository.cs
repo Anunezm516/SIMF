@@ -112,5 +112,15 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         {
             return _context.Impuesto.Where(x => x.TipoImpuestoId == TipoImpuesto && x.Estado).ToList();
         }
+
+        public List<TipoIdentificacion> GetTipoIdentificaciones()
+        {
+            return _context.TipoIdentificacion.Where(x => x.Estado).ToList();
+        }
+
+        public List<UnidadMedida> GetUnidadesMedida()
+        {
+            return _context.UnidadMedida.Where(x => x.Estado).ToList();
+        }
     }
 }

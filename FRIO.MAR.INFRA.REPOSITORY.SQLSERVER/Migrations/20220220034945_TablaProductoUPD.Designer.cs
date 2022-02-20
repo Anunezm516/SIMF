@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220220034945_TablaProductoUPD")]
+    partial class TablaProductoUPD
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -397,9 +399,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("varchar(10)");
 
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
@@ -412,26 +411,14 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<DateTime?>("FechaModificacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("IVA")
-                        .HasColumnType("decimal(5,2)");
-
                     b.Property<string>("Ip")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Marca")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Modelo")
+                    b.Property<string>("Nombre")
                         .HasColumnType("varchar(50)");
 
                     b.Property<decimal>("PrecioUnitario")
                         .HasColumnType("decimal(18, 6)");
-
-                    b.Property<int>("TipoProducto")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UnidadMedida")
-                        .HasColumnType("varchar(50)");
 
                     b.Property<long>("UsuarioCreacion")
                         .HasColumnType("bigint");
@@ -649,27 +636,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.ToTable("SucursalBodega");
                 });
 
-            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.TipoIdentificacion", b =>
-                {
-                    b.Property<long>("TipoIdentificacionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Codigo")
-                        .HasColumnType("varchar(5)");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(25)");
-
-                    b.HasKey("TipoIdentificacionId");
-
-                    b.ToTable("TipoIdentificacion");
-                });
-
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.TipoImpuesto", b =>
                 {
                     b.Property<int>("TipoImpuestoId")
@@ -689,30 +655,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.HasKey("TipoImpuestoId");
 
                     b.ToTable("TipoImpuesto");
-                });
-
-            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.UnidadMedida", b =>
-                {
-                    b.Property<int>("UnidadMedidaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Abreviatura")
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("Codigo")
-                        .HasColumnType("varchar(5)");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("UnidadMedidaId");
-
-                    b.ToTable("UnidadMedida");
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Usuario", b =>

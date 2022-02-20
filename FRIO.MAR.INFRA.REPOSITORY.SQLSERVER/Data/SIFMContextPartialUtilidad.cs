@@ -15,6 +15,8 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<Correo> Correos { get; set; }
         public virtual DbSet<Impuesto> Impuesto { get; set; }
         public virtual DbSet<TipoImpuesto> TipoImpuesto { get; set; }
+        public virtual DbSet<TipoIdentificacion> TipoIdentificacion { get; set; }
+        public virtual DbSet<UnidadMedida> UnidadMedida { get; set; }
 
         partial void OnModelCreatingPartialVenta(ModelBuilder modelBuilder) 
         {

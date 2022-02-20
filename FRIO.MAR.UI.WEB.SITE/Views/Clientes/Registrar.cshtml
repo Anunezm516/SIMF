@@ -19,13 +19,8 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label asp-for="TipoIdentificacion" class="control-label">Tipo de Identificacion <span class="text-danger">*</span></label>
-                        <select asp-for="TipoIdentificacion" class=" form-control" >
+                        <select asp-for="TipoIdentificacion" class=" form-control" asp-items="ViewBag.tipoIdentificacion" >
                             <option value="" selected disabled>--Seleccionar--</option>
-                            <option value="04">RUC</option>
-                            <option value="05">CEDULA</option>
-                            <option value="06">PASAPORTE</option>
-                            <option value="07">VENTA A CONSUMIDOR FINAL*</option>
-                            <option value="08">IDENTIFICACION DELEXTERIOR*</option>
                         </select>
                         <span asp-validation-for="TipoIdentificacion" class="text-danger"></span>
                     </div>

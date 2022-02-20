@@ -6,15 +6,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Models
 {
     public class PermisoModel
     {
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string NombreAbreviado { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public long Codigo { get; set; }
 
         public string Icono { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string Descripcion { get; set; }
 
         public string Url { get; set; }

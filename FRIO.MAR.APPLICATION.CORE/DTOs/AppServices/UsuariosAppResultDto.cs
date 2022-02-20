@@ -12,20 +12,20 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
     {
         public string IdUsuario { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string Usuario { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string Nombre { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string Apellido { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string CorreoElectronico { get; set; }
         public string Telefono { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUERIDO)]
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public long IdRol { get; set; }
         public string NombreRol { get; set; }
 

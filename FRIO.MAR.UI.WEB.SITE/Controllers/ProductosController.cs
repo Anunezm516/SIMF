@@ -11,34 +11,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [Filters.MenuFilter(Constants.VentanasSoporte.Clientes)]
-    public class ClientesController : BaseController
+    //[Filters.MenuFilter(Constants.VentanasSoporte.ProductosInternos)]
+    public class ProductosController : BaseController
     {
         private readonly IUtilidadRepository _utilidadRepository;
-        private readonly IClienteAppService _clienteAppService;
+        private readonly IProductoAppService _ProductoAppService;
 
-        public ClientesController(IUtilidadRepository utilidadRepository, ILogInfraServices logInfraServices, IClienteAppService clienteAppService) : base(logInfraServices)
+        public ProductosController(IUtilidadRepository utilidadRepository, IProductoAppService ProductoAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
             _utilidadRepository = utilidadRepository;
-            _clienteAppService = clienteAppService;
+            _ProductoAppService = ProductoAppService;
         }
 
         public IActionResult Index()
         {
-            List<ClienteModel> clientes = new List<ClienteModel>();
+            List<ProductoModel> Productoes = new List<ProductoModel>();
             try
             {
-                ViewData["tipoIdentificacion"] = _utilidadRepository.GetTipoIdentificaciones();
-                var result = _clienteAppService.ConsultarClientes();
+                ViewData["unidadMeida"] = _utilidadRepository.GetUnidadesMedida();
+                ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
+
+                var result = _ProductoAppService.ConsultarProductos();
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
                 {
-                    clientes = result.Data;
+                    Productoes = result.Data;
                 }
             }
             catch (Exception ex)
@@ -46,23 +47,24 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 TempData["msg"] = WebSiteConstants.MENSAJE_SWEET_ALERT_ERROR.Replace("{Mensaje_Respuesta}", DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex));
             }
 
-            return View(clientes);
+            return View(Productoes);
         }
 
         [HttpGet]
         public IActionResult Registrar(string Id)
         {
             ViewBag.EsNuevo = true;
-            
-            ClienteModel model = new ClienteModel();
+
+            ProductoModel model = new ProductoModel();
             try
-            {
-                ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones().ToList(), "Codigo", "Nombre");
+            {    
+                ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Codigo", "Nombre");
+                ViewData["IVA"] = new SelectList(_utilidadRepository.GetImpuestos(1), "Porcentaje", "Nombre");
 
                 if (!string.IsNullOrEmpty(Id))
                 {
                     ViewBag.EsNuevo = false;
-                    var result = _clienteAppService.ConsultarCliente(Id);
+                    var result = _ProductoAppService.ConsultarProducto(Id);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
                     {
@@ -76,7 +78,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
             catch (System.Exception ex)
             {
-                model = new ClienteModel();
+                model = new ProductoModel();
                 ModelState.AddModelError(string.Empty, DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex));
             }
 
@@ -84,12 +86,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registrar(ClienteModel model)
+        public IActionResult Registrar(ProductoModel model)
         {
             ViewBag.EsNuevo = true;
             try
             {
-                ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones(), "Codigo", "Nombre");
+                ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Codigo", "Nombre");
+                ViewData["IVA"] = new SelectList(_utilidadRepository.GetImpuestos(1), "Porcentaje", "Nombre");
 
                 if (ModelState.IsValid)
                 {
@@ -99,11 +102,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                     if (string.IsNullOrEmpty(model.Id))
                     {
-                        var result = _clienteAppService.CrearCliente(model);
+                        var result = _ProductoAppService.CrearProducto(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)
                         {
-                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Cliente registrado con éxito");
+                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Producto registrado con éxito");
                             return RedirectToAction("Index");
                         }
                         else
@@ -114,11 +117,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     else
                     {
                         ViewBag.EsNuevo = false;
-                        var result = _clienteAppService.EditarCliente(model);
+                        var result = _ProductoAppService.EditarProducto(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)
                         {
-                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Cliente actualizado con éxito");
+                            TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Producto actualizado con éxito");
                             return RedirectToAction("Index");
                         }
                         else
@@ -142,15 +145,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 var usr = GetUserLogin();
-                var result = _clienteAppService.EliminarCliente(Id, usr.IPLogin, usr.IdUsuario);
+                var result = _ProductoAppService.EliminarProducto(Id, usr.IPLogin, usr.IdUsuario);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
                 {
-                    return Json(new ResponseToViewDto { Estado = true, Mensaje = "Cliente eliminado con éxito" });
+                    return Json(new ResponseToViewDto { Estado = true, Mensaje = "Producto eliminado con éxito" });
                 }
                 else
                 {
-                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "Error al eliminar el Cliente" });
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "Error al eliminar el Producto" });
                 }
             }
             catch (Exception ex)
