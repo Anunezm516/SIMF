@@ -22,7 +22,10 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public decimal PrecioUnitario { get; set; }
 
         [Column(TypeName = "decimal(5,2)")]
-        public decimal? IVA { get; set; }
+        public decimal? IvaPorcentaje { get; set; }
+
+        [Column(TypeName = "varchar(50)")]
+        public string IvaCodigo { get; set; }
 
         [Column(TypeName = "varchar(50)")]
         public string Marca { get; set; }

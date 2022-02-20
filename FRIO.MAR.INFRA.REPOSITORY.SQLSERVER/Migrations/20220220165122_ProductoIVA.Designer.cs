@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220220165122_ProductoIVA")]
+    partial class ProductoIVA
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +72,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("varchar(100)");
@@ -118,7 +120,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("varchar(25)");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NombreComercial")
                         .HasColumnType("varchar(100)");
@@ -413,7 +415,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IvaCodigo")
                         .HasColumnType("varchar(50)");
@@ -479,7 +481,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("varchar(25)");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NombreComercial")
                         .HasColumnType("varchar(100)");
@@ -611,7 +613,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("varchar(100)");
@@ -701,17 +703,17 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Comentario")
-                        .HasColumnType("varchar(max)");
+                    b.Property<string>("Abreviatura")
+                        .HasColumnType("varchar(25)");
 
-                    b.Property<bool?>("Estado")
+                    b.Property<string>("Codigo")
+                        .HasColumnType("varchar(5)");
+
+                    b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("varchar(max)");
-
-                    b.Property<string>("Simbolo")
-                        .HasColumnType("varchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("UnidadMedidaId");
 

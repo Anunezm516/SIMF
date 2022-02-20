@@ -46,8 +46,11 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="IVA" class="control-label">Descripción <span class="text-danger">*</span></label>
-                        <select asp-for="IVA" class=" form-control" asp-items="ViewBag.IVA" >
+                        <select asp-for="IVA" class=" form-control" >
                             <option value="" selected disabled>--Seleccionar--</option>
+                            @foreach(var iva in ViewBag.IVA as List<FRIO.MAR.APPLICATION.CORE.Entities.Impuesto>){
+                                <option value="@iva.TipoImpuesto.Codigo|@iva.Porcentaje">@iva.Nombre</option>
+                            }
                         </select>
                         <span asp-validation-for="IVA" class="text-danger"></span>
                     </div>
@@ -55,7 +58,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="PrecioUnitario" class="control-label">Precio Unitario <span class="text-danger">*</span></label>
-                        <input asp-for="PrecioUnitario" class="form-control"  />
+                        <input asp-for="PrecioUnitario" class="form-control decimal"  />
                         <span asp-validation-for="PrecioUnitario" class="text-danger"></span>
                     </div>
                 </div>
@@ -80,10 +83,10 @@
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
+    <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.min.js"></script>
     <script>
         $(document).ready(function () {
-            
+            $(".decimal").maskMoney();
         });
     </script>
     @Html.Raw(TempData["msg"])

@@ -9,15 +9,16 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
     {
         public int UnidadMedidaId { get; set; }
 
-        [Column(TypeName = "varchar(5)")]
-        public string Codigo { get; set; }
+        [Column(TypeName = "varchar(max)")]
+        public string Simbolo { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [Column(TypeName = "varchar(max)")]
         public string Nombre { get; set; }
+        
+        [Column(TypeName = "varchar(max)")]
+        public string Comentario { get; set; }
 
-        [Column(TypeName = "varchar(25)")]
-        public string Abreviatura { get; set; }
 
-        public bool Estado { get; set; }
+        public bool? Estado { get; set; }
     }
 }

@@ -77,9 +77,11 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 Producto = new Producto
                 {
                     Codigo = model.Codigo,
-                    //IVA = model.IVA,
+                    IvaCodigo = model.IVA.Split("|")[0],
+                    IvaPorcentaje = decimal.Parse(model.IVA.Split("|")[1]),
                     UnidadMedida = model.UnidadMedida,
                     Descripcion = model.Descripcion,
+                    PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitario)),
 
                     Ip = model.Ip,
                     UsuarioCreacion = model.Usuario,
@@ -125,9 +127,11 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 }
 
                 Producto.Codigo = model.Codigo;
-                //IVA = model.IVA,
+                Producto.IvaCodigo = model.IVA.Split("|")[0];
+                Producto.IvaPorcentaje = decimal.Parse(model.IVA.Split("|")[1]);
                 Producto.UnidadMedida = model.UnidadMedida;
                 Producto.Descripcion = model.Descripcion;
+                Producto.PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitario));
 
                 Producto.Ip = model.Ip;
                 Producto.UsuarioModificacion = model.Usuario;

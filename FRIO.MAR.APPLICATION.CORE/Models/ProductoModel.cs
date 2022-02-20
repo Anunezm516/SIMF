@@ -43,7 +43,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             Codigo = producto.Codigo;
             Descripcion = producto.Descripcion;
             UnidadMedida = producto.UnidadMedida;
-
-        }
+            PrecioUnitario = APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(producto.PrecioUnitario, 2);
+            IVA = producto.IvaCodigo + "|" + producto.IvaPorcentaje;
+        } 
     }
 }

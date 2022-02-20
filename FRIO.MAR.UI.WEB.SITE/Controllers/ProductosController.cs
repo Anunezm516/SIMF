@@ -59,7 +59,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {    
                 ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Codigo", "Nombre");
-                ViewData["IVA"] = new SelectList(_utilidadRepository.GetImpuestos(1), "Porcentaje", "Nombre");
+                ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
 
                 if (!string.IsNullOrEmpty(Id))
                 {
@@ -92,14 +92,14 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Codigo", "Nombre");
-                ViewData["IVA"] = new SelectList(_utilidadRepository.GetImpuestos(1), "Porcentaje", "Nombre");
+                ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
 
                 if (ModelState.IsValid)
                 {
                     var usr = GetUserLogin();
                     model.Ip = usr.IPLogin;
                     model.Usuario = usr.IdUsuario;
-
+                    decimal precio = decimal.Parse(APPLICATION.CORE.Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitario));
                     if (string.IsNullOrEmpty(model.Id))
                     {
                         var result = _ProductoAppService.CrearProducto(model);

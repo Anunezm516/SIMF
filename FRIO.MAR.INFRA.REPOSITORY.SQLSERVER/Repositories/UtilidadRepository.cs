@@ -110,7 +110,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 
         public List<Impuesto> GetImpuestos(int TipoImpuesto)
         {
-            return _context.Impuesto.Where(x => x.TipoImpuestoId == TipoImpuesto && x.Estado).ToList();
+            return _context.Impuesto.Include(c => c.TipoImpuesto).Where(x => x.TipoImpuestoId == TipoImpuesto && x.Estado).ToList();
         }
 
         public List<TipoIdentificacion> GetTipoIdentificaciones()
@@ -120,7 +120,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 
         public List<UnidadMedida> GetUnidadesMedida()
         {
-            return _context.UnidadMedida.Where(x => x.Estado).ToList();
+            return _context.UnidadMedida.Where(x => x.Estado == true).ToList();
         }
     }
 }
