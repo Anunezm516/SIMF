@@ -1,12 +1,14 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using FRIO.MAR.UI.WEB.SITE.Constants;
 using GS.TOOLS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 
@@ -16,10 +18,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     [Filters.MenuFilter(Constants.VentanasSoporte.Bodegas)]
     public class BodegasController : BaseController
     {
+        private readonly ISucursalRepository _sucursalRepository;
         private readonly IBodegaAppService _BodegaAppService;
 
-        public BodegasController(IBodegaAppService BodegaAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
+        public BodegasController(
+            ISucursalRepository sucursalRepository,
+            IBodegaAppService BodegaAppService, 
+            ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _sucursalRepository = sucursalRepository;
             _BodegaAppService = BodegaAppService;
         }
 
@@ -51,6 +58,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             BodegaModel model = new BodegaModel();
             try
             {
+                ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
+
                 if (!string.IsNullOrEmpty(Id))
                 {
                     ViewBag.EsNuevo = false;
@@ -81,6 +90,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ViewBag.EsNuevo = true;
             try
             {
+                ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
+
                 if (ModelState.IsValid)
                 {
                     var usr = GetUserLogin();

@@ -8,6 +8,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" />
+}
+
 <div class="card">
     <div class="card-body">
         <form asp-action="Registrar" method="post">
@@ -30,7 +34,14 @@
                         <span asp-validation-for="Nombre" class="text-danger"></span>
                     </div>
                 </div>
-
+                 <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Sucursales">Sucursales <span class="text-danger">*</span></label>
+                        <select asp-for="Sucursales" class=" form-control select2" asp-items="ViewBag.sucursales" multiple>
+                        </select>
+                        <span asp-validation-for="Sucursales" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
              <br />
@@ -60,9 +71,12 @@
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
-            
+            $(".select2").select2({
+                placeholder: "--Seleccionar uno o más--"
+            });
         });
     </script>
     @Html.Raw(TempData["msg"])

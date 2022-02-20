@@ -7,6 +7,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
 {
     public interface IBodegaRepository : IRepository<Bodega>
     {
+        Bodega GetBodega(long Id);
         List<Bodega> GetBodegas();
     }
 }

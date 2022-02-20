@@ -47,7 +47,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
 
-                Bodega Bodega = _bodegaRepository.Get(Id);
+                Bodega Bodega = _bodegaRepository.GetBodega(Id);
 
                 responseDto.Data = new BodegaModel(Bodega);
 
@@ -85,7 +85,10 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     Estado = true
                 };
 
+                Bodega.SucursalBodega = model.Sucursales.Select(c => new SucursalBodega { SucursalId = c }).ToList();
+
                 _bodegaRepository.Add(Bodega);
+
                 responseDto.Estado = _bodegaRepository.Save() > 0;
             }
             catch (Exception ex)
@@ -103,7 +106,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(model.Id));
 
-                Bodega Bodega = _bodegaRepository.Get(Id);
+                Bodega Bodega = _bodegaRepository.GetBodega(Id);
                 if (Bodega == null)
                 {
                     responseDto.CodigoError = DomainConstants.ERROR_BODEGA_ANONIMO;
@@ -129,6 +132,8 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 Bodega.UsuarioModificacion = model.Usuario;
                 Bodega.FechaModificacion = Utilities.Utilidades.GetHoraActual();
 
+                Bodega.SucursalBodega.Clear();
+                Bodega.SucursalBodega = model.Sucursales.Select(c => new SucursalBodega { SucursalId = c }).ToList();
                 _bodegaRepository.Update(Bodega);
                 responseDto.Estado = _bodegaRepository.Save() > 0;
             }

@@ -13,5 +13,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices
         MethodResponseDto CrearBodega(BodegaModel model);
         MethodResponseDto EditarBodega(BodegaModel model);
         MethodResponseDto EliminarBodega(string ID, string Ip, long Usuario);
+
     }
 }
