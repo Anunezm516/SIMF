@@ -20,7 +20,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public string Descripcion { get; set; }
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
-        public string PrecioUnitario { get; set; }
+        public string PrecioUnitarioStr { get; set; }
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
@@ -28,6 +28,16 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string IVA { get; set; }
+
+
+        public string CantidadStr { get; set; }
+        public decimal Cantidad { get; set; }
+        public decimal PrecioUnitario { get; set; }
+
+        public long Bodega { get; set; }
+        public long Sucursal { get; set; }
+        public long ProductoId { get; set; }
+
 
         public string Ip { get; set; }
         public long Usuario { get; set; }
@@ -43,7 +53,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             Codigo = producto.Codigo;
             Descripcion = producto.Descripcion;
             UnidadMedida = producto.UnidadMedida;
-            PrecioUnitario = APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(producto.PrecioUnitario, 2);
+            PrecioUnitarioStr = APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(producto.PrecioUnitario, 2);
             IVA = producto.IvaCodigo + "|" + producto.IvaPorcentaje;
         } 
     }

@@ -99,7 +99,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     var usr = GetUserLogin();
                     model.Ip = usr.IPLogin;
                     model.Usuario = usr.IdUsuario;
-                    decimal precio = decimal.Parse(APPLICATION.CORE.Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitario));
+
                     if (string.IsNullOrEmpty(model.Id))
                     {
                         var result = _ProductoAppService.CrearProducto(model);

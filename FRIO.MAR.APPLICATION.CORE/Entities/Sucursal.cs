@@ -12,6 +12,12 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public Sucursal()
         {
             SucursalBodega = new HashSet<SucursalBodega>();
+            Bodega = new HashSet<Bodega>();
+            InventarioMovimientoEntrada = new HashSet<InventarioMovimientoEntrada>();
+            InventarioMovimientoSalida = new HashSet<InventarioMovimientoSalida>();
+            //InventarioBodegaSucursales = new HashSet<InventarioBodegaSucursales>();
+            InventarioProveedor = new HashSet<InventarioProveedor>();
+            InventarioVenta = new HashSet<InventarioVenta>();
         }
 
         [Key]
@@ -24,5 +30,11 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public string Codigo { get; set; }
 
         public virtual ICollection<SucursalBodega> SucursalBodega { get; set; }
+        public virtual ICollection<Bodega> Bodega { get; set; }
+        public virtual ICollection<InventarioMovimientoEntrada> InventarioMovimientoEntrada { get; set; }
+        public virtual ICollection<InventarioMovimientoSalida> InventarioMovimientoSalida { get; set; }
+        //public virtual ICollection<InventarioBodegaSucursales> InventarioBodegaSucursales { get; set; }
+        public virtual ICollection<InventarioProveedor> InventarioProveedor { get; set; }
+        public virtual ICollection<InventarioVenta> InventarioVenta { get; set; }
     }
 }

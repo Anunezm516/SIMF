@@ -81,7 +81,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     IvaPorcentaje = decimal.Parse(model.IVA.Split("|")[1]),
                     UnidadMedida = model.UnidadMedida,
                     Descripcion = model.Descripcion,
-                    PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitario)),
+                    PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitarioStr)),
 
                     Ip = model.Ip,
                     UsuarioCreacion = model.Usuario,
@@ -131,7 +131,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 Producto.IvaPorcentaje = decimal.Parse(model.IVA.Split("|")[1]);
                 Producto.UnidadMedida = model.UnidadMedida;
                 Producto.Descripcion = model.Descripcion;
-                Producto.PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitario));
+                Producto.PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitarioStr));
 
                 Producto.Ip = model.Ip;
                 Producto.UsuarioModificacion = model.Usuario;

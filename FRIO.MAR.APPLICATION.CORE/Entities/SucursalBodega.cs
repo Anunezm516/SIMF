@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.Entities
 {
-    public class SucursalBodega
+    public class SucursalBodega : Auditoria
     {
         [Key]
         public long SucursalBodegaId { get; set; }

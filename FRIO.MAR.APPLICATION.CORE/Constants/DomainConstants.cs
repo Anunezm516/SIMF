@@ -6,6 +6,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 {
     public static class DomainConstants
     {
+        public const string CODIGO_TRANSACCION = "{Fecha}-{Usuario}-{Compania}-{Tipo_Inventario}-{Tipo_Movimiento}-{Tabla}-{Id_Inventario}-{Hora}";
+
         public const string MENSAJE_CAMPO_REQUIRED = "Este campo es requerido";
         public const string MENSAJE_CAMPO_MAX_LENGTH = "Ha excedido la capacidad máxima de caracteres";
 
@@ -95,5 +97,17 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         Servicio = 2
     }
 
+    public enum TipoInventario
+    {
+        proveedor = 1,
+        venta = 2
+    }
+
+    public enum TipoMovimientoInventario
+    {
+        Manual = 1,
+        Tranferencia = 2,
+        Factura = 3
+    }
 
 }
