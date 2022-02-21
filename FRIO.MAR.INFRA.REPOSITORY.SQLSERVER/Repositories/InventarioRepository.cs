@@ -1,20 +1,19 @@
 ﻿
-using APLICATIONCORE_GSEDOCPYME.Interfaces.Inventario;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using FRIO.MAR.APPLICATION.CORE.Entities;
-using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Utilities;
 using GS.TOOLS;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 //using System.Data.Entity;
 
-namespace DATA_EPCOLOMBIA.Repositories.Inventario
+namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 {
     public class InventarioRepository : Repository<InventarioVenta>, IInventarioRepository
     {
@@ -22,7 +21,7 @@ namespace DATA_EPCOLOMBIA.Repositories.Inventario
         {
         }
 
-        public List<InventarioMovimientoDto> SelMovimientoEntrada(long IdCompania, int TipoMovimiento, DateTime fechaInicio, DateTime fechaFin, long IdProducto, long IdBodega)
+        public List<InventarioMovimientoDto> SelMovimientoEntrada(int TipoMovimiento, DateTime fechaInicio, DateTime fechaFin, long IdProducto, long IdBodega)
         {
             List<InventarioMovimientoDto> movimientoDtos = new List<InventarioMovimientoDto>();
             try
@@ -187,7 +186,7 @@ namespace DATA_EPCOLOMBIA.Repositories.Inventario
             }
         }
 
-        public bool QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdCompania, long IdUsuario, string IP, ref long IdInventarioMovimiento, ref string mensaje, ref string mensajeError)
+        public bool QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdUsuario, string IP, ref long IdInventarioMovimiento, ref string mensaje, ref string mensajeError)
         {
             var transaction = _context.Database.BeginTransaction();
             string codigo = DomainConstants.CODIGO_TRANSACCION;
@@ -201,7 +200,7 @@ namespace DATA_EPCOLOMBIA.Repositories.Inventario
             try
             {
                 codigoTransferencia = codigo.Replace("{Fecha}", DateTime.Now.ToString("yyyyMMdd")).Replace("{Hora}", DateTime.Now.ToString("HHmmss"))
-                                            .Replace("{Usuario}", IdUsuario.ToString()).Replace("{Compania}", IdCompania.ToString())
+                                            .Replace("{Usuario}", IdUsuario.ToString()).Replace("{Compania}", "")
                                             .Replace("{Tipo_Inventario}", mantenimientoDto.tipoInventario.ToString())
                                             .Replace("{Tipo_Movimiento}", mantenimientoDto.tipoMovimiento.ToString());
 
@@ -417,7 +416,7 @@ namespace DATA_EPCOLOMBIA.Repositories.Inventario
             }
         }
 
-        public bool QryInventarioTransferencia(long IdCompania, long IdUsuario, string IP, InventarioTransferenciaDto inventarioTransferenciaDto, ref string mensaje, ref string mensajeError)
+        public bool QryInventarioTransferencia(long IdUsuario, string IP, InventarioTransferenciaDto inventarioTransferenciaDto, ref string mensaje, ref string mensajeError)
         {
             var transaction = _context.Database.BeginTransaction();
             string codigo = DomainConstants.CODIGO_TRANSACCION;
@@ -434,12 +433,12 @@ namespace DATA_EPCOLOMBIA.Repositories.Inventario
                 
 
                 codigoTransferenciaEntrada = codigo.Replace("{Fecha}", DateTime.Now.ToString("yyyyMMdd")).Replace("{Hora}", DateTime.Now.ToString("HHmmss"))
-                                            .Replace("{Usuario}", IdUsuario.ToString()).Replace("{Compania}", IdCompania.ToString())
+                                            .Replace("{Usuario}", IdUsuario.ToString()).Replace("{Compania}", "")
                                             .Replace("{Tipo_Inventario}", inventarioTransferenciaDto.TipoInventarioOrigen.ToString())
                                             .Replace("{Tipo_Movimiento}", inventarioTransferenciaDto.TipoInventarioOrigen.ToString());
 
                 codigoTransferenciaSalida = codigo.Replace("{Fecha}", DateTime.Now.ToString("yyyyMMdd")).Replace("{Hora}", DateTime.Now.ToString("HHmmss"))
-                                            .Replace("{Usuario}", IdUsuario.ToString()).Replace("{Compania}", IdCompania.ToString())
+                                            .Replace("{Usuario}", IdUsuario.ToString()).Replace("{Compania}", "")
                                             .Replace("{Tipo_Inventario}", inventarioTransferenciaDto.TipoInventarioDestino.ToString())
                                             .Replace("{Tipo_Movimiento}", inventarioTransferenciaDto.TipoInventarioDestino.ToString());
 
@@ -775,7 +774,7 @@ namespace DATA_EPCOLOMBIA.Repositories.Inventario
             }
         }
 
-        public List<ProductoBodegaDto> SelProductosBodega(long IdBodega, int Sucursal, int TipoInventario, long IdCompania)
+        public List<ProductoBodegaDto> SelProductosBodega(long IdBodega, int Sucursal, int TipoInventario)
         {
             List<ProductoBodegaDto> productosDto = new List<ProductoBodegaDto>();
             try
@@ -833,7 +832,7 @@ namespace DATA_EPCOLOMBIA.Repositories.Inventario
             }
         }
 
-        public List<Producto> SelProductos(int cantidad, long IdProducto, long IdCompania, DateTime fechaInicio, DateTime fechaFin)
+        public List<Producto> SelProductos(int cantidad, long IdProducto, DateTime fechaInicio, DateTime fechaFin)
         {
             try
             {

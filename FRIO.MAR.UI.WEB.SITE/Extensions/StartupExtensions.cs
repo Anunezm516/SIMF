@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using System;
 using GS.IO.Constants;
 using GS.TOOLS;
-using GS.IO.Interfaces.IOServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
 using FRIO.MAR.UI.WEB.SITE.Settings;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
@@ -40,6 +39,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IBodegaRepository, BodegaRepository>();
             services.AddScoped<ISucursalRepository, SucursalRepository>();
             services.AddScoped<IProductoRepository, ProductoRepository>();
+            services.AddScoped<IInventarioRepository, InventarioRepository>();
         }
 
         public static void AddServices(this IServiceCollection services)
@@ -64,6 +64,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IBodegaAppService, BodegaAppService>();
             services.AddScoped<ISucursalAppService, SucursalAppService>();
             services.AddScoped<IProductoAppService, ProductoAppService>();
+            services.AddScoped<IInventarioDomainService, InventarioDomainService>();
 
         }
 

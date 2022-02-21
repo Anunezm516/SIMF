@@ -153,12 +153,12 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
     {
         public GetProductoInventarioDto()
         {
-            //EpinventarioProveedor = new List<FRIO.MAR.APPLICATION.CORE.Entities.EpinventarioProveedor>();
-            //EpinventarioVenta = new List<FRIO.MAR.APPLICATION.CORE.Entities.EpinventarioVenta>();
+            InventarioProveedor = new List<FRIO.MAR.APPLICATION.CORE.Entities.InventarioProveedor>();
+            InventarioVenta = new List<FRIO.MAR.APPLICATION.CORE.Entities.InventarioVenta>();
         }
         public int TipoInventario { get; set; }
-        //public List<FRIO.MAR.APPLICATION.CORE.Entities.EpinventarioProveedor> EpinventarioProveedor { get; set; }
-        //public List<FRIO.MAR.APPLICATION.CORE.Entities.EpinventarioVenta> EpinventarioVenta { get; set; }
+        public List<FRIO.MAR.APPLICATION.CORE.Entities.InventarioProveedor> InventarioProveedor { get; set; }
+        public List<FRIO.MAR.APPLICATION.CORE.Entities.InventarioVenta> InventarioVenta { get; set; }
     }
 
     public class ProductoMovimientoDto

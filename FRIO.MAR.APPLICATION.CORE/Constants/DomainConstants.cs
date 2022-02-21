@@ -110,4 +110,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         Factura = 3
     }
 
+    public class RespuestaVentaDto
+    {
+        public string NumDocumento { get; set; }
+    }
+
 }

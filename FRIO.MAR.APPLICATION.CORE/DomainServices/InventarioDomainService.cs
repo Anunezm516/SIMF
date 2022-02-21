@@ -2,6 +2,7 @@
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using GS.TOOLS;
 using System;
@@ -12,19 +13,21 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 {
     public class InventarioDomainService : IInventarioDomainService
     {
+        private readonly IInventarioRepository _inventarioRepository;
 
-        public InventarioDomainService()
+        public InventarioDomainService(IInventarioRepository inventarioRepository)
         {
-
+            _inventarioRepository = inventarioRepository;
         }
 
 
-        public MethodResponseDto QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdCompania, long IdUsuario, string IP, ref long IdInventarioMovimiento)
+        public MethodResponseDto QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdUsuario, string IP, ref long IdInventarioMovimiento, ref string mensaje, ref string mensajeError)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                //return inventarioRepositorio.QryInventarioMovimiento(mantenimientoDto, IdCompania, IdUsuario, IP, ref IdInventarioMovimiento);
+                responseDto.Data = _inventarioRepository.QryInventarioMovimiento(mantenimientoDto, IdUsuario, IP, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
+                responseDto.Estado = true;
             }
             catch (Exception ex)
             {
@@ -35,12 +38,13 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             return responseDto;
         }
 
-        public MethodResponseDto QryInventarioTransferencia(long IdCompania, long IdUsuario, string IP, InventarioTransferenciaDto transferencia)
+        public MethodResponseDto QryInventarioTransferencia(long IdUsuario, string IP, InventarioTransferenciaDto transferencia, ref string mensaje, ref string mensajeError)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                //return inventarioRepositorio.QryInventarioTransferencia(IdCompania, IdUsuario, IP, transferencia);
+                responseDto.Data = _inventarioRepository.QryInventarioTransferencia(IdUsuario, IP, transferencia, ref mensaje, ref mensajeError);
+                responseDto.Estado = true;
             }
             catch (Exception ex)
             {
@@ -50,8 +54,8 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 
             return responseDto;
         }
-        /*
-        public MethodResponseDto ActualizarInventarioEmision(long IdCompania, long IdUsuario, string IP, int tipoMovimiento, long IdCliente, RespuestaEDOCDto respuestaEdoc, List<ProductoModel> productos)
+        
+        public MethodResponseDto ActualizarInventarioEmision(long IdUsuario, string IP, int tipoMovimiento, long IdCliente, RespuestaVentaDto respuestaVentaDto, List<ProductoModel> productos, ref string mensaje, ref string mensajeError)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
 
@@ -62,8 +66,8 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 mantenimiento.tipoMovimiento = tipoMovimiento;
                 mantenimiento.subTipoMovimiento = (int)TipoMovimientoInventario.Factura;
                 mantenimiento.cliente = IdCliente;
-                mantenimiento.cufeFactura = respuestaEdoc.UUID;
-                mantenimiento.numeroFactura = respuestaEdoc.NumDocumento;
+                //mantenimiento.cufeFactura = respuestaVentaDto.UUID;
+                mantenimiento.numeroFactura = respuestaVentaDto.NumDocumento;
 
                 if (tipoMovimiento == 1)// Entrada
                 {
@@ -82,7 +86,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     mantenimiento.productos = item.ProductoId;
                     mantenimiento.cantidad = item.Cantidad;
                     mantenimiento.unidadMedida = item.UnidadMedida;
-                    responseDto = QryInventarioMovimiento(mantenimiento, IdCompania, IdUsuario, IP, ref IdInventarioMovimiento);
+                    responseDto = QryInventarioMovimiento(mantenimiento, IdUsuario, IP, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
                 }
             }
             catch (Exception ex)
@@ -93,6 +97,6 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 
             return responseDto;
         }
-        */
+        
     }
 }

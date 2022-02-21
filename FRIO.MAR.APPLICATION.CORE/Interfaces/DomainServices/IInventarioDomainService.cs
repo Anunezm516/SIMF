@@ -8,7 +8,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices
 {
     public interface IInventarioDomainService
     {
-        MethodResponseDto QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdCompania, long IdUsuario, string IP, ref long IdInventarioMovimiento);
-        MethodResponseDto QryInventarioTransferencia(long IdCompania, long IdUsuario, string IP, InventarioTransferenciaDto transferencia);
+        MethodResponseDto QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdUsuario, string IP, ref long IdInventarioMovimiento, ref string mensaje, ref string mensajeError);
+        MethodResponseDto QryInventarioTransferencia(long IdUsuario, string IP, InventarioTransferenciaDto transferencia, ref string mensaje, ref string mensajeError);
     }
 }
