@@ -794,7 +794,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     {
                         //var props = prod.FirstOrDefault(x => x.IdProducto == item.IdProducto);
                         ProductoBodegaDto productoBodegaDto = new ProductoBodegaDto();
-                        productoBodegaDto.IdProducto = item.IdProductoNavigation.ProductoId;
+                        productoBodegaDto.ProductoId = item.IdProductoNavigation.ProductoId;
                         productoBodegaDto.Codigo = item.IdProductoNavigation.Codigo;
                         productoBodegaDto.Descripcion = item.IdProductoNavigation.Descripcion;
                         productoBodegaDto.Stock = item.StockActual == null ? "0" : Utilidades.DoubleToString_FrontCO((decimal)item?.StockActual, 2); 
@@ -816,7 +816,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     {
                         //var props = prod.FirstOrDefault(x => x.IdProducto == item.IdProducto);
                         ProductoBodegaDto productoBodegaDto = new ProductoBodegaDto();
-                        productoBodegaDto.IdProducto = item.IdProductoNavigation.ProductoId;
+                        productoBodegaDto.ProductoId = item.IdProductoNavigation.ProductoId;
                         productoBodegaDto.Codigo = item.IdProductoNavigation.Codigo;
                         productoBodegaDto.Descripcion = item.IdProductoNavigation.Descripcion;
                         productoBodegaDto.Stock = item.StockActual == null ? "0" : Utilidades.DoubleToString_FrontCO((decimal)item?.StockActual, 0);
@@ -852,6 +852,52 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         public List<Bodega> GetBodegas(long IdCompania)
         {
             return _context.Bodega.Where(x => x.Estado == true).ToList();
+        }
+
+        public List<InventarioVenta> GetInventarioVenta(long BodegaId)
+        {
+            if (BodegaId > 0)
+            {
+                return _context.InventarioVenta.Include(y => y.Bodega)
+                                            .Include(y => y.IdProductoNavigation)
+                                            .Include(y => y.IdSucursalNavigation)
+                                            .Where(x => x.Estado == true
+                                                        && x.IdInventarioBodega == BodegaId
+                                                        && x.Bodega.Estado == true
+                                                        ).ToList();
+            }
+            else
+            {
+                return _context.InventarioVenta.Include(y => y.Bodega)
+                                                .Include(y => y.IdProductoNavigation)
+                                                .Include(y => y.IdSucursalNavigation)
+                                                .Where(x => x.Estado == true
+                                                            && x.Bodega.Estado == true
+                                                            ).ToList();
+            }
+        }
+
+        public List<InventarioProveedor> GetInventarioProveedor(long BodegaId)
+        {
+            if (BodegaId > 0)
+            {
+                return _context.InventarioProveedor.Include(y => y.Bodega)
+                                                                        .Include(y => y.IdProductoNavigation)
+                                                                        .Include(y => y.IdSucursalNavigation)
+                                                                        .Where(x => x.Estado == true
+                                                                                    && x.IdInventarioBodega == BodegaId
+                                                                                    && x.Bodega.Estado == true
+                                                                                  ).ToList();
+            }
+            else
+            {
+                return _context.InventarioProveedor.Include(y => y.Bodega)
+                                                           .Include(y => y.IdProductoNavigation)
+                                                           .Include(y => y.IdSucursalNavigation)
+                                                           .Where(x => x.Estado == true
+                                                                        && x.Bodega.Estado == true
+                                                                     ).ToList();
+            }
         }
     }
 }

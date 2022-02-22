@@ -1,0 +1,410 @@
+﻿
+@{
+    ViewData["Title"] = "Mantenimiento Inventario";
+    ViewBag.DocExportacion = false;
+
+    ViewBag.pVentasUrl = Url.Action("Index", "Ventas");
+    ViewBag.pTitle = "Mantenimiento Inventario";
+    ViewBag.pageTitle = "Inventario";
+
+    var Productos = @ViewBag.Productos;
+    var Bodegas = @ViewBag.Bodegas;
+}
+
+@section Styles {
+    
+    <!-- select2 css -->
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+
+}
+
+@model FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.InventarioMantenimientoDto
+
+<div class="card">
+    <form id="formc">
+        <div class="card-body">
+            <div class="alert alert-info">
+                <span style="color: red">(*)</span> Campos obligatorios
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: black!important">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label class="label">Tipo Movimiento <span style="color: red">*</span></label>
+                    <select asp-for="tipoMovimiento" name="tipoMovimiento" id="tipoMovimiento" class="select2 form-control">
+                        <option value="1" selected>Entrada</option>
+                        <option value="2">Salida</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="label">Tipo de Inventario <span style="color: red">*</span></label>
+                    <select asp-for="tipoInventario" name="tipoInventario" id="tipoInventario" class="select2 form-control">
+                        <option value="0">-- SELECCIONAR --</option>
+                        <option value="1">Proveedor</option>
+                        <option value="2">Venta</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="label">Sucursal <span style="color: red">*</span></label>
+                    <select asp-for="sucursal" name="sucursal" id="sucursal" class="select2 form-control">
+                        <option value="0">-- SELECCIONAR --</option>
+                        @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Sucursal item in ViewBag.Sucursal)
+                        {
+                            <option value="@item.SucursalId">@item.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="label">Bodegas <span style="color: red">*</span></label>
+                    <select asp-for="bodegas" name="bodegas" id="bodegas" class="select2 form-control">
+                        <option value="0">-- SELECCIONAR --</option>
+                    </select>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label class="label">Productos <span style="color: red">*</span></label>
+                    <select asp-for="productos" name="productos" id="productos" class="select2 form-control">
+                        <option value="0">-- SELECCIONAR --</option>
+                        @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Producto item in Productos)
+                        {
+                            <option value="@item.ProductoId">@item.Codigo - @item.Descripcion</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Stock</label>
+                    <input readonly type="text" name="stock" id="stock" class="form-control" value="0" />
+                </div>
+                <div class="col-md-2">
+                    <label class="label">Cantidad <span style="color: red">*</span></label>
+                    <input asp-for="cantidadStr" class="form-control cantidad" type="text" name="cantidadStr" value="0.00" id="cantidadStr" />
+                </div>
+
+                <div class="col-md-4 div-entrada">
+                    <label class="label">Proveedor</label>
+                    <select asp-for="proveedor" name="proveedor" id="proveedor" class="select2 form-control">
+                        <option value="0">-- SELECCIONAR --</option>
+                        @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Proveedor item in ViewBag.Proveedor)
+                        {
+                            <option value="@item.ProveedorId">@item.Identificacion - @item.RazonSocial</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4 div-salida">
+                    <label class="label">Cliente</label>
+                    <select asp-for="cliente" name="cliente" id="cliente" class="select2 form-control">
+                        <option value="0">-- SELECCIONAR --</option>
+                        @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Cliente item in ViewBag.Cliente)
+                        {
+                            <option value="@item.ClienteId">@item.Identificacion - @item.RazonSocial</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row form-group div-entrada">
+                <div class="col-md-2">
+                    <label class="label">Precio</label>
+                    <input asp-for="precioStr" placeholder="$ 0.00" class="form-control feCurrencyEDOC" type="text" name="precioStr" value="" id="precioStr" />
+                </div>
+                <div class="col-md-2">
+                    <label class="label">Número Factura</label>
+                    <input asp-for="numeroFactura" placeholder="Ejemplo: SET-000000" class="form-control" type="text" name="numeroFactura" value="" id="numeroFactura" />
+                </div>
+                <div class="col-8">
+                    <label class="label">Cufe Factura</label>
+                    <input asp-for="cufeFactura" placeholder="Ejemplo: ebf5474f6367604f41e7a8e34b0b4bcde41925f8cea163c1b734e808de0ae63584349efd2e2cdba181febe88c80157fb" class="form-control" type="text" name="cufeFactura" value="" id="cufeFactura" />
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row form-group">
+                <div class="col-md-4 div-entrada">
+                    <div class="form-group">
+                        <label class="label">Unidad de Medida </label>
+                        <select asp-for="unidadMedida" id="unidadMedida" name="unidadMedida" class="select2 form-control">
+                            <option value="0">-- SELECCIONAR --</option>
+                            @foreach (var item in ViewBag.UnidadesMedida as List<FRIO.MAR.APPLICATION.CORE.Entities.UnidadMedida>)
+                            {
+                                <option value="@item.Simbolo"> @item.Simbolo @item.Nombre </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Cantidad Descripcion</label>
+                        <input asp-for="cantidadDescripcion" placeholder="Cantidad Descripción" class="form-control" type="text" name="cantidadDescripcion" value="" id="cantidadDescripcion" />
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <label class="label">Motivo</label>
+                    <textarea asp-for="motivo" maxlength="5000" placeholder="Texto libre de manera opcional máximo 5000 caracteres" rows="6" id="motivo" name="motivo" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row form-group">
+                <div class="col-12 text-right">
+                    <button id="btnenviar" type="button" class="btn btn-block btn-success">
+                        <i class="icon-file-xmlx"></i> Registrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+
+    <!-- select 2 plugin -->
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+
+    <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.min.js"></script>
+
+
+    <script>
+
+        function ActualizarComboEntrada(tipoInventario) {
+            IniciarLoading();
+            $.get("@Url.Action("ActualizarComboEntrada", "Inventario")", {}, function (response) {
+                DetenerLoading();
+                if (isEmpty(response)) {
+                    MensajeSesionFinalizadaConfirmacionRedireccion("@Url.Action("Index", "Auth")");
+                } else {
+                    if (response.status === "success") {
+                        LimpiarSelect("sucursal");
+                        LimpiarSelect("bodegas");
+                        LimpiarSelect("productos");
+                        addOptionsSucursales("sucursal", response.sucursal);
+                        //addOptionsSucursales("bodegas", response.bodegas);
+                        addOptionsProductos("productos", response.productos);
+                    } else {
+                        MensajeErrorSwal(response.mensaje, "");
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $(".select2").select2();
+            $(".div-entrada").show();
+
+            $(".div-salida").hide();
+
+            $("#tipoMovimiento").change(function () {
+                if ($(this).val() == "1") {
+                    $(".div-entrada").show();
+                    $(".div-salida").hide();
+                    ActualizarComboEntrada();
+                } else {
+                    $(".div-entrada").hide();
+                    $(".div-salida").show();
+
+                    LimpiarSelect("sucursal");
+                    LimpiarSelect("bodegas");
+                    LimpiarSelect("productos");
+                }
+            });
+
+            $('.cantidad').maskMoney({ thousands: ',', allowNegative: false, decimal: '.', precision: 2, allowZero: false });
+
+            $('.feCurrencyEDOC').maskMoney({ thousands: ',', allowNegative: false, decimal: '.', precision: 2, allowZero: false, prefix: '$ ' });
+
+            $('button#btnenviar').click(function () {
+                RegistrarMovimiento();
+            });
+
+            $("#cantidadStr").change(function () {
+                var value = parseInt($(this).val());
+                if (value < 0) {
+                    $(this).val(0);
+                }
+            });
+
+            $("#sucursal").change(function () {
+                var sucursal = $(this).val();
+                $("#stock").val("0");
+                ActualizarComboProductosBodega(sucursal);
+            });
+
+            $("#tipoInventario").change(function () {
+                //var id = $(this).attr("data-id");
+                if ($("#tipoMovimiento").val() == 1) { return; }
+
+                var value = $(this).val();
+                IniciarLoading();
+                $.post("@Url.Action("ActualizarComboProductosBodega", "Inventario")", { TipoInventario: value }, function (response) {
+                    DetenerLoading();
+                    if (isEmpty(response)) {
+                        MensajeSesionFinalizada();
+                        setTimeout(function () {
+                            window.location.href = "@Url.Action("index", "Auth")";
+                        }, 3000);
+                    } else {
+                        if (response.status === "success") {
+                            addOptionsSucursales("sucursal", response.sucursales);
+                            LimpiarSelect("bodegas");
+                        }
+                    }
+                });
+            });
+
+            $("#bodegas").change(function () {
+                if ($("#tipoMovimiento").val() == 1) { return; }
+                var bodega = $(this).val();
+                var tipoInventarioDestino = $("#tipoInventario").val();
+                var sucursalDestino = $("#sucursal").val();
+                $("#stock").val("0");
+                IniciarLoading();
+                $.post("@Url.Action("ActualizarComboProductosBodega", "Inventario")", { Bodega: bodega, TipoInventarioProducto: tipoInventarioDestino, SucursalProducto: sucursalDestino }, function (response) {
+                    DetenerLoading();
+                    console.log(response);
+                    if (isEmpty(response)) {
+                         MensajeSesionFinalizada();
+                            setTimeout(function () {
+                            window.location.href = "@Url.Action("index", "Auth")";
+                        }, 3000);
+                    } else {
+                        if (response.status === "success") {
+                            addOptionsProductos("productos", response.productos);
+                        }
+                    }
+                });
+            });
+
+            $("#productos").change(function () {
+                var stock = $("#productos :selected").attr("data-stock");
+                $("#stock").val(stock);
+            });
+        });
+
+        function RegistrarMovimiento() {
+            var TipoInventario = $("#tipoInventario").val();
+            var TipoMovimiento = $("#tipoMovimiento").val();
+            var IdProducto = $("#productos").val();
+            var IdBodega = $("#bodegas").val();
+            var sucursal = $("#sucursal").val();
+            var Cantidad = $("#cantidadStr").val();
+            var Motivo = $("#motivo").val();
+            var NumFactura = $("#numeroFactura").val();
+            var Cufe = $("#cufeFactura").val();
+            var Precio = $("#precioStr").val();
+            var UnidadMedida = $("#unidadMedida").val();
+            var CantidadDescripcion = $("#cantidadDescripcion").val();
+            var SubTipoMovimiento = 1;
+
+            if (isEmpty(TipoInventario) || TipoInventario === "0") { MensajeErrorSwal("Seleccione un tipo de Inventario", ""); return; }
+            if (isEmpty(TipoMovimiento) || TipoMovimiento === "0") { MensajeErrorSwal("Seleccione el tipo de movimiento", ""); return; }
+            if (isEmpty(IdProducto) || IdProducto === "0") { MensajeErrorSwal("Seleccione un producto", ""); return; }
+            if (isEmpty(Cantidad) || Cantidad === "0") { MensajeErrorSwal("Ingrese una cantidad valida", ""); return; }
+            if (isEmpty(sucursal) || sucursal === "0") { MensajeErrorSwal("Seleccione una sucursal", ""); return; }
+            if (isEmpty(IdBodega) || IdBodega === "0") { MensajeErrorSwal("Seleccione una bodega de destino", ""); return; }
+
+            var stock = parseFloat($("#stock").val().replace(",", "").replace(",", "").replace(",", "").replace(",", ""));
+            var cant = parseFloat(Cantidad.replace(",", "").replace(",", "").replace(",", "").replace(",", ""));
+
+            if (TipoMovimiento === "2") {
+                if ((stock) < (cant)) {
+                    MensajeErrorSwal("Ingrese una cantidad válida", "");
+                    return;
+                }
+            }
+
+            var formContainer = $('form#formc');
+
+            IniciarLoading();
+
+            $.ajax({
+                url:"@Url.Action("MantenimientoInventario", "Inventario")",
+                type: 'POST',
+                cache: false,
+                data: formContainer.serialize(),
+                success: function (result) {
+                    DetenerLoading();
+                    if (result.status === "success") {
+                        MensajeExitosoSwalConfirmacionRedireccion(result.mensaje, "", '@Url.Action("ListaInventario", "Inventario")');
+                    } else {
+                        MensajeErrorSwal(result.mensaje, "");
+                    }
+                },
+                error: function (jqXHR, textStatus, error) {
+                    DetenerLoading();
+                    MsgAjaxError(jqXHR);
+                }
+            });
+        }
+
+        function ActualizarComboProductosBodega(sucursal) {
+            IniciarLoading();
+            $.post("@Url.Action("ActualizarComboProductosBodega", "Inventario")", { Sucursal: sucursal }, function (response) {
+                DetenerLoading();
+                if (isEmpty(response)) {
+                    MensajeSesionFinalizada();
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("index", "Auth")";
+                    }, 3000);
+                } else {
+                    if (response.status === "success") {
+                        //addOptionsProductos("productosOrigen", response.productos);
+                        addOptionsBodegas("bodegas", response.bodegas);
+                    }
+                }
+            });
+        }
+
+        // Rutina para agregar opciones a un <select>
+        function addOptionsProductos(domElement, result) {
+            console.log(result);
+            var select = document.getElementById(domElement);
+            LimpiarSelect(domElement);
+            result.forEach(producto => {
+                var option = document.createElement("option");
+                option.value = producto.productoId;
+                option.text = producto.codigo + " - " + producto.descripcion;
+                option.setAttribute("data-stock", producto.stock);
+                select.add(option);
+            });
+        }
+
+        function addOptionsSucursales(domElement, result) {
+            console.log(result);
+            var select = document.getElementById(domElement);
+            LimpiarSelect(domElement);
+            result.forEach(sucursal => {
+                var option = document.createElement("option");
+                option.value = sucursal.sucursalId;
+                option.text = sucursal.nombre;
+                select.add(option);
+            });
+        }
+
+        function addOptionsBodegas(domElement, result) {
+            var select = document.getElementById(domElement);
+            LimpiarSelect(domElement);
+            result.forEach(bodega => {
+                var option = document.createElement("option");
+                option.value = bodega.bodegaId;
+                option.text = bodega.codigo + " - " + bodega.nombre;
+                select.add(option);
+            });
+        }
+
+        function LimpiarSelect(domElement) {
+            console.log(domElement);
+            $('#' + domElement).empty();
+            var select = document.getElementById(domElement);
+            var option = document.createElement("option");
+            option.text = "-- SELECCIONAR --";
+            option.value = "0";
+            select.add(option);
+        }
+    </script>
+}

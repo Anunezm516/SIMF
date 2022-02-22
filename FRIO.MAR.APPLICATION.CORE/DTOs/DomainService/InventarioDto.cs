@@ -92,7 +92,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
 
     public class ProductoBodegaDto
     {
-        public long IdProducto { get; set; }
+        public long ProductoId { get; set; }
         public string Codigo { get; set; }
         public string Descripcion { get; set; }
         public string Stock { get; set; }

@@ -58,7 +58,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ProductoModel model = new ProductoModel();
             try
             {    
-                ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Codigo", "Nombre");
+                ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Simbolo", "Nombre");
                 ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
 
                 if (!string.IsNullOrEmpty(Id))

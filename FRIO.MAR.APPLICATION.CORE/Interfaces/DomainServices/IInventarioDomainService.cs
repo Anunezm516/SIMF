@@ -10,5 +10,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices
     {
         MethodResponseDto QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdUsuario, string IP, ref long IdInventarioMovimiento, ref string mensaje, ref string mensajeError);
         MethodResponseDto QryInventarioTransferencia(long IdUsuario, string IP, InventarioTransferenciaDto transferencia, ref string mensaje, ref string mensajeError);
+        MethodResponseDto ListarInventarios(long BodegaId);
     }
 }

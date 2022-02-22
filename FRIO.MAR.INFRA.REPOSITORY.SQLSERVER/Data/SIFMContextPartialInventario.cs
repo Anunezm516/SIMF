@@ -68,7 +68,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
                 entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 6)");
 
                 entity.Property(e => e.CodigoTransferencia)
-                    .HasMaxLength(20)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Cufe)
@@ -122,7 +122,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
                 entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 6)");
 
                 entity.Property(e => e.CodigoTransferencia)
-                    .HasMaxLength(20)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Cufe)

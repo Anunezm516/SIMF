@@ -1,0 +1,269 @@
+﻿
+@{
+    ViewBag.Title = "eDoc Pyme | Reporte Inventario de Movimiento";
+    ViewBag.pTitle = "Reporte Inventario de Movimiento";
+    ViewBag.pageTitle = "Inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Reporte Inventario de Movimiento";
+}
+
+
+@section styles{
+    <!-- Sweet Alert-->
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <!-- Select y DataPicker-->
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/doc-emitido.css" rel="stylesheet" />
+
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body" style="padding-bottom: 0;">
+                <div class="toolbar">
+                    <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                        Seleccione los parámetros para realizar la consulta.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <p id="sub-text">Parámetros de Consulta</p>
+                    </div>
+                    <div class="row">
+                        <!-- Lista de productos -->
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <select name="tipoInventario" id="tipoInventario" class="select2 form-control">
+                                    <option value="0">-- TODO --</option>
+                                    <option value="1">Proveedor</option>
+                                    <option value="2">Venta</option>
+                                </select>
+                                <small>Tipo de Inventario</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <select name="tipoMovimiento" id="tipoMovimiento" class="select2 form-control">
+                                    <option value="0">-- TODO --</option>
+                                    <option value="1">Entrada</option>
+                                    <option value="2">Salida</option>
+                                </select>
+                                <small>Tipo de Movimiento</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <select name="subtipoMovimiento" id="subtipoMovimiento" class="select2 form-control">
+                                    <option value="0">-- TODO --</option>
+                                    <option value="1">Manual</option>
+                                    <option value="2">Tranferencia</option>
+                                    <option value="3">Factura</option>
+                                </select>
+                                <small>Acción</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <select name="proveedor" id="proveedor" class="form-control select2" data-placeholder="Seleccionar ...">
+                                    <option value="0">-- TODO --</option>
+                                    @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Proveedor item in ViewBag.Proveedor)
+                                    {
+                                        <option value="@item.ProveedorId">[@item.Identificacion] @item.RazonSocial - @item.NombreComercial</option>
+                                    }
+                                </select>
+                                <small>Proveedor</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <select name="producto" id="producto" class="form-control select2" data-placeholder="Seleccionar ...">
+                                    <option value="0">-- TODO --</option>
+                                    @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Productos)
+                                    {
+                                        <option value="@item.ProductoId">@item.Codigo - @item.Descripcion</option>
+                                    }
+                                </select>
+                                <small>Producto</small>
+                            </div>
+                        </div>
+                        <!-- Selector Rango de Fecha -->
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <div>
+                                    <div class="input-daterange input-group align-baseline" data-provide="datepicker">
+                                        <input style="cursor: pointer" readonly placeholder="Desde" id="fechaInicio2" type="text" class="form-control" name="start" />
+                                        <input style="cursor: pointer" readonly placeholder="Hasta" id="fechaFin2" type="text" class="form-control" name="end" />
+                                    </div>
+                                    <small>Rango de Fecha</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <div class="input-group">
+                                    <button id="idBotonConsultarEmitidos" type="button" class="btn btn-block btn-rounded waves-effect waves-light">Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<button class="btn btn-outline-primary btn-pdf" value="1faa763c5e415b0685e0928069141c561f631a9dd41b1eee59e6abf5006879e1cb04cc1df61836638b56a66f61482b72">
+                            <i class="fas fa-file-pdf"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-xml" value="1faa763c5e415b0685e0928069141c561f631a9dd41b1eee59e6abf5006879e1cb04cc1df61836638b56a66f61482b72">
+                            <i class="fas fa-file-archive"></i>
+                        </button>*@
+                    <hr />
+                    <div id="tablaDocumentosEmitidos"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <!-- Sweet Alerts js -->
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.es.js"></script>
+
+    @*<script src="~/assets/js/pages/form-advanced.init.js"></script>*@
+    <script src="~/assets/js/app.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $(".select2").select2();
+
+            $("#fechaInicio2").datepicker({
+                format: 'yyyy-mm-dd', orientation: "bottom auto", language: 'es'
+            });
+
+            $("#fechaFin2").datepicker({
+                format: 'yyyy-mm-dd', orientation: "bottom auto", language: 'es'
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+
+            $("#idBotonConsultarEmitidos").click(function () {
+                var TipoInventario = $("#tipoInventario").val();
+                var tipoMovimiento = $("#tipoMovimiento").val();
+                var subtipoMovimiento = $("#subtipoMovimiento").val();
+                var producto = $("#producto").val();
+                var proveedor = $("#proveedor").val();
+                var sucursal = 0;
+                var bodega = 0;
+                var valorFechaInicio = $("#fechaInicio2").val();
+                var valorFechaFin = $("#fechaFin2").val();
+                if (ValidarCampos(producto, valorFechaInicio, valorFechaFin)) {
+                    GetDetalleReporteInventarioProveedor(
+                        proveedor,
+                        TipoInventario,
+                        tipoMovimiento,
+                        subtipoMovimiento,
+                        producto,
+                        sucursal,
+                        bodega,
+                        valorFechaInicio,
+                        valorFechaFin
+                    );
+                } else {
+                    Swal.fire({
+                        title: 'Campos Incompletos!',
+                        text: 'Asegurese de enviar los parámetros completos para realizar la consulta.',
+                        type: "error",
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false,
+                        footer: " Por favor, intente nuevamente."
+                    });
+                }
+            });
+        });
+
+        function ValidarCampos(producto, valorFechaInicio, valorFechaFin) {
+
+            if (valorFechaInicio == "") {
+                return false;
+            }
+            if (valorFechaFin == "") {
+                return false
+            }
+            return true;
+        }
+
+        function GetDetalleReporteInventarioProveedor(proveedor, TipoInventario, tipoMovimiento, subtipoMovimiento, producto, sucursal, bodega, valorFechaInicio, valorFechaFin ) {
+            Swal.fire({
+                icon: "info",
+                allowOutsideClick: false,
+                title: 'Consultando Información',
+                text: 'Espere, por favor!...',
+                timer: 150000
+            });
+            Swal.showLoading();
+            $.get("@Url.Action("GetDetalleReporteInventario", "Inventario")", {
+                Proveedor: proveedor,
+                producto: producto,
+                sucursal: sucursal,
+                bodega: bodega,
+                fechaInicio: valorFechaInicio,
+                fechaFin: valorFechaFin,
+                TipoInventario: TipoInventario,
+                TipoMovimiento: tipoMovimiento,
+                SubtipoMovimiento: subtipoMovimiento
+            }, function (result) {
+                    DetenerLoading();
+                if (isEmpty(result)) {
+                    MensajeSesionFinalizada();
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("index", "Auth")';
+                    }, 3000);
+                } else {
+                    if (result.status === "error") {
+                        MensajeErrorSwal(result.mensaje, "");
+                    } else {
+                        $("#tablaDocumentosEmitidos").html(result);
+                    }
+                }
+            }).fail(function (error) {
+                // en caso de error
+                //console.log(error);
+                Swal.fire({
+                    title: '¡Lo sentimos!',
+                    text: 'Se ha generado un error técnico no controlado en el proceso.',
+                    type: "error",
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false,
+                    footer: "Técnico, por favor consulte el archivo.log"
+                });
+            });
+        }
+    </script>
+}

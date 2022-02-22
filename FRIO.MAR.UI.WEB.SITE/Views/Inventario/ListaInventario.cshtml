@@ -1,0 +1,761 @@
+﻿@model FRIO.MAR.APPLICATION.CORE.Models.ListaInventarioViewModel
+
+@{
+    ViewBag.Title = "eDoc Pyme | Inventario";
+    ViewBag.pTitle = "Lista Inventario";
+    ViewBag.pageTitle = "Inventario";
+
+    ViewData["Title"] = "Inventario";
+}
+
+@section Styles {
+    <!-- DataTables-->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples-->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card" style="padding:15px;">
+            <div class="card-body">
+
+                <div class="form-group row">
+
+                    <div class="col-md-10">
+                        <a asp-action="MantenimientoInventario" class="btn btn-success btn-rounded mb-2 mr-2" id="btn-client">
+                            <i class="fa fa-plus"></i> Ingreso/Salida
+                        </a>
+
+                        <a asp-action="MovimientoInventario" class="btn btn-success btn-rounded mb-2 mr-2" id="btn-client">
+                            <i class="fa fa-plus"></i> Transferencia Masiva
+                        </a>
+
+                        <a asp-action="Index" asp-controller="Bodegas" class="btn btn-success btn-rounded mb-2 mr-2" id="btn-client">
+                            <i class="fa fa-plus"></i> Bodegas
+                        </a>
+                    </div>
+
+                    <div class="col-md-2 " style="text-align: left; padding: 8px;">
+                       
+                        <button id="btn-Opciones" class="btn btn-success btn-rounded mb-2 mr-2" style="color:#014D6F;font-weight:600">Opciones</button>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group row">
+                    <br /><br />
+                    <div class="col-md-12">
+
+                        <div style="width: 100%; height: 13px; border-bottom: 1px solid #adb5bd; text-align: center;">
+                            <span style="font-size: 16px; background-color: #9FBB2F; padding: 0 10px;" id="InventarioNombreProducto">
+                                INVENTARIO VENTAS
+                            </span>
+                        </div>
+
+
+                        <table class="table table-striped table-bordereds table-responsive-lg" id="InventarioTable">
+                            <thead class="thead-light text-center">
+                                <tr>
+                                    <th>Acciones</th>
+                                    <th>Producto</th>
+                                    <th>Sucursal</th>
+                                    <th>Bodega</th>
+                                    <th>Precio Venta</th>
+                                    <th>Stock Actual</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListaInventario)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <div>
+                                                <button type="button" class="btn btn-outline-info btn-open-modal-inventario-venta" value="@item.IdInventario" title="Transferir">
+                                                    <i class="fa fa-arrow-right"></i>
+                                                </button>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="moda-agregar-V-@item.IdInventario" tabindex="-1" role="dialog" aria-labelledby="moda-agregarLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-md" role="document">
+                                                        <div class="modal-content" style="box-shadow: 0px 0px 10px 0px black">
+                                                            <div class="modal-header">
+                                                                <h6 class="modal-title" id="moda-agregarLabel">Transferir Producto</h6>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div>
+                                                                    @{
+                                                                        int tipoInventario = (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoInventario.venta;
+                                                                    }
+                                                                    <input type="hidden" name="sucursal" id="tipoInventarioOrigen-V-@item.IdInventario" class="tipoInventarioOrigen" value="@tipoInventario" />
+                                                                    <input type="hidden" name="sucursal" id="sucursal-V-@item.IdInventario" class="sucursal" value="@item.IdSucursal" />
+                                                                    <input type="hidden" name="bodega" id="bodega-V-@item.IdInventario" class="bodega" value="@item.IdBodega" />
+                                                                    <input type="hidden" name="producto" id="producto-V-@item.IdInventario" class="producto" value="@item.IdProducto" />
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-6">
+                                                                        <label>Producto Origen</label>
+                                                                        <input class="form-control" value="@item.Producto" readonly />
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Stock Actual</label>
+                                                                        <input class="form-control" id="stock-actual-V-@item.IdInventario" value="@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(@item.StockActual??0, 2)" readonly />
+                                                                        <small>Stock Actual con 2 decimales</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-6">
+                                                                        <label>Tipo Inventario</label>
+                                                                        <select name="tipoInventarioDestino" id="tipoInventarioDestino-V-@item.IdInventario" data-id="V-@item.IdInventario" class="select2 form-control tipoInventarioDestino">
+                                                                            <option value="0">-- SELECCIONAR --</option>
+                                                                            <option value="1">Proveedor</option>
+                                                                            <option value="2">Venta</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Sucursal Destino</label>
+                                                                        <select class="form-control select2 sucursalDestino" id="sucursalDestino-V-@item.IdInventario" data-id="V-@item.IdInventario" style="width: 100%">
+                                                                            <option value="0">-- SELECCIONAR --</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-6">
+                                                                        <label>Bodega Destino</label>
+                                                                        <select class="form-control select2 bodegasDestino" id="bodegasDestino-V-@item.IdInventario" data-id="V-@item.IdInventario" style="width: 100%">
+                                                                            <option value="0">-- SELECCIONAR --</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Cantidad</label>
+                                                                        <input placeholder="0.00" class="form-control cantidad" type="text" name="cantidad" id="cantidad-V-@item.IdInventario" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-12">
+                                                                        <label class="label">Motivo</label>
+                                                                        <textarea id="motivo-V-@item.IdInventario" maxlength="5000" placeholder="Texto libre de manera opcional máximo 5000 caracteres" rows="6" name="motivo" class="form-control"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button value="V-@item.IdInventario" class="btn btn-block btn-success btn-agregar-existente btn-rounded" data-unidad-medida="@item.UnidadMedida">
+                                                                    Transferir
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(modelItem => item.Producto)
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(modelItem => item.Sucursal)
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(modelItem => item.BodegaCodigo)
+                                        </td>
+                                        <td class="text-center">
+                                            @item.PrecioUnitario.ToString("N2").Replace(",", "$").Replace(".", ",").Replace("$", ".") 
+                                        </td>
+                                        <td class="text-center">
+                                            @item.StockActual.Value.ToString("N2").Replace(",", "$").Replace(".", ",").Replace("$", ".")
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-12">
+
+                        <div style="width: 100%; height: 13px; border-bottom: 1px solid #adb5bd; text-align: center;">
+                            <span style="font-size: 16px; background-color: #9FBB2F; padding: 0 10px;" id="InventarioNombreProducto">
+                                INVENTARIO PROVEEDOR
+                            </span>
+                        </div>
+                        <table class="table table-striped table-bordereds table-responsive-lg" id="InventarioTableProveedor">
+                            <thead class="thead-light text-center">
+                                <tr>
+                                    <th>Acciones</th>
+                                    <th>Producto</th>
+                                    <th>Sucursal</th>
+                                    <th>Bodega</th>
+                                    <th>Precio Venta</th>
+                                    <th>Stock Actual</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListaInventarioProvedor)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <div>
+                                                <button type="button" class="btn btn-outline-info btn-open-modal-inventario-proveedor" value="@item.IdInventario" title="Transferir">
+                                                    <i class="fa fa-arrow-right"></i>
+                                                </button>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="moda-agregar-P-@item.IdInventario" tabindex="-1" role="dialog" aria-labelledby="moda-agregarLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-md" role="document">
+                                                        <div class="modal-content" style="box-shadow: 0px 0px 10px 0px black">
+                                                            <div class="modal-header">
+                                                                <h6 class="modal-title" id="moda-agregarLabel">Transferir Producto</h6>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div>
+                                                                    @{
+                                                                        int tipoInventario = (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoInventario.proveedor;
+                                                                    }
+                                                                    <input type="hidden" name="sucursal" id="tipoInventarioOrigen-P-@item.IdInventario" class="tipoInventarioOrigen" value="@tipoInventario" />
+                                                                    <input type="hidden" name="sucursal" id="sucursal-P-@item.IdInventario" class="sucursal" value="@item.IdSucursal" />
+                                                                    <input type="hidden" name="bodega" id="bodega-P-@item.IdInventario" class="bodega" value="@item.IdBodega" />
+                                                                    <input type="hidden" name="producto" id="producto-P-@item.IdInventario" class="producto" value="@item.IdProducto" />
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-6">
+                                                                        <label>Producto Origen</label>
+                                                                        <input class="form-control" value="@item.Producto" readonly />
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Stock Actual</label>
+                                                                        <input class="form-control" id="stock-actual-P-@item.IdInventario" value="@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(@item.StockActual??0, 2)" readonly />
+                                                                        <small>Stock Actual con 2 decimales</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-6">
+                                                                        <label>Tipo Inventario</label>
+                                                                        <select name="tipoInventarioDestino" id="tipoInventarioDestino-P-@item.IdInventario" data-id="P-@item.IdInventario" class="select2 form-control tipoInventarioDestino">
+                                                                            <option value="0">-- SELECCIONAR --</option>
+                                                                            <option value="1">Proveedor</option>
+                                                                            <option value="2">Venta</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Sucursal Destino</label>
+                                                                        <select class="form-control select2 sucursalDestino" id="sucursalDestino-P-@item.IdInventario" data-id="P-@item.IdInventario" style="width: 100%">
+                                                                            <option value="0">-- SELECCIONAR --</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-6">
+                                                                        <label>Bodega Destino</label>
+                                                                        <select class="form-control select2 bodegasDestino" id="bodegasDestino-P-@item.IdInventario" data-id="P-@item.IdInventario" style="width: 100%">
+                                                                            <option value="0">-- SELECCIONAR --</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Cantidad</label>
+                                                                        <input placeholder="0.00" class="form-control cantidad" type="text" name="cantidad" id="cantidad-P-@item.IdInventario" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-12">
+                                                                        <label class="label">Motivo</label>
+                                                                        <textarea id="motivo-P-@item.IdInventario" maxlength="5000" placeholder="Texto libre de manera opcional máximo 5000 caracteres" rows="6" name="motivo" class="form-control"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button value="P-@item.IdInventario" class="btn btn-block btn-success btn-agregar-existente btn-rounded" data-unidad-medida="@item.UnidadMedida">
+                                                                    Transferir
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(modelItem => item.Producto)
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(modelItem => item.Sucursal)
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(modelItem => item.BodegaCodigo)
+                                        </td>
+                                        <td class="text-center">
+                                            @item.PrecioUnitario.ToString("N2").Replace(",", "$").Replace(".", ",").Replace("$", ".")
+                                        </td>
+                                        <td class="text-center">
+                                            @item.StockActual.Value.ToString("N2").Replace(",", "$").Replace(".", ",").Replace("$", ".")
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    @*<div class="col-md-12" id="DivTablaProveedor">
+
+                        </div>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Accesos-->
+<div class="modal fade" id="modal-Configuraciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLabel">Configuración</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container" id="">
+
+                    <div style="text-align: center;">
+                        <h4>Configuración Inventario </h4>
+
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    </td> 
+                                    <td>
+                                        Descontar Stock Automatico
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" @(Model.Descontar == true ? "checked" : "") data-toggle="toggle" data-onstyle="outline-success" data-offstyle="outline-danger" id="checkDescontar">
+                                    </td>
+                                </tr>
+                                <tr> 
+                                    <td>
+                                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>  
+                                    <td>
+                                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    </td>
+                                    <td>
+                                        Control Inventario Sucursal
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" @(Model.ControlSucursal == true ? "checked" : "") data-toggle="toggle" data-onstyle="outline-success" data-offstyle="outline-danger" id="checkControlInventario">
+                                    </td>
+                                </tr>
+                                <tr> 
+                                    <td>
+                                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr> 
+                                    <td>
+                                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    </td>
+                                    <td>
+                                        Control Inventario Emision
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" @(Model.ControlEmision == true ? "checked" : "") data-toggle="toggle" data-onstyle="outline-success" data-offstyle="outline-danger" id="checkControlEmision">
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+ 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-rounded mb-2 mr-2" style="font-weight:600" data-dismiss="modal" >Cerrar</button>
+                <button type="button" id="btnGuardarConfiguraciones" class="btn btn-success btn-rounded mb-2 mr-2" style="color:#014D6F;font-weight:600" data-dismiss="modal">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+
+    <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script>
+
+
+        $(function () {
+            $("#idBotonConsultar").click(function () {
+                GetDetalleProveedor();
+            });
+        });
+
+
+        function GetDetalleProveedor(IdProductos) {
+            Swal.fire({
+                icon: "info",
+                allowOutsideClick: false,
+                title: 'Consultando Información',
+                text: 'Espere, por favor!...',
+                timer: 150000
+            });
+            Swal.showLoading();
+            $.get("@Url.Action("GetDetalleProveedor", "Inventario")", {
+
+                IdProducto: IdProductos,
+            //    fechaInicio: valorFechaInicio,
+            //    fechaFin: valorFechaFin
+            }, function (response) {
+                    //console.log(response);
+                    // si sale todo perfecto, pinta la tabla recibida desde el parcial
+                    $("#DivTablaProveedor").empty();
+                    $("#DivTablaProveedor").append(response);
+                Swal.close();
+            }).fail(function (error) {
+                // en caso de error
+                ////console.log(error);
+                Swal.fire({
+                    title: '¡Lo sentimos!',
+                    text: 'Se ha generado un error técnico no controlado en el proceso.',
+                    type: "error",
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false,
+                    footer: "Técnico, por favor consulte el archivo.log"
+                });
+            });
+        }
+
+        $(document).ready(function () {
+
+            $('#InventarioTable').dataTable({
+                "pageLength": 4,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+
+            $('#InventarioTableProveedor').dataTable({
+                "pageLength": 4,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+
+            $('button#btn-Opciones').click(function (event) {
+                $('#modal-Configuraciones').modal('show');
+                //var a = $(this).val();
+                //$('#IdComp').val(a);
+            });
+
+
+    function InventarioConfiguracion(Decontar, ControlInventario,ControlEmision ) {
+        console.log(Decontar+"1");
+        console.log(ControlInventario+"2");
+        console.log(ControlEmision+"3");
+       $.post("@Url.Action("InventarioConfiguracion", "Inventario")",
+            { Decontar, ControlInventario, ControlEmision},
+            function (response)
+            {
+                if (isEmpty(response)) {
+                    MensajeSesionFinalizada();
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("index", "Auth")';
+                    }, 3000);
+                    return false;
+                } else {
+                    if (response.status == "success") {
+
+                        return true;
+                    } else {
+                        MensajeErrorSwal(response.mensaje);
+                        return false;
+                    }
+                }
+            }
+        );
+
+        return false;
+    }
+
+            $('button#btnGuardarConfiguraciones').click(function (event) {
+
+                var descontar = false;
+                var ControlInventario = false;
+                var ControlEmision= false;
+
+                if ($('#checkDescontar').prop('checked') == true) {
+                    descontar = true;
+                } else {
+                    descontar = false;
+                }
+
+                if ($('#checkControlInventario').prop('checked') == true) {
+                    ControlInventario = true;
+
+                } else {
+                    ControlInventario = false;
+                }
+
+                if ($('#checkControlEmision').prop('checked') == true) {
+                    ControlEmision = true;
+
+                } else {
+                    ControlEmision = false;
+                }
+
+
+           $.post("@Url.Action("InventarioConfiguracion", "Inventario")",
+               { descontar, ControlInventario, ControlEmision},
+            function (response)
+            {
+                if (isEmpty(response)) {
+                    MensajeSesionFinalizada();
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("index", "Auth")';
+                    }, 3000);
+                    return false;
+                } else {
+                    if (response.status == "success") {
+                        MensajeExitosoSwal("Configuracion Realizada Con Exito","Inventario");
+                        return true;
+                    } else if (response.status == "fail" ) {
+                        MensajeErrorSwal("Ocurrio un error");
+                    }
+                    else {
+                        MensajeErrorSwal(response.mensaje);
+                        return false;
+                    }
+                }
+            }
+        );
+                 
+
+                //$('#modal-Configuraciones').modal('show');
+            });
+
+           // var table = $('#InventarioTable');
+            //var table = $('#InventarioTable').dataTable();
+            //$('#InventarioTable tbody').on('click', 'tr', function () {
+
+            //    var $row = $(this);
+            //    //var $rowww = $row.closest('tr'); // event.target is the button
+            //    //var $columns = $rowww.find('td');
+            //    ////console.log($columns);
+            //    //var $text = $row.text();
+            //    var IdProducto = $row.find(".textIndex").text();
+            //    var Producto = $row.find(".textIndexdos").text();
+
+            //    //console.log(IdProducto);
+            //    //var data = table.row($(this)).data();
+            //    GetDetalleProveedor(IdProducto);
+            //});
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".btn-open-modal-inventario-venta").click(function(){
+                $("#moda-agregar-V-" + $(this).val()).modal('show');
+            });
+
+            $(".btn-open-modal-inventario-proveedor").click(function(){
+                $("#moda-agregar-P-" + $(this).val()).modal('show');
+            });
+
+            $('.cantidad').maskMoney({ thousands: ',', allowNegative: false, decimal: '.', precision: 2, allowZero: false });
+
+            $(".tipoInventarioDestino").change(function () {
+                var id = $(this).attr("data-id");
+                var value = $(this).val();
+                IniciarLoading();
+                $.post("@Url.Action("ActualizarComboProductosBodega", "Inventario")", { TipoInventario: value }, function (response) {
+                    DetenerLoading();
+                    if (isEmpty(response)) {
+                        MensajeSesionFinalizada();
+                        setTimeout(function () {
+                            window.location.href = "@Url.Action("index", "Auth")";
+                        }, 3000);
+                    } else {
+                        if (response.status === "success") {
+                            addOptionsSucursales("sucursalDestino-" + id, response.sucursales);
+                            LimpiarSelect("bodegasDestino-" + id);
+                            //LimpiarSelect("productosOrigen-" + id);
+                        }
+                    }
+                });
+            });
+
+            $(".sucursalDestino").change(function () {
+                var id = $(this).attr("data-id");
+                var value = $(this).val();
+                 IniciarLoading();
+                $.post("@Url.Action("ActualizarComboProductosBodega", "Inventario")", { Sucursal: value }, function (response) {
+                    DetenerLoading();
+                    if (isEmpty(response)) {
+                        MensajeSesionFinalizada();
+                        setTimeout(function () {
+                            window.location.href = "@Url.Action("index", "Auth")";
+                        }, 3000);
+                    } else {
+                        if (response.status === "success") {
+                            addOptionsBodegas("bodegasDestino-" + id, response.bodegas);
+                            //LimpiarSelect("productosOrigen-" + id);
+                        }
+                    }
+                });
+             });
+
+            $(".productosOrigen").change(function () {
+                var id = "productosOrigen-" + $(this).attr("data-id");
+                var stock = $("#" + id+ " :selected").attr("data-stock");
+                $("#stock-" + $(this).attr("data-id")).val(stock);
+            });
+
+            $(".btn-agregar-existente").click(function () {
+                debugger;
+                var value = $(this).val();
+
+                var TipoInventarioOrigen = $("#tipoInventarioOrigen-" + value).val();
+                var BodegaOrigen = $("#bodega-" + value).val();
+                var producto = $("#producto-" + value).val();
+                var sucursal = $("#sucursal-" + value).val();
+
+                var TipoInventarioDestino = $("#tipoInventarioDestino-" + value).val();
+                var SucursalDestino = $("#sucursalDestino-" + value).val();
+                var BodegaDestino = $("#bodegasDestino-" + value).val();
+                var cantidad = parseFloat($("#cantidad-" + value).val().replace(",", "").replace(",", "").replace(",", "").replace(",", ""));
+                var cantidadStr = $("#cantidad-" + value).val();
+                var Motivo = $("#motivo-" + value).val();
+
+                if (isEmpty(TipoInventarioDestino) || TipoInventarioDestino === "0") { MensajeErrorSwal("Seleccione un Inventrio de Destino", ""); return; }
+                if (isEmpty(SucursalDestino) || SucursalDestino === "0") { MensajeErrorSwal("Seleccione una Sucursal de Destino", ""); return; }
+                if (isEmpty(BodegaDestino) || BodegaDestino === "0") { MensajeErrorSwal("Seleccione una Bodega de Destino", ""); return; }
+                if (isEmpty(cantidad) || cantidad === "0") { MensajeErrorSwal("Ingrese una cantidad válida", ""); return; }
+
+                var stock = parseFloat($("#stock-actual-" + value).val().replace(",", "").replace(",", "").replace(",", "").replace(",", ""));
+                if ((stock) < (cantidad) ) {
+                    MensajeErrorSwal("Ingrese una cantidad válida", "");
+                    return;
+                }
+                var unidadMedida = $(this).attr("data-unidad-medida");
+                 //return;
+                IniciarLoading();
+                $.post("@Url.Action("MovimientoInventario", "Inventario")",
+                    {
+                        TipoInventarioOrigen: TipoInventarioOrigen,
+                        BodegaOrigen: BodegaOrigen,
+                        Producto: producto,
+                        SucursalOrigen: sucursal,
+
+                        TipoInventarioDestino: TipoInventarioDestino,
+                        SucursalDestino: SucursalDestino,
+                        BodegaDestino: BodegaDestino,
+                        Cantidad: cantidadStr,
+                        Motivo: Motivo
+                    }
+                    , function (response) {
+                        DetenerLoading();
+                        if (isEmpty(response)) {
+                            MensajeSesionFinalizada();
+                            setTimeout(function () {
+                                window.location.href = "@Url.Action("index", "Auth")";
+                            }, 3000);
+                        } else {
+                            if (response.status === "success") {
+                                MensajeExitosoSwalConfirmacionRedireccion(response.mensaje, "", "@Url.Action("ListaInventario", "Inventario")");
+                            } else {
+                                MensajeErrorSwal(response.mensaje, "");
+                            }
+                        }
+                    }
+                );
+            });
+        });
+
+        // Rutina para agregar opciones a un <select>
+        function addOptionsProductos(domElement, result) {
+            var select = document.getElementById(domElement);
+            LimpiarSelect(domElement);
+            result.forEach(producto => {
+                var option = document.createElement("option");
+                option.value = producto.productoId;
+                option.text = producto.codigo + " - " + producto.descripcion;
+                option.setAttribute("data-stock", producto.stock);
+                select.add(option);
+            });
+        }
+
+        function addOptionsSucursales(domElement, result) {
+            console.log(result);
+            var select = document.getElementById(domElement);
+            LimpiarSelect(domElement);
+            result.forEach(sucursal => {
+                var option = document.createElement("option");
+                option.value = sucursal.sucursalId;
+                option.text = sucursal.nombre;
+                select.add(option);
+            });
+        }
+
+        function addOptionsBodegas(domElement, result) {
+            var select = document.getElementById(domElement);
+            LimpiarSelect(domElement);
+            result.forEach(bodega => {
+                var option = document.createElement("option");
+                option.value = bodega.bodegaId;
+                option.text = bodega.codigo + " - " + bodega.nombre;
+                select.add(option);
+            });
+        }
+
+        function LimpiarSelect(domElement) {
+            console.log(domElement);
+            $('#' + domElement).empty();
+            var select = document.getElementById(domElement);
+            var option = document.createElement("option");
+            option.text = "-- SELECCIONAR --";
+            option.value = "0";
+            select.add(option);
+        }
+
+    </script>
+}
+

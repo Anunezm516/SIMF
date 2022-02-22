@@ -1,0 +1,169 @@
+﻿@model List<FRIO.MAR.UI.WEB.SITE.Controllers.ReporteInventarioEntradaSalidaDto>
+
+<table id="datatable-documentos-emitidos" class="table table-bordered table-condensed no-footer table-hover table-responsive-lg" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+        <tr>
+            <th class="text-center">Fecha</th>
+            <th class="text-center">Movimiento</th>
+            <th class="text-center">Inventario</th>
+            <th class="text-center">Acción</th>
+            <th class="text-center">Sucursal</th>
+            <th class="text-center">Bodega</th>
+            <th class="text-center">Producto</th>
+            @*<th>Proveedor</th>*@
+            <th class="text-center">Cantidad</th>
+            @*<th>Precio</th>*@
+            @*<th>Numero Factura</th>*@
+            @*<th>Cufe</th>*@
+            <th class="text-center">Motivo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td class="text-center">@item.Fecha</td>
+            <td>
+                @if (item.TipoMovimiento == 1)
+                {
+                    <p>Entrada</p>
+                }
+                else if (item.TipoMovimiento == 2)
+                {
+                    <p>Salida</p>
+                }
+                else
+                {
+                    <p>---</p>
+                }
+            </td>
+            <td>
+                @if (item.TipoInventario == 1)
+                {
+                    <p>Proveedor</p>
+                }
+                else if (item.TipoInventario == 2)
+                {
+                    <p>Venta</p>
+                }
+                else
+                {
+                    <p>---</p>
+                }
+            </td>
+
+            <td>
+                @if (item.SubTipoMovimiento == (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Factura)
+                {
+                    <p>Factura</p>
+                }
+                else if (item.SubTipoMovimiento == (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Manual)
+                {
+                    <p>Manual</p>
+                }
+                else if (item.SubTipoMovimiento == (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Tranferencia)
+                {
+                    <p>Tranferencia</p>
+                }
+                else
+                {
+                    <p>---</p>
+                }
+            </td>
+            <td class="text-center">@item.Sucursal</td>
+            <td class="text-center">@item.Bodega</td>
+            <td class="text-center">@item.Producto</td>
+            @*<td>@item.ClienteProveedor</td>*@
+            <td class="text-center">@item.CantidadStr</td>
+            @*<td>@item.Precio</td>*@
+            @*<td>@item.NumeroFactura</td>*@
+            @*<td>@item.Cufe</td>*@
+            <td class="text-center">
+                @if (item.Motivo.Length >= 50)
+                {
+                    <div id="short-text-@item.ID.ToString()">
+                        @item.Motivo.Substring(0, 50) <button class="btn btn-ver-mas btn-link" value="@item.ID.ToString()">Ver más</button>
+                    </div>
+                    <div id="text-full-@item.ID.ToString()" hidden>
+                        @item.Motivo <button class="btn btn-ver-menos btn-link" value="@item.ID.ToString()">Ver Menos</button>
+                    </div>
+                }
+                else
+                {
+                    @item.Motivo
+                }
+            </td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+
+        $(".btn-ver-mas").click(function () {
+            var value = $(this).val();
+            $("#short-text-" + value).prop('hidden', 'hidden');
+            $("#text-full-" + value).prop('hidden', '');
+        });
+
+        $(".btn-ver-menos").click(function () {
+            var value = $(this).val();
+            $("#short-text-" + value).prop('hidden', '');
+            $("#text-full-" + value).prop('hidden', 'hidden');
+        });
+
+        // INICIO DATATABLE
+        $("#datatable").DataTable(),
+            $("#datatable-documentos-emitidos").DataTable({
+                scrollX: true,
+                paging: true,
+                ordering: true,
+                info: true,
+                pageLength: 10,
+                searching: true,
+                responsive: false,
+                language: {
+                    processing: 'Procesando...',
+                    search: "Buscar: _INPUT_",
+                    lengthMenu: '   Mostrar _MENU_ registros',
+                    info: 'Mostrando desde _START_ al _END_ de _TOTAL_ registros',
+                    infoEmpty: 'Mostrando ningún elemento.',
+                    infoFiltered: '(filtrado _MAX_ elementos total)',
+                    infoPostFix: '',
+                    loadingRecords: 'Cargando registros...',
+                    zeroRecords: 'No se encontraron registros',
+                    emptyTable: 'No hay datos disponibles en la tabla',
+                    paginate: {
+                        first: 'Primero',
+                        previous: 'Anterior',
+                        next: 'Siguiente',
+                        last: 'Último'
+                    }
+                },
+                lengthChange: !1,
+                buttons: [{
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    customize: function (doc, config) {
+                        var tableNode;
+                        for (i = 0; i < doc.content.length; ++i) {
+                            if (doc.content[i].table !== undefined) {
+                                tableNode = doc.content[i];
+                                break;
+                            }
+                        }
+
+                        var rowIndex = 0;
+                        var tableColumnCount = tableNode.table.body[rowIndex].length;
+
+                        if (tableColumnCount > 5) {
+                            doc.pageOrientation = 'landscape';
+                        }
+                    }
+                }, "excel"]
+            }).buttons().container().appendTo("#datatable-documentos-emitidos_wrapper .col-md-6:eq(0)");
+         // FIN DATATABLE
+    })
+</script>

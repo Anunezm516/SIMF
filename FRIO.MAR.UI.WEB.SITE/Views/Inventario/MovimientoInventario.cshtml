@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewData["Title"] = "Transferencia Inventario";
+    ViewBag.DocExportacion = false;
+
+    ViewBag.pVentasUrl = Url.Action("Index", "Ventas");
+    ViewBag.pTitle = "Transferencia Inventario";
+    ViewBag.pageTitle = "Inventario";
+
+    var Productos = @ViewBag.Productos;
+    var Bodegas = @ViewBag.Bodegas;
+}
+
+@section Styles {
+    
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .bg-card-header {
+            background-color: #24356a !important;
+            color: white !important;
+            padding-bottom: 1px !important;
+            padding-top: 7px !important;
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+            color: white !important;
+        }
+
+            .bg-card-header h6 {
+                color: white !important;
+            }
+
+        .card {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+            border-bottom-left-radius: 10px !important;
+            border-bottom-right-radius: 10px !important;
+        }
+    </style>
+}
+
+@*@model APLICATIONCORE_GSEDOCPYME.DTOs.Inventario.InventarioTransferenciaDto*@
+
+<div class="alert alert-info">
+    <span style="color: red">(*)</span> Campos obligatorios
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: black!important">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="card">
+            <!--<div class="card-header bg-card-header">-->
+                @*<h6>Origen</h6>*@
+            <!--</div>-->
+            <div class="card-body">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label class="label">Tipo de Inventario Origen <span style="color: red">*</span></label>
+                        <select name="tipoInventario" id="tipoInventario" class="select2 form-control">
+                            <option value="0">-- SELECCIONAR --</option>
+                            <option value="1">Proveedor</option>
+                            <option value="2">Venta</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row form-group" id="div-productos">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+   
+
+    <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.min.js"></script>
+
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Responsive examples -->
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".select2").select2();
+            $("#tipoInventario").change(function () {
+                var tipoInventario = $(this).val();
+                IniciarLoading();
+                $.post("@Url.Action("GetProductosInventario", "Inventario")", { TipoInventario: tipoInventario }, function (response) {
+                    DetenerLoading();
+                    if (isEmpty(response)) {
+                        MensajeSesionFinalizada();
+                        setTimeout(function () {
+                            window.location.href = '@Url.Action("index", "Auth")';
+                        }, 3000);
+                    } else {
+                        if (response.status === "error") {
+                            if (response.verMensaje === true) {
+                                MensajeErrorSwal(response.mensaje, "");
+                            } else {
+                                $("#div-productos").empty();
+                            }
+                        } else {
+                            $("#div-productos").empty();
+                            $("#div-productos").html(response);
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+}

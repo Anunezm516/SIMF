@@ -15,6 +15,8 @@ using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.UI.WEB.SITE.Constants;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
@@ -43,71 +45,24 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             inventarioService = inventarioServices;
         }
 
-        public IActionResult Index() => View();
-
         //[Helper.PermisoPantalla("Inventario", "ListaInventario")]
-        public ActionResult ListaInventario(long? Id)
+        public ActionResult ListaInventario(long Id)
         {
-            var UsuarioSesion = GetUserLogin();
-
             ListaInventarioViewModel model = new ListaInventarioViewModel();
-            List<InventarioVenta> ListaInventario = new List<InventarioVenta>();
-            List<InventarioProveedor> ListaInventarioProveedor = new List<InventarioProveedor>();
-
-            if (Id != null)
+            try
             {
-
-                ListaInventario = _context.InventarioVenta.Include(y => y.Bodega)
-                                                            .Include(y => y.IdProductoNavigation)
-                                                            .Include(y => y.IdSucursalNavigation)
-                                                            .Where(x => x.Estado == true
-                                                                        && x.IdInventarioBodega == Id
-                                                                        && x.Bodega.Estado == true
-                                                                      ).ToList();
-
-                ListaInventarioProveedor = _context.InventarioProveedor.Include(y => y.Bodega)
-                                                                        .Include(y => y.IdProductoNavigation)
-                                                                        .Include(y => y.IdSucursalNavigation)
-                                                                        .Where(x => x.Estado == true
-                                                                                    && x.IdInventarioBodega == Id
-                                                                                    && x.Bodega.Estado == true
-                                                                                  ).ToList(); 
+                var result = inventarioService.ListarInventarios(Id);
+                if (result.TieneErrores) throw new Exception(result.MensajeError);
+                if (result.Estado)
+                {
+                    model = result.Data;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ListaInventario = _context.InventarioVenta.Include(y => y.Bodega)
-                                                            .Include(y => y.IdProductoNavigation)
-                                                            .Include(y => y.IdSucursalNavigation)
-                                                            .Where(x => x.Estado == true
-                                                                        && x.Bodega.Estado == true
-                                                                      ).ToList();
-
-                ListaInventarioProveedor = _context.InventarioProveedor.Include(y => y.Bodega)
-                                                           .Include(y => y.IdProductoNavigation)
-                                                           .Include(y => y.IdSucursalNavigation)
-                                                           .Where(x => x.Estado == true
-                                                                        && x.Bodega.Estado == true
-                                                                     ).ToList();
+                TempData["msg"] = WebSiteConstants.MENSAJE_SWEET_ALERT_ERROR.Replace("{Mensaje_Respuesta}", DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex));
             }
 
-
-            model.ListaInventario = ListaInventario.Select(itemBBDD => new ItemInventarioViewModel(itemBBDD)).ToList();
-            model.ListaInventarioProvedor = ListaInventarioProveedor.Select(itemBBDD => new ItemInventarioProvedorViewModel(itemBBDD)).ToList();
-
-            var InventarioConfiguracion = _context.InventarioConfiguracionesGenerales.FirstOrDefault();
-            if (InventarioConfiguracion != null)
-            {
-                model.Descontar = InventarioConfiguracion.DescontarStockAutomatico ?? true;
-                model.ControlSucursal = InventarioConfiguracion.ControlInventarioSucursal ?? true;
-                model.ControlEmision = InventarioConfiguracion.ControlInventarioEmision ?? true;
-            }
-            else
-            {
-                model.Descontar = true;
-                model.ControlSucursal = true;
-                model.ControlEmision = true;
-            }
-            
             return View(model);
         }
 
@@ -216,9 +171,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     transferencia.Cantidad = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(item.cantidad));
 
                     var result = inventarioService.QryInventarioTransferencia(IdUsuario, IP, transferencia, ref mensaje, ref mensajeError);
-                    
+                    if (result.TieneErrores) throw new Exception(result.MensajeError);
                     item.tieneError = !result.Estado;
-                    item.mensaje = mensajeError;
+                    item.mensaje = result.Mensaje;
                     item.mensajeError = mensajeError;
 
                     respuestas.Add(item);
@@ -545,22 +500,23 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return PartialView("_GetProductosInventario", get);
         }
 
-        public Microsoft.AspNetCore.Mvc.Rendering.SelectList DropSucursal(string Pais = null)
+        public SelectList DropSucursal(string Pais = null)
         {
             var data = _context.Sucursal.Where(x => x.Estado == true).Select(c => new {
                 text = c.Nombre,
                 value = c.SucursalId,
             }).ToList();
 
-            return new Microsoft.AspNetCore.Mvc.Rendering.SelectList(data, "text", "value", Pais);
+            return new SelectList(data, "text", "value", Pais);
         }
 
         //[Helper.PermisoPantalla("Inventario", "ReportesInventarioMovimiento")]
-        public ActionResult ReportesInventarioMovimiento()
+
+        public ActionResult Reporte()
         {
-            //ViewBag.Productos = _context.Producto.Where(x => x.Estado == true).ToList();
+            ViewBag.Productos = _context.Producto.Where(x => x.Estado == true).ToList();
             //Edcompania edcompania = _contextEmps.Edcompania.FirstOrDefault(x => x.Ruc == UsuarioSesion.Nit && x.Estado == true);
-            //ViewBag.Proveedor = _contextEmps.Erproveedor.Where(x =>  x.Estado == true).ToList();
+            ViewBag.Proveedor = _context.Proveedores.Where(x =>  x.Estado == true).ToList();
 
             return View("Reporte/ReportesInventarioMovimiento");
         }
@@ -572,7 +528,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 var productoModel = _context.Producto.Where(x => x.Estado)
                     .Select(c => new ProductoBodegaDto()
                     {
-                        IdProducto = c.ProductoId,
+                        ProductoId = c.ProductoId,
                         Codigo = c.Codigo,
                         Descripcion = c.Descripcion,
                         Stock = Utilidades.DoubleToString_FrontCO(0, 2)

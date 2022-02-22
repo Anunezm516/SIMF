@@ -14,6 +14,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
         List<ProductoBodegaDto> SelProductosBodega(long IdBodega, int Sucursal, int TipoInventario);
         List<Producto> SelProductos(int cantidad, long IdProducto, DateTime fechaInicio, DateTime fechaFin);
         List<Bodega> GetBodegas(long IdCompania);
+        List<InventarioProveedor> GetInventarioProveedor(long BodegaId);
+        List<InventarioVenta> GetInventarioVenta(long BodegaId);
 
     }
 }

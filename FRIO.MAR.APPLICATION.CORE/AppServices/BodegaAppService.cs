@@ -85,7 +85,15 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     Estado = true
                 };
 
-                Bodega.SucursalBodega = model.Sucursales.Select(c => new SucursalBodega { SucursalId = c }).ToList();
+                Bodega.SucursalBodega = model.Sucursales.Select(c => new SucursalBodega 
+                { 
+                    SucursalId = c,
+                    Estado = true,
+                    FechaCreacion = Utilities.Utilidades.GetHoraActual(),
+                    UsuarioCreacion = model.Usuario,
+                    Ip = model.Ip
+
+                }).ToList();
 
                 _bodegaRepository.Add(Bodega);
 
@@ -133,7 +141,14 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 Bodega.FechaModificacion = Utilities.Utilidades.GetHoraActual();
 
                 Bodega.SucursalBodega.Clear();
-                Bodega.SucursalBodega = model.Sucursales.Select(c => new SucursalBodega { SucursalId = c }).ToList();
+                Bodega.SucursalBodega = model.Sucursales.Select(c => new SucursalBodega 
+                { 
+                    SucursalId = c ,
+                    Estado = true,
+                    FechaCreacion = Utilities.Utilidades.GetHoraActual(),
+                    UsuarioCreacion = model.Usuario,
+                    Ip = model.Ip
+                }).ToList();
                 _bodegaRepository.Update(Bodega);
                 responseDto.Estado = _bodegaRepository.Save() > 0;
             }

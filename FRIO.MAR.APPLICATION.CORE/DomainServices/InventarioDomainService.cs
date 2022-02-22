@@ -1,12 +1,14 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
+using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using GS.TOOLS;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.DomainServices
@@ -20,14 +22,12 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             _inventarioRepository = inventarioRepository;
         }
 
-
         public MethodResponseDto QryInventarioMovimiento(InventarioMantenimientoDto mantenimientoDto, long IdUsuario, string IP, ref long IdInventarioMovimiento, ref string mensaje, ref string mensajeError)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                responseDto.Data = _inventarioRepository.QryInventarioMovimiento(mantenimientoDto, IdUsuario, IP, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
-                responseDto.Estado = true;
+                responseDto.Estado = _inventarioRepository.QryInventarioMovimiento(mantenimientoDto, IdUsuario, IP, ref IdInventarioMovimiento, ref mensaje, ref mensajeError); ;
             }
             catch (Exception ex)
             {
@@ -43,8 +43,11 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                responseDto.Data = _inventarioRepository.QryInventarioTransferencia(IdUsuario, IP, transferencia, ref mensaje, ref mensajeError);
-                responseDto.Estado = true;
+                responseDto.Estado = _inventarioRepository.QryInventarioTransferencia(IdUsuario, IP, transferencia, ref mensaje, ref mensajeError);
+                if (!responseDto.Estado)
+                {
+                    responseDto.Mensaje = mensaje;
+                }
             }
             catch (Exception ex)
             {
@@ -98,5 +101,41 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             return responseDto;
         }
         
+        public MethodResponseDto ListarInventarios(long BodegaId)
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+            try
+            {
+                ListaInventarioViewModel model = new ListaInventarioViewModel();
+                List<InventarioVenta> ListaInventario = ListaInventario = _inventarioRepository.GetInventarioVenta(BodegaId);
+                List<InventarioProveedor> ListaInventarioProveedor = ListaInventarioProveedor = _inventarioRepository.GetInventarioProveedor(BodegaId);
+
+                model.ListaInventario = ListaInventario.Select(itemBBDD => new ItemInventarioViewModel(itemBBDD)).ToList();
+                model.ListaInventarioProvedor = ListaInventarioProveedor.Select(itemBBDD => new ItemInventarioProvedorViewModel(itemBBDD)).ToList();
+
+                //var InventarioConfiguracion = _context.InventarioConfiguracionesGenerales.FirstOrDefault();
+                //if (InventarioConfiguracion != null)
+                //{
+                //    model.Descontar = InventarioConfiguracion.DescontarStockAutomatico ?? true;
+                //    model.ControlSucursal = InventarioConfiguracion.ControlInventarioSucursal ?? true;
+                //    model.ControlEmision = InventarioConfiguracion.ControlInventarioEmision ?? true;
+                //}
+                //else
+                //{
+                //    model.Descontar = true;
+                //    model.ControlSucursal = true;
+                //    model.ControlEmision = true;
+                //}
+                responseDto.Data = model;
+                responseDto.Estado = true;
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
+        }
     }
 }
