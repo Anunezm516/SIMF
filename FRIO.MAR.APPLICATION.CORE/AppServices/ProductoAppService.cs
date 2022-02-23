@@ -91,6 +91,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 _ProductoRepository.Add(Producto);
                 responseDto.Estado = _ProductoRepository.Save() > 0;
+                model.ProductoId = Producto.ProductoId;
             }
             catch (Exception ex)
             {

@@ -166,12 +166,22 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
-                Bodega Bodega = _bodegaRepository.Get(Id);
+                Bodega Bodega = _bodegaRepository.GetBodega(Id);
                 if (Bodega == null)
                 {
                     responseDto.CodigoError = DomainConstants.ERROR_BODEGA_ANONIMO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
+                }
+
+                if (Bodega.InventarioVenta.Any() || Bodega.InventarioProveedor.Any())
+                {
+                    if (Bodega.InventarioVenta.Sum(x => x.StockActual) > 0 && Bodega.InventarioProveedor.Sum(x => x.StockActual) > 0)
+                    {
+                        responseDto.CodigoError = DomainConstants.ERROR_BODEGA_REGISTRADO_PRODUCTO;
+                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        return responseDto;
+                    }
                 }
 
                 Bodega.Ip = Ip;

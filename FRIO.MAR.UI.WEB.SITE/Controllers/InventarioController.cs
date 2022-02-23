@@ -46,11 +46,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         //[Helper.PermisoPantalla("Inventario", "ListaInventario")]
-        public ActionResult ListaInventario(long Id)
+        public ActionResult ListaInventario(string data)
         {
             ListaInventarioViewModel model = new ListaInventarioViewModel();
             try
             {
+                long Id = long.Parse(Crypto.DescifrarId(data));
+
                 var result = inventarioService.ListarInventarios(Id);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)

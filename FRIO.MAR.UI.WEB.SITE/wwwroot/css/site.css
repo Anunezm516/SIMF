@@ -89,7 +89,7 @@ body {*/
     /*font-family: 'Open Sans', sans-serif;*/
     /*font-size: 12px !important;
 }
-
+        */
 .form-control, .input-group-append, select2-results__option {
     height: 29px;
     font-size: 11px !important;
@@ -115,7 +115,7 @@ body {*/
     box-shadow: none;
     border-radius: 0;
 }
-
+/*
 .modal-content {
     border: hidden !important;
 }

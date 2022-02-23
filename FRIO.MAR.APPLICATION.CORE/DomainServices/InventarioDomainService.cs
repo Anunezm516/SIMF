@@ -27,7 +27,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                responseDto.Estado = _inventarioRepository.QryInventarioMovimiento(mantenimientoDto, IdUsuario, IP, ref IdInventarioMovimiento, ref mensaje, ref mensajeError); ;
+                responseDto.Estado = _inventarioRepository.QryInventarioMovimiento(mantenimientoDto, IdUsuario, IP, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
             }
             catch (Exception ex)
             {
@@ -84,8 +84,8 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 long IdInventarioMovimiento = 0;
                 foreach (var item in productos)
                 {
-                    mantenimiento.bodegas = item.Bodega;
-                    mantenimiento.sucursal = item.Sucursal;
+                    mantenimiento.bodegas = item.Bodega ?? 0;
+                    mantenimiento.sucursal = item.Sucursal ?? 0;
                     mantenimiento.productos = item.ProductoId;
                     mantenimiento.cantidad = item.Cantidad;
                     mantenimiento.unidadMedida = item.UnidadMedida;

@@ -106,38 +106,33 @@
 
             <br />
 
-            <div class="row form-group div-entrada">
-                <div class="col-md-2">
-                    <label class="label">Precio</label>
-                    <input asp-for="precioStr" placeholder="$ 0.00" class="form-control feCurrencyEDOC" type="text" name="precioStr" value="" id="precioStr" />
-                </div>
-                <div class="col-md-2">
-                    <label class="label">Número Factura</label>
-                    <input asp-for="numeroFactura" placeholder="Ejemplo: SET-000000" class="form-control" type="text" name="numeroFactura" value="" id="numeroFactura" />
-                </div>
-                <div class="col-8">
-                    <label class="label">Cufe Factura</label>
-                    <input asp-for="cufeFactura" placeholder="Ejemplo: ebf5474f6367604f41e7a8e34b0b4bcde41925f8cea163c1b734e808de0ae63584349efd2e2cdba181febe88c80157fb" class="form-control" type="text" name="cufeFactura" value="" id="cufeFactura" />
-                </div>
-            </div>
-
-            <br />
-
-            <div class="row form-group">
-                <div class="col-md-4 div-entrada">
-                    <div class="form-group">
-                        <label class="label">Unidad de Medida </label>
-                        <select asp-for="unidadMedida" id="unidadMedida" name="unidadMedida" class="select2 form-control">
-                            <option value="0">-- SELECCIONAR --</option>
-                            @foreach (var item in ViewBag.UnidadesMedida as List<FRIO.MAR.APPLICATION.CORE.Entities.UnidadMedida>)
-                            {
-                                <option value="@item.Simbolo"> @item.Simbolo @item.Nombre </option>
-                            }
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="label">Cantidad Descripcion</label>
-                        <input asp-for="cantidadDescripcion" placeholder="Cantidad Descripción" class="form-control" type="text" name="cantidadDescripcion" value="" id="cantidadDescripcion" />
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row form-group div-entrada">
+                        <div class="col-md-6">
+                            <label class="label">Precio</label>
+                            <input asp-for="precioStr" placeholder="$ 0.00" class="form-control feCurrencyEDOC" type="text" name="precioStr" value="" id="precioStr" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="label">Número Factura</label>
+                            <input asp-for="numeroFactura" placeholder="Ejemplo: SET-000000" class="form-control" type="text" name="numeroFactura" value="" id="numeroFactura" />
+                        </div>
+                        <div class="col-md-12 div-entrada">
+                            <div class="form-group">
+                                <label class="label">Unidad de Medida </label>
+                                <select asp-for="unidadMedida" id="unidadMedida" name="unidadMedida" class="select2 form-control">
+                                    <option value="0">-- SELECCIONAR --</option>
+                                    @foreach (var item in ViewBag.UnidadesMedida as List<FRIO.MAR.APPLICATION.CORE.Entities.UnidadMedida>)
+                                    {
+                                        <option value="@item.Simbolo"> @item.Simbolo @item.Nombre </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Cantidad Descripcion</label>
+                                <input asp-for="cantidadDescripcion" placeholder="Cantidad Descripción" class="form-control" type="text" name="cantidadDescripcion" value="" id="cantidadDescripcion" />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-8">

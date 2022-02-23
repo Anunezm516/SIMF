@@ -46,14 +46,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpGet]
         public IActionResult Registrar(string Id)
         {
-            ViewBag.EsNuevo = true;
+            ViewBag.EsNuevo = string.IsNullOrEmpty(Id);
 
             SucursalModel model = new SucursalModel();
             try
             {
                 if (!string.IsNullOrEmpty(Id))
                 {
-                    ViewBag.EsNuevo = false;
                     var result = _SucursalAppService.ConsultarSucursal(Id);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
@@ -78,7 +77,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpPost]
         public IActionResult Registrar(SucursalModel model)
         {
-            ViewBag.EsNuevo = true;
+            ViewBag.EsNuevo = string.IsNullOrEmpty(model.Id);
             try
             {
                 if (ModelState.IsValid)
@@ -103,7 +102,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     }
                     else
                     {
-                        ViewBag.EsNuevo = false;
                         var result = _SucursalAppService.EditarSucursal(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)

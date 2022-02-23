@@ -17,7 +17,10 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 
         public Bodega GetBodega(long Id)
         {
-            return _context.Bodega.Include(x => x.SucursalBodega).FirstOrDefault(x => x.BodegaId == Id && x.Estado);
+            return _context.Bodega
+                .Include(c => c.InventarioProveedor)
+                .Include(v => v.InventarioVenta)
+                .Include(x => x.SucursalBodega).FirstOrDefault(x => x.BodegaId == Id && x.Estado);
         }
 
         public List<Bodega> GetBodegas()

@@ -23,6 +23,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
         public const string ERROR_BODEGA_ANONIMO = "P301";
         public const string ERROR_BODEGA_REGISTRADO_CODIGO = "P302";
+        public const string ERROR_BODEGA_REGISTRADO_PRODUCTO = "P303";
 
         public const string ERROR_SUCURSAL_ANONIMO = "P401";
         public const string ERROR_SUCURSAL_REGISTRADO_CODIGO = "P402";
@@ -67,6 +68,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
             ERROR_BODEGA_ANONIMO => $"{CodigoError}: La bodega no se encuetra registrado.",
             ERROR_BODEGA_REGISTRADO_CODIGO => $"{CodigoError}: El código de la bodega ya se encuentra registrada.",
+            ERROR_BODEGA_REGISTRADO_PRODUCTO => $"{CodigoError}: No se puede eliminar la bodega, la bodega contiene productos actualmente.",
 
             ERROR_SUCURSAL_ANONIMO => $"{CodigoError}: La sucursal no se encuetra registrado.",
             ERROR_SUCURSAL_REGISTRADO_CODIGO => $"{CodigoError}: El código de la sucursal ya se encuentra registrada.",

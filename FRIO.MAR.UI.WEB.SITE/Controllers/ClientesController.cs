@@ -52,8 +52,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpGet]
         public IActionResult Registrar(string Id)
         {
-            ViewBag.EsNuevo = true;
-            
+            ViewBag.EsNuevo = string.IsNullOrEmpty(Id);
+
             ClienteModel model = new ClienteModel();
             try
             {
@@ -61,7 +61,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                 if (!string.IsNullOrEmpty(Id))
                 {
-                    ViewBag.EsNuevo = false;
                     var result = _clienteAppService.ConsultarCliente(Id);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
@@ -86,7 +85,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpPost]
         public IActionResult Registrar(ClienteModel model)
         {
-            ViewBag.EsNuevo = true;
+            ViewBag.EsNuevo = string.IsNullOrEmpty(model.Id);
             try
             {
                 ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones(), "Codigo", "Nombre");
@@ -113,7 +112,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     }
                     else
                     {
-                        ViewBag.EsNuevo = false;
                         var result = _clienteAppService.EditarCliente(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)

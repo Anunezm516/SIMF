@@ -25,6 +25,9 @@
                         <td class="text-center">
                             <a asp-action="Registrar" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-edit"></i></a>
                             <button type="button" class="btn btn-danger btn-eliminar" value="@item.Id"><i class="fa fa-trash"></i></button>
+                            <a asp-controller="Inventario" asp-action="ListaInventario" asp-route-data="@item.Id" class="btn btn-primary" title="Visualizar Listado Producto">
+                                <i class="fas fa-eye"></i>
+                            </a>
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.Codigo)</td>
                         <td>@Html.DisplayFor(modelItem => item.Nombre)</td>

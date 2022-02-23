@@ -11,33 +11,51 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
     {
         public string Id { get; set; }
 
+
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string Codigo { get; set; }
+
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         [MaxLength(100, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string Descripcion { get; set; }
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
-        public string PrecioUnitarioStr { get; set; }
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string UnidadMedida { get; set; }
 
+
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string IVA { get; set; }
 
 
+        //[Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string CantidadStr { get; set; }
         public decimal Cantidad { get; set; }
+
+
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        public string PrecioUnitarioStr { get; set; }
         public decimal PrecioUnitario { get; set; }
 
-        public long Bodega { get; set; }
-        public long Sucursal { get; set; }
+
+        //[Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        public long? Bodega { get; set; }
+        public long? Proveedor { get; set; }
+
+        //[Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        public long? Sucursal { get; set; }
+
         public long ProductoId { get; set; }
 
+
+
+        //[Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        public TipoInventario? TipoInventario { get; set; }
+
+        public bool RegistrarInventario { get; set; }
 
         public string Ip { get; set; }
         public long Usuario { get; set; }

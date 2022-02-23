@@ -53,7 +53,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpGet]
         public IActionResult Registrar(string Id)
         {
-            ViewBag.EsNuevo = true;
+            ViewBag.EsNuevo = string.IsNullOrEmpty(Id);
 
             BodegaModel model = new BodegaModel();
             try
@@ -62,7 +62,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                 if (!string.IsNullOrEmpty(Id))
                 {
-                    ViewBag.EsNuevo = false;
                     var result = _BodegaAppService.ConsultarBodega(Id);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
@@ -87,7 +86,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpPost]
         public IActionResult Registrar(BodegaModel model)
         {
-            ViewBag.EsNuevo = true;
+            ViewBag.EsNuevo = string.IsNullOrEmpty(model.Id);
             try
             {
                 ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
@@ -114,7 +113,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     }
                     else
                     {
-                        ViewBag.EsNuevo = false;
                         var result = _BodegaAppService.EditarBodega(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)
@@ -151,7 +149,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 }
                 else
                 {
-                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "Error al eliminar el Bodega" });
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = (string.IsNullOrEmpty(result.Mensaje) ? "Error al eliminar el Bodega" : result.Mensaje)  });
                 }
             }
             catch (Exception ex)

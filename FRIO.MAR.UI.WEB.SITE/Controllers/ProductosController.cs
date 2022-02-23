@@ -1,8 +1,11 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
+using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Models;
+using FRIO.MAR.APPLICATION.CORE.Utilities;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using FRIO.MAR.UI.WEB.SITE.Constants;
 using GS.TOOLS;
@@ -18,11 +21,23 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.ProductosInternos)]
     public class ProductosController : BaseController
     {
+        private readonly IBodegaRepository _bodegaRepository;
+        private readonly IInventarioDomainService _inventarioDomainService;
+        private readonly ISucursalRepository _sucursalRepository;
         private readonly IUtilidadRepository _utilidadRepository;
         private readonly IProductoAppService _ProductoAppService;
 
-        public ProductosController(IUtilidadRepository utilidadRepository, IProductoAppService ProductoAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
+        public ProductosController(
+            IBodegaRepository bodegaRepository,
+            IInventarioDomainService inventarioDomainService,
+            ISucursalRepository sucursalRepository,
+            IUtilidadRepository utilidadRepository, 
+            IProductoAppService ProductoAppService, 
+            ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _bodegaRepository = bodegaRepository;
+            _inventarioDomainService = inventarioDomainService;
+            _sucursalRepository = sucursalRepository;
             _utilidadRepository = utilidadRepository;
             _ProductoAppService = ProductoAppService;
         }
@@ -34,6 +49,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 ViewData["unidadMeida"] = _utilidadRepository.GetUnidadesMedida();
                 ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
+                ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
 
                 var result = _ProductoAppService.ConsultarProductos();
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
@@ -53,17 +69,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpGet]
         public IActionResult Registrar(string Id)
         {
-            ViewBag.EsNuevo = true;
+            ViewBag.EsNuevo = string.IsNullOrEmpty(Id);
 
             ProductoModel model = new ProductoModel();
             try
-            {    
-                ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Simbolo", "Nombre");
-                ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
+            {
+                CargarDatos();
 
                 if (!string.IsNullOrEmpty(Id))
                 {
-                    ViewBag.EsNuevo = false;
                     var result = _ProductoAppService.ConsultarProducto(Id);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
@@ -88,17 +102,53 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         [HttpPost]
         public IActionResult Registrar(ProductoModel model)
         {
-            ViewBag.EsNuevo = true;
+            ViewBag.EsNuevo = string.IsNullOrEmpty(model.Id);
             try
             {
-                ViewData["unidadMeida"] = new SelectList(_utilidadRepository.GetUnidadesMedida(), "Codigo", "Nombre");
-                ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
+                CargarDatos();
+
+                if (model.RegistrarInventario)
+                {
+                    bool pasoValidaciones = true;
+
+                    if (model.TipoInventario == null)
+                    {
+                        pasoValidaciones = false;
+                        ModelState.AddModelError("TipoInventario", DomainConstants.MENSAJE_CAMPO_REQUIRED);
+                    }
+
+                    if (model.Sucursal == null)
+                    {
+                        pasoValidaciones = false;
+                        ModelState.AddModelError("Sucursal", DomainConstants.MENSAJE_CAMPO_REQUIRED);
+                    }
+
+                    if (model.Bodega == null)
+                    {
+                        pasoValidaciones = false;
+                        ModelState.AddModelError("Bodega", DomainConstants.MENSAJE_CAMPO_REQUIRED);
+                    }
+
+                    if (string.IsNullOrEmpty(model.CantidadStr))
+                    {
+                        pasoValidaciones = false;
+                        ModelState.AddModelError("CantidadStr", DomainConstants.MENSAJE_CAMPO_REQUIRED);
+                    }
+
+                    if (!pasoValidaciones)
+                    {
+                        return View(model);
+                    }
+                }
 
                 if (ModelState.IsValid)
                 {
                     var usr = GetUserLogin();
                     model.Ip = usr.IPLogin;
                     model.Usuario = usr.IdUsuario;
+                    model.Cantidad = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(model.CantidadStr));
+                    model.PrecioUnitario = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(model.PrecioUnitarioStr));
+
 
                     if (string.IsNullOrEmpty(model.Id))
                     {
@@ -107,6 +157,34 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                         if (result.Estado)
                         {
                             TempData["msg"] = WebSiteConstants.MENSAJE_TOAST_ALERT_SUCCESS.Replace("{Mensaje_Respuesta}", "Producto registrado con éxito");
+
+                            if (model.RegistrarInventario)
+                            {
+                                InventarioMantenimientoDto mantenimiento = new InventarioMantenimientoDto
+                                {
+                                    productos = model.ProductoId,
+                                    cantidad = model.Cantidad,
+                                    precio = model.PrecioUnitario,
+                                    tipoInventario = ((int)model.TipoInventario),
+                                    tipoMovimiento = 1,
+                                    subTipoMovimiento = (int)TipoMovimientoInventario.Manual,
+                                    bodegas = model.Bodega ?? 0,
+                                    sucursal = model.Sucursal ?? 0,
+                                    //mantenimiento.cufeFactura = productoForm.cufe;
+                                    //mantenimiento.numeroFactura = productoForm.numeroDocumento;
+                                    unidadMedida = model.UnidadMedida,
+                                    proveedor = model.Proveedor ?? 0,
+                                    motivo = "Registro de nuevo producto"
+                                };
+
+                                long IdInventarioMovimiento = 0;
+                                string mensaje = "";
+                                string mensajeError = "";
+
+                                var resultInventario = _inventarioDomainService.QryInventarioMovimiento(mantenimiento, usr.IdUsuario, usr.IPLogin, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
+
+                            }
+
                             return RedirectToAction("Index");
                         }
                         else
@@ -116,7 +194,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     }
                     else
                     {
-                        ViewBag.EsNuevo = false;
                         var result = _ProductoAppService.EditarProducto(model);
                         if (result.TieneErrores) throw new Exception(result.MensajeError);
                         if (result.Estado)
@@ -160,6 +237,26 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
             }
+        }
+
+        private void CargarDatos()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            foreach (var item in _utilidadRepository.GetUnidadesMedida())
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = item.Simbolo + " - " + item.Comentario,
+                    Value = item.Simbolo,
+                });
+            }
+
+            ViewData["unidadMeida"] = new SelectList(items, "Value", "Text");
+
+
+            ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
+            ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
+            //ViewData["bodegas"] = new SelectList(_bodegaRepository.GetBodegas(), "BodegaId", "Nombre");
         }
     }
 }
