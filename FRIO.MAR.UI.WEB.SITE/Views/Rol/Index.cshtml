@@ -8,15 +8,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Styles {
-    <!-- Bootstrap Css -->
-    <!--<link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" />-->
-    <!-- Icons Css -->
-    <!--<link href="~/assets/css/icons.min.css" rel="stylesheet" />-->
-    <!-- App Css-->
-    <!--<link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" />-->
-
     <link href="~/css/kendo.default-v2.min.css" rel="stylesheet" />
-
 }
 
 <div class="card">
@@ -24,50 +16,47 @@
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" id="btnGuardar">
             Nuevo
         </button>
+        <table class="table table-bordered table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>Acciones</th>
+                    <th></th>
+                    <th>Nombre</th>
 
-            <table class="table table-bordered table-responsive table-striped">
-                <thead>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
                     <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Nombre</th>
+                        <td class="text-center">
 
-                        <th>Estado</th>
+                            <button type="button" class="btn btn-info btn-editar" data-toggle="modal" data-target="#myModal" id="btnEditar">
+                                <i class="fa fa-edit"></i>
+                                @*<img alt="Editar" src="../images/btn_edit.png" width="25">*@
+                            </button>
+                            <button type="button" class="btn btn-primary btn-asignar" data-toggle="modal" id="Asignar">
+                                <i class="fa fa-plus"></i>
+                                @*<img alt="Asignar Permisos" src="../images/btn_rol.png" width="25">*@
+                            </button>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdRol)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>*@
+                        <td>
+                            @(item.Estado ? Html.Raw("ACTIVO") : Html.Raw("INACTIVO"))
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td style="text-align:center">
-
-                                <button type="button" class="btn btn-primary btn-editar" data-toggle="modal" data-target="#myModal" id="btnEditar">
-                                    <i class="fa fa-edit"></i>
-                                    @*<img alt="Editar" src="../images/btn_edit.png" width="25">*@
-                                </button>
-                                <button type="button" class="btn btn-info btn-asignar" data-toggle="modal" id="Asignar">
-                                    <i class="fa fa-plus"></i>
-                                    @*<img alt="Asignar Permisos" src="../images/btn_rol.png" width="25">*@
-                                </button>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IdRol)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Nombre)
-                            </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.Descripcion)
-                                </td>*@
-                            <td>
-                                @(item.Estado ? Html.Raw("ACTIVO") : Html.Raw("INACTIVO"))
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -131,7 +120,6 @@
                 var data = table.row($(this).parents('tr')).data();
                 $("#IdRol").val(data[1]);
                 $("#Nombre").val(data[2]);
-                //$("#Descripcion").val(data[3]);
                 $("#Estado").val(data[3] == 'ACTIVO' ? '1' : '0').trigger("change");
             });
 
@@ -149,19 +137,10 @@
                         $.each(result.data, function (i, item) {
                             try {
                                 var getitem = treeview.dataSource.get(item.id);
-                                //console.log(getitem);
                                 var data1 = treeview.dataSource.getByUid(getitem.uid);
-                                //console.log(data1);
-
                                 if (data1)
                                     data1.set("checked", true);
 
-                            //if (data1.items.length > 0) {
-                            //    if (data1.items.filter(x => x.checked == false).length > 0) {
-                            //        //console.log(data1);
-                            //        data1.set("checked", false);
-                            //    }
-                            //}
                             } catch (e) {
                                 console.log(item);
                             }

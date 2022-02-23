@@ -9,16 +9,14 @@
 
 
 @section styles{
-    <!-- Sweet Alert-->
-    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
     <!-- Select y DataPicker-->
     <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
     <link href="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
     <!-- DataTables -->
     <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/css/doc-emitido.css" rel="stylesheet" />
 
     <!-- Responsive datatable examples -->
     <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -30,9 +28,6 @@
                 <div class="toolbar">
                     <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
                         Seleccione los parámetros para realizar la consulta.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
                     <br />
                     <div class="row">
@@ -107,21 +102,15 @@
                                 </div>
                             </div>
                         </div>
-
+                        <br />
                         <div class="col-md-3">
                             <div class="form-group mb-0">
                                 <div class="input-group">
-                                    <button id="idBotonConsultarEmitidos" type="button" class="btn btn-block btn-rounded waves-effect waves-light">Consultar</button>
+                                    <button id="idBotonConsultarEmitidos" type="button" class="btn btn-success btn-block">Consultar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @*<button class="btn btn-outline-primary btn-pdf" value="1faa763c5e415b0685e0928069141c561f631a9dd41b1eee59e6abf5006879e1cb04cc1df61836638b56a66f61482b72">
-                            <i class="fas fa-file-pdf"></i>
-                        </button>
-                        <button class="btn btn-outline-primary btn-xml" value="1faa763c5e415b0685e0928069141c561f631a9dd41b1eee59e6abf5006879e1cb04cc1df61836638b56a66f61482b72">
-                            <i class="fas fa-file-archive"></i>
-                        </button>*@
                     <hr />
                     <div id="tablaDocumentosEmitidos"></div>
                 </div>

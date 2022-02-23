@@ -10,6 +10,7 @@
 
 <div class="card">
     <div class="card-body">
+        @{await Html.RenderPartialAsync("_camposObligatorios");}
         <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -70,8 +71,8 @@
             <br />
 
             <div class="form-group">
-                <input type="submit" value="Crear Usuario" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-dark">Regresar</a>
+                <input type="submit" value="Crear Usuario" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary">Regresar</a>
             </div>
         </form>
     </div>

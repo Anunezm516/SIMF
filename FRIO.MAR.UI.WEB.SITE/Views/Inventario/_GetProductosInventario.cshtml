@@ -6,122 +6,124 @@
 }
 
 <div class="row">
-            <div class="col-md-12 form-group">
-                <table id="datatable" class="table table-bordered table-condensed no-footer table-hover table-responsive-lg">
-                    <thead>
+    <div class="col-md-12 form-group">
+        <table id="datatable" class="table table-bordered table-condensed no-footer table-hover table-responsive-lg">
+            <thead>
+                <tr>
+                    @*<th>Seleccionar</th>*@
+                    <th style="display: none"></th>
+                    <th style="display: none"></th>
+                    <th class="text-center">Producto</th>
+                    <th style="display: none"></th>
+                    <th class="text-center">Bodega</th>
+                    <th class="text-center">Sucursal</th>
+                    <th class="text-center">Stock</th>
+                    <th class="text-center">Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.TipoInventario == 1)
+                {
+                    @foreach (var item in Model.InventarioProveedor)
+                    {
                         <tr>
-                            @*<th>Seleccionar</th>*@
-                            <th style="display: none"></th>
-                            <th style="display: none"></th>
-                            <th class="text-center">Producto</th>
-                            <th style="display: none"></th>
-                            <th class="text-center">Bodega</th>
-                            <th class="text-center">Sucursal</th>
-                            <th class="text-center">Stock</th>
-                            <th class="text-center">Cantidad</th>
+                            <td style="display: none" id="td-producto-@item.IdInventarioProveedor">@item.IdProducto</td>
+                            <td style="display: none" id="td-sucursal-@item.IdInventarioProveedor">@item.IdSucursal</td>
+                            <td>@item.IdProductoNavigation.Codigo - @item.IdProductoNavigation.Descripcion</td>
+                            <td class="text-center" style="display: none" id="td-bodega-@item.IdInventarioProveedor">@item.IdInventarioBodega</td>
+                            <td class="text-center"> @item.Bodega.Nombre</td>
+                            <td class="text-center"> @item.IdSucursalNavigation.Nombre</td>
+                            <td class="text-center" id="td-@item.IdInventarioProveedor">@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.StockActual ?? 0, 2)</td>
+                            <td class="text-center">
+                                <input data-tipo-inventario="2" data-inventario="@item.IdInventarioProveedor" 
+                                        data-sucursal="@item.IdSucursal" data-bodega="@item.IdInventarioBodega" 
+                                        data-producto="@item.IdProducto" placeholder="0.00" class="form-control cantidad @item.IdSucursal-@item.IdInventarioBodega" 
+                                        type="text" data-stock="@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.StockActual??0, 2)" 
+                                        id="cantidad-@item.IdInventarioProveedor" data-id="@item.IdInventarioProveedor" name="cantidad" />
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.TipoInventario == 1)
-                        {
-                            @foreach (var item in Model.InventarioProveedor)
-                            {
-                                <tr>
-                                    <td style="display: none" id="td-producto-@item.IdInventarioProveedor">@item.IdProducto</td>
-                                    <td style="display: none" id="td-sucursal-@item.IdInventarioProveedor">@item.IdSucursal</td>
-                                    <td>@item.IdProductoNavigation.Codigo - @item.IdProductoNavigation.Descripcion</td>
-                                    <td class="text-center" style="display: none" id="td-bodega-@item.IdInventarioProveedor">@item.IdInventarioBodega</td>
-                                    <td class="text-center"> @item.Bodega.Nombre</td>
-                                    <td class="text-center"> @item.IdSucursalNavigation.Nombre</td>
-                                    <td class="text-center" id="td-@item.IdInventarioProveedor">@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.StockActual ?? 0, 2)</td>
-                                    <td class="text-center">
-                                        <input data-tipo-inventario="2" data-inventario="@item.IdInventarioProveedor" 
-                                               data-sucursal="@item.IdSucursal" data-bodega="@item.IdInventarioBodega" 
-                                               data-producto="@item.IdProducto" placeholder="0.00" class="form-control cantidad @item.IdSucursal-@item.IdInventarioBodega" 
-                                               type="text" data-stock="@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.StockActual??0, 2)" 
-                                               id="cantidad-@item.IdInventarioProveedor" data-id="@item.IdInventarioProveedor" name="cantidad" />
-                                    </td>
-                                </tr>
+                    }
+                }
+                else
+                {
+                    @foreach (var item in Model.InventarioVenta)
+                    {
+                        <tr>
+                            <td style="display: none" id="td-producto-@item.IdInventarioVenta">@item.IdProducto</td>
+                            <td style="display: none" id="td-sucursal-@item.IdInventarioVenta">@item.IdSucursal</td>
+                            <td>@item.IdProductoNavigation.Codigo - @item.IdProductoNavigation.Descripcion</td>
+                            <td class="text-center" style="display: none" id="td-bodega-@item.IdInventarioVenta">@item.IdInventarioBodega</td>
+                            <td class="text-center"> @item.Bodega.Nombre</td>
+                            <td class="text-center"> @item.IdSucursalNavigation.Nombre</td>
+                            @{
+                                string stock = FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.StockActual ?? 0, 2);
                             }
-                        }
-                        else
+                            <td class="text-center">@stock</td>
+
+                            <td class="text-center">
+                                <input data-tipo-inventario="2" data-inventario="@item.IdInventarioVenta" data-sucursal="@item.IdSucursal" 
+                                        data-bodega="@item.IdInventarioBodega" data-producto="@item.IdProducto" placeholder="0.00" 
+                                        class="form-control cantidad @item.IdSucursal-@item.IdInventarioBodega" type="text" name="cantidad" data-stock="@stock" id="cantidad-@item.IdInventarioVenta"
+                                        data-id="@item.IdInventarioVenta" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <hr />
+    <div class="col-md-12">
+        <form>
+
+        <div class="row">
+                <div class="col-md-4 form-group">
+                    <label>Tipo de Inventario Destino</label>
+                    <select name="tipoInventarioDestino" id="tipoInventarioDestino" class="select2 form-control tipoInventarioDestino">
+                        <option value="0">-- SELECCIONAR --</option>
+                        <option value="1">Proveedor</option>
+                        <option value="2">Venta</option>
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>Sucursal Destino</label>
+                    <select class="form-control select2 sucursalDestino" id="sucursalDestino" style="width: 100%">
+                        <option value="0">-- SELECCIONAR --</option>
+                        @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Sucursal item in ViewBag.Sucursal)
                         {
-                            @foreach (var item in Model.InventarioVenta)
-                            {
-                                <tr>
-                                    <td style="display: none" id="td-producto-@item.IdInventarioVenta">@item.IdProducto</td>
-                                    <td style="display: none" id="td-sucursal-@item.IdInventarioVenta">@item.IdSucursal</td>
-                                    <td>@item.IdProductoNavigation.Codigo - @item.IdProductoNavigation.Descripcion</td>
-                                    <td class="text-center" style="display: none" id="td-bodega-@item.IdInventarioVenta">@item.IdInventarioBodega</td>
-                                    <td class="text-center"> @item.Bodega.Nombre</td>
-                                    <td class="text-center"> @item.IdSucursalNavigation.Nombre</td>
-                                    @{
-                                        string stock = FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.StockActual ?? 0, 2);
-                                    }
-                                    <td class="text-center">@stock</td>
-
-                                    <td class="text-center">
-                                        <input data-tipo-inventario="2" data-inventario="@item.IdInventarioVenta" data-sucursal="@item.IdSucursal" 
-                                               data-bodega="@item.IdInventarioBodega" data-producto="@item.IdProducto" placeholder="0.00" 
-                                               class="form-control cantidad @item.IdSucursal-@item.IdInventarioBodega" type="text" name="cantidad" data-stock="@stock" id="cantidad-@item.IdInventarioVenta"
-                                               data-id="@item.IdInventarioVenta" />
-                                    </td>
-                                </tr>
-                            }
+                            <option value="@item.SucursalId">@item.Nombre</option>
                         }
-                    </tbody>
-                </table>
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>Bodega Destino</label>
+                    <select class="form-control select2 bodegasDestino" id="bodegasDestino" style="width: 100%">
+                        <option value="0">-- SELECCIONAR --</option>
+                    </select>
+                </div>
             </div>
-            <hr />
-            <div class="col-md-12">
-                <form>
 
-                <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label>Tipo de Inventario Destino</label>
-                            <select name="tipoInventarioDestino" id="tipoInventarioDestino" class="select2 form-control tipoInventarioDestino">
-                                <option value="0">-- SELECCIONAR --</option>
-                                <option value="1">Proveedor</option>
-                                <option value="2">Venta</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label>Sucursal Destino</label>
-                            <select class="form-control select2 sucursalDestino" id="sucursalDestino" style="width: 100%">
-                                <option value="0">-- SELECCIONAR --</option>
-                                @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Sucursal item in ViewBag.Sucursal)
-                                {
-                                    <option value="@item.SucursalId">@item.Nombre</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label>Bodega Destino</label>
-                            <select class="form-control select2 bodegasDestino" id="bodegasDestino" style="width: 100%">
-                                <option value="0">-- SELECCIONAR --</option>
-                            </select>
-                        </div>
-                    </div>
+            <br />
 
-                    <br />
-
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label class="label">Motivo</label>
-                            <textarea maxlength="5000" placeholder="Texto libre de manera opcional máximo 5000 caracteres" rows="6" id="motivo" name="motivo" class="form-control"></textarea>
-                        </div>
-                    </div>
-
-                    <br />
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button class="btn btn-success btn-block btn-transferir" type="button">Transferir</button>
-                        </div>
-                    </div>
-                </form>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label class="label">Motivo</label>
+                    <textarea maxlength="5000" placeholder="Texto libre de manera opcional máximo 5000 caracteres" rows="6" id="motivo" name="motivo" class="form-control"></textarea>
+                </div>
             </div>
-        </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-success btn-block btn-transferir" type="button">Transferir</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 
 <script type="text/javascript">
     var productosArray = [];
@@ -214,26 +216,6 @@
             TransferirProductos();
         });
 
-        @*$(".tipoInventarioDestino").change(function () {
-            //var id = $(this).attr("data-id");
-            var value = $(this).val();
-            IniciarLoading();
-            $.post("@Url.Action("ActualizarComboProductosBodega", "Inventario")", { TipoInventario: value }, function (response) {
-                DetenerLoading();
-                if (isEmpty(response)) {
-                    MensajeSesionFinalizada();
-                    setTimeout(function () {
-                        window.location.href = "@Url.Action("index", "Auth")";
-                    }, 3000);
-                } else {
-                    if (response.status === "success") {
-                        addOptionsSucursales("sucursalDestino", response.sucursales);
-                        LimpiarSelect("bodegasDestino");
-                    }
-                }
-            });
-        });*@
-
         $(".sucursalDestino").change(function () {
             //var id = $(this).attr("data-id");
             var value = $(this).val();
@@ -296,7 +278,7 @@
     });
 </script>
 <script>
-    // Rutina para agregar opciones a un <select>
+
     function addOptionsProductos(domElement, result) {
         var select = document.getElementById(domElement);
         LimpiarSelect(domElement);

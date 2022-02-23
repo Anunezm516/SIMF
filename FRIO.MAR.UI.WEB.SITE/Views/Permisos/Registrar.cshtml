@@ -11,6 +11,7 @@
 
 <div class="card">
     <div class="card-body">
+        @{await Html.RenderPartialAsync("_camposObligatorios");}
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-info">
@@ -69,8 +70,8 @@
                     </div>
                     <br />
                     <div class="form-group">
-                        <input type="submit" value="Guardar" class="btn btn-primary" />
-                        <a asp-action="Index" class="btn btn-dark">Regresar</a>
+                        <input type="submit" value="Guardar" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-secondary">Regresar</a>
                     </div>
                 </form>
             </div>

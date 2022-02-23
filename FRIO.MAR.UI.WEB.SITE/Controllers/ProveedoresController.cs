@@ -8,6 +8,7 @@ using FRIO.MAR.UI.WEB.SITE.Constants;
 using GS.TOOLS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 
@@ -56,7 +57,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ProveedorModel model = new ProveedorModel();
             try
             {
-                ViewData["tipoIdentificacion"] = _utilidadRepository.GetTipoIdentificaciones();
+                ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones(), "Codigo", "Nombre");
 
                 if (!string.IsNullOrEmpty(Id))
                 {
@@ -88,7 +89,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ViewBag.EsNuevo = true;
             try
             {
-                ViewData["tipoIdentificacion"] = _utilidadRepository.GetTipoIdentificaciones();
+                ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones(), "Codigo", "Nombre");
 
                 if (ModelState.IsValid)
                 {

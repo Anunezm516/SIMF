@@ -10,11 +10,7 @@
             <th class="text-center">Sucursal</th>
             <th class="text-center">Bodega</th>
             <th class="text-center">Producto</th>
-            @*<th>Proveedor</th>*@
             <th class="text-center">Cantidad</th>
-            @*<th>Precio</th>*@
-            @*<th>Numero Factura</th>*@
-            @*<th>Cufe</th>*@
             <th class="text-center">Motivo</th>
         </tr>
     </thead>
@@ -73,11 +69,7 @@
             <td class="text-center">@item.Sucursal</td>
             <td class="text-center">@item.Bodega</td>
             <td class="text-center">@item.Producto</td>
-            @*<td>@item.ClienteProveedor</td>*@
             <td class="text-center">@item.CantidadStr</td>
-            @*<td>@item.Precio</td>*@
-            @*<td>@item.NumeroFactura</td>*@
-            @*<td>@item.Cufe</td>*@
             <td class="text-center">
                 @if (item.Motivo.Length >= 50)
                 {
@@ -95,7 +87,6 @@
             </td>
         </tr>
         }
-
     </tbody>
 </table>
 <script>

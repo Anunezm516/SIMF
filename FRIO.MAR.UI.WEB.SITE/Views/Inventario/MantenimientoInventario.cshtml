@@ -23,12 +23,9 @@
 <div class="card">
     <form id="formc">
         <div class="card-body">
-            <div class="alert alert-info">
-                <span style="color: red">(*)</span> Campos obligatorios
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: black!important">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+
+             @{await Html.RenderPartialAsync("_camposObligatorios");}
+
             <div class="row form-group">
                 <div class="col-md-2">
                     <label class="label">Tipo Movimiento <span style="color: red">*</span></label>

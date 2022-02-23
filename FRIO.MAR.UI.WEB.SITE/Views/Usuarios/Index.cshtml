@@ -13,9 +13,7 @@
 
 <div class="card">
     <div class="card-body">
-        <p>
-            <a asp-action="Create" class="btn btn-primary">Nuevo</a>
-        </p>
+        <a asp-action="Create" class="btn btn-success">Nuevo</a>
         <table class="table">
             <thead>
                 <tr>
@@ -32,8 +30,8 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.IdUsuario" class="btn btn-dark"><i class="fa fa-edit"></i></a>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.IdUsuario" class="btn btn-info"><i class="fa fa-edit"></i></a>
                             <button type="button" class="btn btn-danger btn-eliminar" value="@item.IdUsuario"><i class="fa fa-trash"></i></button>
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.NombreRol)</td>
