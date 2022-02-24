@@ -230,7 +230,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 }
                 else
                 {
-                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "Error al eliminar el Producto" });
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = (string.IsNullOrEmpty(result.Mensaje) ? "Error al eliminar el Producto" : result.Mensaje) });
+
                 }
             }
             catch (Exception ex)

@@ -35,6 +35,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
         public const string ERROR_PRODUCTO_ANONIMO = "P601";
         public const string ERROR_PRODUCTO_REGISTRADO_CODIGO = "P602";
+        public const string ERROR_PRODUCTO_REGISTRADO_BODEGA = "P603";
 
 
         public const string ERROR_ENVIAR_MAIL = "P018";
@@ -75,6 +76,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
             ERROR_PRODUCTO_ANONIMO => $"{CodigoError}: El producto no se encuetra registrado.",
             ERROR_PRODUCTO_REGISTRADO_CODIGO => $"{CodigoError}: El código del producto ya se encuentra registrada.",
+            ERROR_PRODUCTO_REGISTRADO_BODEGA => $"{CodigoError}: No se puede eliminar el producto, la producto se encuentra registrado en una bodega.",
         };
     }
 

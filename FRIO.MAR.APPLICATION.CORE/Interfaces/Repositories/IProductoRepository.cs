@@ -8,5 +8,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
     public interface IProductoRepository : IRepository<Producto>
     {
         List<Producto> GetProductos();
+        Producto GetProducto(long Id);
     }
 }

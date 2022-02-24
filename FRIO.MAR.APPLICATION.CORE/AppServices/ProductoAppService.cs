@@ -155,12 +155,22 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
-                Producto Producto = _ProductoRepository.Get(Id);
+                Producto Producto = _ProductoRepository.GetProducto(Id);
                 if (Producto == null)
                 {
                     responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_ANONIMO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
+                }
+
+                if (Producto.InventarioVenta.Any() || Producto.InventarioProveedor.Any())
+                {
+                    if (Producto.InventarioVenta.Sum(x => x.StockActual) > 0 || Producto.InventarioProveedor.Sum(x => x.StockActual) > 0)
+                    {
+                        responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_REGISTRADO_BODEGA;
+                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        return responseDto;
+                    }
                 }
 
                 Producto.Ip = Ip;
