@@ -1,0 +1,36 @@
+﻿@model FRIO.MAR.APPLICATION.CORE.Models.FacturaModel
+@{
+    int cantidadColumnas = 6;
+}
+@if(Model.Detalle != null)
+{
+    @foreach (var item in Model.Detalle)
+    {
+        <tr>
+            <td class="text-center">
+                <div>
+                    <button class="btn btn-danger btn-eliminar-item" value="@item.Id">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+            <td>@item.Codigo</td>
+            <td>@item.Descripcion</td>
+
+            @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
+            {
+                cantidadColumnas = 7;
+                <td>@item.CodigoSeguimiento</td>
+            }
+        
+             <td class="text-right">
+                <input class="form-control decimal input-precio-unitario" value="@item.PrecioUnitario" data-id="@item.Id"/>
+            </td>
+            <td class="text-right">
+                <input class="form-control decimal input-cantidad" value="@item.Cantidad" data-id="@item.Id"/>
+            </td>
+            <td>@item.IvaValor</td>
+            <td>@item.Total</td>
+        </tr>
+    }
+}

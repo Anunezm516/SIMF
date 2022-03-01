@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Ventas";
+    ViewBag.pTitle = "Ventas";
+    ViewBag.pageTitle = "Ventas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class = "card">
+    <div class = "card-body">
+        <h5>Facturas Borrador</h5>
+        <div id="div-facturas-borrador" class = "">
+        </div>
+    </div>
+</div>
+
+<div class = "card">
+    <div class = "card-body">
+        <h5>Proforma</h5>
+        <div id="div-facturas-proforma" class = "">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $.get("@Url.Action("ListarFacturasBorrador", "Ventas")", function(response){
+                if (!response.estado){
+                    $("#div-facturas-borrador").empty();
+                    $("#div-facturas-borrador").html(response);
+                }else{
+                    MensajeErrorSwal(response.mensaje);
+                }
+            }).fail(function(error) {
+                MsgAjaxError(error);
+            });
+
+            $.get("@Url.Action("ListarFacturasProforma", "Ventas")", function(response){
+                if (!response.estado){
+                    $("#div-facturas-proforma").empty();
+                    $("#div-facturas-proforma").html(response);
+                }else{
+                    MensajeErrorSwal(response.mensaje);
+                }
+            }).fail(function(error) {
+                MsgAjaxError(error);
+            });
+        });
+    </script>
+    @Html.Raw(TempData["msg"])
+}

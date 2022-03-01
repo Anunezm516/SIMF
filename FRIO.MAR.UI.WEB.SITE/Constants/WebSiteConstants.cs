@@ -8,7 +8,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Constants
         public const string ROLES_AGENTE = "Agente";
         public const string ROLES_ESTANDAR = "Estandar";
 
-        public const string MENSAJE_SWEET_ALERT_ERROR = "<script> $(document).ready(function () { MensajeError(); });  function MensajeError(){ Swal.fire({ icon: 'error', title: 'Plan', text: '{Mensaje_Respuesta}' }); } </script>";
+        public const string MENSAJE_SWEET_ALERT_ERROR = "<script> $(document).ready(function () { MensajeError(); });  function MensajeError(){ Swal.fire({ icon: 'error', title: '', text: '{Mensaje_Respuesta}' }); } </script>";
         public const string MENSAJE_SWEET_ALERT_SUCCESS = "<script>  $(document).ready(function () { MensajeSuccess(); });  function MensajeSuccess(){ Swal.fire({ text: '{Mensaje_Respuesta}', icon: 'success', confirmButtonText: 'OK', allowOutsideClick: false }); } </script>";
 
         public const string MENSAJE_TOAST_ALERT_ERROR = "<script> $(document).ready(function () { MensajeError(); });  function MensajeError(){ $.toast({ heading: '¡Alerta!', text: '{Mensaje_Respuesta}', position: 'top-right', stack: 6, hideAfter: 5000, showHideTransition: 'fade', icon: 'error' }); } </script>";

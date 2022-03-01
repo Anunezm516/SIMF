@@ -97,7 +97,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
     public enum TipoProducto
     {
-        Producto = 1,
+        Bien = 1,
         Servicio = 2
     }
 
@@ -112,6 +112,14 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         Manual = 1,
         Tranferencia = 2,
         Factura = 3
+    }
+
+    public enum EstadoFactura
+    {
+        Eliminado = 0,
+        Facturado = 1,
+        Borrador = 2,
+        Proforma = 3
     }
 
     public class RespuestaVentaDto

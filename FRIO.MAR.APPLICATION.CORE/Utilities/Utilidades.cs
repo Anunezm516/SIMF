@@ -428,5 +428,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Utilities
 
             return timeInfoKey;
         }
+
+        //public static string GetEstado
     }
 }

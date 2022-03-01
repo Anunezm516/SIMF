@@ -11,6 +11,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
     {
         public string Id { get; set; }
 
+        public TipoProducto TipoProducto { get; set; }
+
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
@@ -73,6 +75,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             UnidadMedida = producto.UnidadMedida;
             PrecioUnitarioStr = APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(producto.PrecioUnitario, 2);
             IVA = producto.IvaCodigo + "|" + producto.IvaPorcentaje;
+            TipoProducto = producto.TipoProducto;
         } 
     }
 }

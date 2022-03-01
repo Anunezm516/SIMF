@@ -25,9 +25,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     {
         private readonly IAccountAppService _accountAppService;
 
-        public AccountController(
-            IAccountAppService accountAppService,
-            ILogInfraServices logInfraServices) : base(logInfraServices)
+        public AccountController(IAccountAppService accountAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
             _accountAppService = accountAppService;
         }

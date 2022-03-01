@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220228235343_TablaFactura2")]
+    partial class TablaFactura2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,9 +250,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<string>("RazonSocial")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<long>("SucursalId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Telefono")
                         .HasColumnType("varchar(25)");
 
@@ -260,59 +259,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.HasKey("FacturaId");
 
                     b.ToTable("Factura");
-                });
-
-            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.FacturaDetalle", b =>
-                {
-                    b.Property<long>("FacturaDetalleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("BodegaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Cantidad")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<string>("Codigo")
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("CodigoSeguimiento")
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("varchar(300)");
-
-                    b.Property<long?>("FacturaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("IvaPorcentaje")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<decimal>("IvaValor")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<decimal>("PrecioUnitario")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<long>("ProductoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Subtotal")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<long>("SucursalId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.HasKey("FacturaDetalleId");
-
-                    b.HasIndex("FacturaId");
-
-                    b.ToTable("FacturaDetalle");
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Impuesto", b =>
@@ -1307,13 +1253,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Sucursal", null)
                         .WithMany("Bodega")
                         .HasForeignKey("SucursalId");
-                });
-
-            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.FacturaDetalle", b =>
-                {
-                    b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Factura", "Factura")
-                        .WithMany("FacturaDetalle")
-                        .HasForeignKey("FacturaId");
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.Impuesto", b =>

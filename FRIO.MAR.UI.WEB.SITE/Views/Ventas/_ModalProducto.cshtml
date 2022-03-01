@@ -1,0 +1,49 @@
+﻿@model FRIO.MAR.APPLICATION.CORE.Models.ModalProductoModel
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-agregar-producto" tabindex="-1" aria-labelledby="agregarProductoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="agregarProductoModalLabel">Agregar Producto</h6>
+      </div>
+      <div class="modal-body">
+        <form id="form-agregar-producto">
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Producto</label>
+                    <select asp-for="ProductoId" class="form-control" style="width: 100%">
+                        @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
+                        {
+                            <option value='@item.ProductoId' data-precio-unitario='@item.PrecioUnitario' data-unidad-medida='@item.UnidadMedida' data-iva='@item.IvaPorcentaje' >@item.Descripcion</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                 <div class="col-md-4">
+                    <label>IVA</label>
+                    <input asp-for="IVA" class="form-control" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label>Precio Unitario</label>
+                    <input asp-for="PrecioUnitario" class="form-control decimal" />
+                </div>
+                <div class="col-md-4">
+                    <label>Cantidad</label>
+                     <input asp-for="Cantidad" class="form-control decimal" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-offset-8">
+                    <button type="button" class="btn btn-success">Agregar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

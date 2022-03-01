@@ -176,7 +176,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 if (Bodega.InventarioVenta.Any() || Bodega.InventarioProveedor.Any())
                 {
-                    if (Bodega.InventarioVenta.Sum(x => x.StockActual) > 0 && Bodega.InventarioProveedor.Sum(x => x.StockActual) > 0)
+                    if (Bodega.InventarioVenta.Sum(x => x.StockActual) > 0 || Bodega.InventarioProveedor.Sum(x => x.StockActual) > 0)
                     {
                         responseDto.CodigoError = DomainConstants.ERROR_BODEGA_REGISTRADO_PRODUCTO;
                         responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);

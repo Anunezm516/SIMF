@@ -17,6 +17,16 @@
             <input asp-for="Id" type="hidden" />
 
             <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="TipoProducto" class="control-label">Tipo de Producto <span class="text-danger">*</span></label>
+                        <select asp-for="TipoProducto" class=" form-control" >
+                            <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Bien">Bien</option>
+                            <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Servicio">Servicio</option>
+                        </select>
+                        <span asp-validation-for="TipoProducto" class="text-danger"></span>
+                    </div>
+                </div>
                  <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="Codigo" class="control-label">Código <span class="text-danger">*</span></label>
@@ -24,7 +34,7 @@
                         <span asp-validation-for="Codigo" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Descripcion" class="control-label">Descripción <span class="text-danger">*</span></label>
                         <input asp-for="Descripcion" class="form-control"  />

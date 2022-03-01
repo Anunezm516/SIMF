@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220301003732_TablaDetalleFactura")]
+    partial class TablaDetalleFactura
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,9 +249,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 
                     b.Property<string>("RazonSocial")
                         .HasColumnType("varchar(100)");
-
-                    b.Property<long>("SucursalId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Telefono")
                         .HasColumnType("varchar(25)");

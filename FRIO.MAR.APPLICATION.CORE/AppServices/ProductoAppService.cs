@@ -82,6 +82,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     UnidadMedida = model.UnidadMedida,
                     Descripcion = model.Descripcion,
                     PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitarioStr)),
+                    TipoProducto = model.TipoProducto,
 
                     Ip = model.Ip,
                     UsuarioCreacion = model.Usuario,
@@ -133,6 +134,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 Producto.UnidadMedida = model.UnidadMedida;
                 Producto.Descripcion = model.Descripcion;
                 Producto.PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitarioStr));
+                Producto.TipoProducto = model.TipoProducto;
 
                 Producto.Ip = model.Ip;
                 Producto.UsuarioModificacion = model.Usuario;
