@@ -21,6 +21,9 @@
 
     <!-- jquery.toast -->
     <link href="~/assets/libs/jquery.toast/jquery.toast.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
 </head>
 <body data-sidebar="dark">
 
@@ -62,7 +65,8 @@
 
 
     <!-- select 2 plugin -->
-    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    @*<script src="~/assets/libs/select2/js/select2.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- sweetalert2 -->
     <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
@@ -78,6 +82,8 @@
 
 
     <script>
+        
+
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 /***
@@ -95,6 +101,9 @@
             });
 
             setInterval(MostrarNotificaciones, 300000);
+
+
+
         });
 
         function MostrarNotificaciones() {

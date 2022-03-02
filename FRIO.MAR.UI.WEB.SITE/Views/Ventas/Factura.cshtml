@@ -7,190 +7,148 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class = "card">
-    <div class = "card-body">
-         <div class="row">
-            <input asp-for="EstadoFactura" type="hidden" />
-            <div class="col-md-4">
-                <label>Fecha</label>
-                <input type="date" asp-for="Fecha" class="form-control" value="@DateTime.Now" />
-            </div>
-            <div class="col-md-4">
-                <label>Cliente</label>
-                <select asp-for="ClienteId" class="form-control select2" asp-items="ViewBag.clientes">
-                    <option selected disabled>--SELECCIONAR--</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label>Sucursal</label>
-               <select asp-for="SucursalId" class="form-control select2" asp-items="ViewBag.sucursales">
-                    <option selected disabled>--SELECCIONAR--</option>
-                </select>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-hover table-bordered">
-                    <thead>
-                        <tr class="text-center bg-dark">
-                            <th colspan="8" style="color: #fff">Detalle</th>
-                        </tr>
-                        <tr>
-                            <th>Acciones</th>
-                            <th>Código</th>
-                            <th>Descripción</th>
-
-                            @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma){
-                                <th>Código de Seguimiento</th>
-                            }
-
-                            <th>Precio Unitario</th>
-                            <th>Cantidad</th>
-                            <th>IVA</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-detalle">
-                        <partial name="_DetalleFactura" />
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class='col-md-4'>
-                <label>Tipo Producto </label>
-                <select id="TipoProducto" class="form-control" >
-                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Bien">Bien</option>
-                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Servicio">Servicio</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row td-bien">
-            <div class="col-md-6">
-                <label>Producto</label>
-                <select id="producto" class="form-control select2" style="width: 100%">
-                    <option disabled selected>--Seleccionar--</option>
-                    @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
-                    {
-                        <option value='@item.ProductoId' data-descripcion='@item.Descripcion' data-codigo='@item.Codigo' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='@item.UnidadMedida' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
-                    }
-                </select>
-                <input id="producto-unidad-medida" type="hidden" />
-                <input id="producto-codigo" type="hidden" />
-                <input id="producto-descripcion" type="hidden" />
-            </div>
-            <div class="col-md-1">
-                <label>IVA</label>
-                <input id="producto-iva" class="form-control" readonly />
-            </div>
-            <div class="col-md-2">
-                <label>Precio Unitario</label>
-                <input id="producto-precio-unitario" class="form-control decimal" />
-            </div>
-            <div class="col-md-2">
-                <label>Cantidad</label>
-                <input id="producto-cantidad" class="form-control decimal" />
-                
-            </div>
-            <div class="col-md-1">
-                <button id="btn-agrega-producto" class='btn btn-success btn-block'>
-                    <i class='fa fa-plus'></i> Agregar Producto
-                </button>
-            </div>
-        </div>
-
-        <div class="row td-servicio">
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Servicio</label>
-                    <select id="servicio" class="form-control select2" style="width: 100%">
-                        <option disabled selected>--Seleccionar--</option>
-                        @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Servicios)
-                        {
-                            <option value='@item.ProductoId' data-descripcion='@item.Descripcion' data-codigo='@item.Codigo' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='@item.UnidadMedida' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
-                        }
-                    </select>
-                    <input id="servicio-unidad-medida" type="hidden" />
-                    <input id="servicio-codigo" type="hidden" />
-                    <input id="servicio-descripcion" type="hidden" />
-                </div>
-                <div class="col-md-3">
-                    <label>Producto Cliente</label>
-                    <select id="producto-cliente" class="form-control select2" style="width: 100%">
-                        <option disabled selected>--Seleccionar--</option>
-                        @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
-                        {
-                            <option value='@item.ProductoId' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='@item.UnidadMedida' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-md-1">
-                    <label>IVA</label>
-                    <input id="servicio-iva" class="form-control" readonly />
-                </div>
-                <div class="col-md-2">
-                    <label>Precio Unitario</label>
-                    <input id="servicio-precio-unitario" class="form-control decimal" />
-                </div>
-                <div class="col-md-2">
-                    <label>Cantidad</label>
-                    <input id="servicio-cantidad" class="form-control decimal" />
-                </div>
-                <div class="col-md-1">
-                    <button id="btn-agrega-servicio" class='btn btn-success btn-block'>
-                        <i class='fa fa-plus'></i> Agregar Servicio
-                    </button>
-                </div>
-            </div>
-        </div>
+@section Styles{
+    <style>
         
-        <br />
+    </style>
+}
+
+<div class="">
+    <div class="">
+         <div class="card" >
+             <div class="card-body">
+                 <div class="row">
+                <input asp-for="Id" type="hidden" />
+                <input asp-for="EstadoFactura" type="hidden" />
+                <div class="col-md-3">
+                    <label>Fecha</label>
+                    <input type="date" asp-for="Fecha" class="form-control" value="@DateTime.Now" />
+                </div>
+                <div class="col-md-3">
+                    <label>Cliente</label>
+                    <select asp-for="ClienteId" class="form-control select2">
+                        <option selected disabled>--SELECCIONAR--</option>
+                        @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Cliente cliente in ViewBag.Clientes)
+                        {
+                            <option value="@cliente.ClienteId" data-correo="@cliente.CorreoElectronico">@cliente.Identificacion - @cliente.RazonSocial - @cliente.NombreComercial</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Correo</label>
+                    <input asp-for="CorreoCliente" class="form-control"/>
+                </div>
+                <div class="col-md-3">
+                    <label>Sucursal</label>
+                    <select asp-for="SucursalId" class="form-control select2" asp-items="ViewBag.sucursales">
+                        <option selected disabled>--SELECCIONAR--</option>
+                    </select>
+                </div>
+            </div>
+             </div>
+         </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-center bg-dark">
+                                    <th>
+                                        <button id="btn-open-modal-producto" class="btn btn-success " title="agregar producto">
+                                            <i class="fa fa-plus"></i> 
+                                        </button>
+                                        <button id="btn-open-modal-servicio" class="btn btn-info " title="agregar servicio">
+                                            <i class="fa fa-plus"></i> 
+                                        </button>
+                                    </th>
+
+                                    <th colspan="7" style="color: #fff">Detalle</th>
+                                </tr>
+                                <tr>
+                                    <th>Acciones</th>
+                                    <th>Código</th>
+                                    <th>Descripción</th>
+
+                                    @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma){
+                                        <th>Código de Seguimiento</th>
+                                    }
+
+                                    <th>Precio Unitario</th>
+                                    <th>Cantidad</th>
+                                    <th>IVA</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-detalle">
+                                <partial name="_DetalleFactura" />
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-8">
-                <table class="table table">
-                    <thead>
-                        <tr class="text-center bg-dark">
-                            @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
-                            {
-                                <th colspan="8" style="color: #fff">Abonos</th>
-                            }else
-                            {
-                                <th colspan="8" style="color: #fff">Forma de Pago</th>
-                            }
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table">
+                            <thead>
+                                <tr class="text-center bg-dark">
+                                    <th>
+                                        <button id="btn-open-modal-forma-pago" class="btn btn-success " title="agregar forma de pago">
+                                            <i class="fa fa-plus"></i> 
+                                        </button>
+                                    </th>
+
+                                    @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
+                                    {
+                                        <th colspan="2" style="color: #fff">Abonos</th>
+                                    }else
+                                    {
+                                        <th colspan="2" style="color: #fff">Forma de Pago</th>
+                                    }
                             
-                        </tr>
-                        <tr>
-                            <th>Acciones</th>
-                            <th>Forma de Pago</th>
-                            <th>Valor</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-formas-pago">
-                        
-                    </tbody>
-                </table>
+                                </tr>
+                                <tr>
+                                    <th>Acciones</th>
+                                    <th>Forma de Pago</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-formas-pago">
+                                <partial name="_FormasPago" />
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
             </div>
-            <div class="col-md-4" id="div-totales">
-                <partial name="_Totales" />
+            <div class="col-md-4" >
+                <div class="card">
+                    <div class="card-body" id="div-totales">
+                        <partial name="_Totales" />
+                    </div>
+                </div>
+                
             </div>
         </div>
-
-
     </div>
 </div>
 
-@*<partial name="_ModalProducto" model="null" />*@
+<partial name="_ModalProducto" />
+<partial name="_ModalServicio" />
+<partial name="_ModalFormaPago" />
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @*@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
+    
     <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.min.js"></script>
     <script>
-
         $(document).ready(function(){
+            
             $(".select2").select2();
             $(".decimal").maskMoney();
 
@@ -201,13 +159,15 @@
             $("#btn-open-modal-servicio").click(function(){
                 $("#modal-agregar-servicio").modal("show");
             });
-
-            CambiarFormularioTipoProducto();
-
-            $("#TipoProducto").change(function(){
-                CambiarFormularioTipoProducto();
+            
+            $("#btn-open-modal-forma-pago").click(function(){
+                $("#modal-agregar-forma-pago").modal("show");
             });
 
+            $("#ClienteId").change(function(){
+                $("#CorreoCliente").val($("#ClienteId option:selected").attr("data-correo"));
+            });
+            
             $("#producto").change(function(){
                 $("#producto-iva").val($("#producto option:selected").attr("data-iva"));
                 $("#producto-unidad-medida").val($("#producto option:selected").attr("data-unidad-medida"));
@@ -230,13 +190,65 @@
 
             $("#btn-agrega-servicio").click(function(){
                 AgregarServicio();
-                
             });
         });
 
+        function EliminarItem(Id){
+            $.post('@Url.Action("EliminarItem", "Ventas")', 
+            {
+                Id: Id
+            })
+            .done(function(response){
+                if (response.estado){
+                    ConstruirDetalles();
+                }else{
+                    MensajeErrorSwal(response.mensaje, "");
+                }
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
+        }
+        
+        function EliminarFormaPago(Id){
+            $.post('@Url.Action("EliminarFormaPago", "Ventas")', 
+            {
+                Id: Id
+            })
+            .done(function(response){
+                if (response.estado){
+                    ConstruirDetalles();
+                }else{
+                    MensajeErrorSwal(response.mensaje, "");
+                }
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
+        }
+
+        function ActualizarItem(Tipo, Valor, Id){
+            $.post('@Url.Action("ActualizarItem", "Ventas")', 
+            {
+                Tipo: Tipo,
+                Id: Id,
+                Valor: Valor
+            })
+            .done(function(response){
+                if (response.estado){
+                    ConstruirDetalles();
+                }else{
+                    MensajeErrorSwal(response.mensaje, "");
+                }
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
+        }
+
         function AgregarServicio(){
             var servicioId = $("#servicio").val();
-            var productoClienteId = $("#servicio-cliente").val();
+            var productoClienteId = $("#producto-cliente").val();
             var iva = $("#servicio-iva").val();
             var unidadMedida = $("#servicio-unidad-medida").val();
             var precioUnitario = $("#servicio-precio-unitario").val();
@@ -258,6 +270,26 @@
                 MensajeGrowl("Ingrese una cantidad");
                 return;
             }
+
+            $.post('@Url.Action("AgregarServicio", "Ventas")', 
+            {
+                Servicio: {
+                    Codigo: codigo,
+                    Descripcion: descripcion,
+                    PrecioUnitario: precioUnitario,
+                    Cantidad: cantidad,
+                    IvaPorcentaje: iva
+                },
+                ProductoClienteId: productoClienteId
+            }, function(response){
+                if (response.estado){
+                    ConstruirDetalles();
+                }else{
+                    MensajeErrorSwal(response.mensaje, "");
+                }
+            }).fail(function(error){
+                MsgAjaxError(error);
+            });
         }
 
         function AgregarProducto(){
@@ -286,8 +318,7 @@
 
             $.post('@Url.Action("AgregarProducto", "Ventas")', 
             {
-                Estado: $("#EstadoFactura").val(),
-                item: {
+                Producto: {
                     Codigo: codigo,
                     Descripcion: descripcion,
                     PrecioUnitario: precioUnitario,
@@ -295,14 +326,48 @@
                     IvaPorcentaje: iva
                 }
             }, function(response){
-
-                if (!response.estado){
-                    $("#tbody-detalle").empty();
-                    $("#tbody-detalle").html(response);
-
-                    CalcularTotales();
+                if (response.estado){
+                    ConstruirDetalles();
                 }else{
+                    MensajeErrorSwal(response.mensaje, "");
+                }
+            }).fail(function(error){
+                MsgAjaxError(error);
+            });
+        }
 
+        function AgregarFormaPago(){
+            var formaPago = $("#forma-pago").val();
+            var formaPagoDescripcion = $("#forma-pago option:selected").attr('data-descripcion');
+            var formaPagoValor = $("#forma-pago-valor").val();
+            var formaPagoObservacion = $("#forma-pago-observacion").val();
+
+
+            if (formaPago === null || formaPago === undefined || formaPago.trim() === ""){
+                MensajeGrowl("Seleccione una forma de pago");
+                $("#forma-pago").focus();
+                return;
+            }
+
+            if (formaPagoValor === null || formaPagoValor === undefined || formaPagoValor.trim() === ""){
+                MensajeGrowl("Ingrese un valor");
+                $("#forma-pago-valor").focus();
+                return;
+            }
+
+            $.post('@Url.Action("AgregarFormaPago", "Ventas")', 
+            {
+                FormaPago: {
+                    Valor: formaPagoValor,
+                    FormaPagoCodigo: formaPago,
+                    FormaPagoDescripcion: formaPagoDescripcion,
+                    Observacion: formaPagoObservacion,
+                }
+            }, function(response){
+                if (response.estado){
+                    ConstruirDetalles();
+                }else{
+                    MensajeErrorSwal(response.mensaje, "");
                 }
             }).fail(function(error){
                 MsgAjaxError(error);
@@ -311,28 +376,34 @@
 
         function CalcularTotales(){
             $.post('@Url.Action("CalcularFactura", "Ventas")', { Estado: $("#EstadoFactura").val() }, function(response){
-                if (!response.estado){
-                    $("#div-totales").empty();
-                    $("#div-totales").html(response);
-                }else{
-
-                }
+                $("#div-totales").empty();
+                $("#div-totales").html(response);
             })
             .fail(function(error){
                 MsgAjaxError(error);
             });
         }
 
-    function CambiarFormularioTipoProducto(){
-        var values = $("#TipoProducto").val();
-        if (values === '@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Bien'){
-            $(".td-bien").show();
-            $(".td-servicio").hide();
-        }else{
-            $(".td-bien").hide();
-            $(".td-servicio").show();
+        function ConstruirDetalles(){
+            $.post('@Url.Action("ConstruirDetalles", "Ventas")', { Estado: $("#EstadoFactura").val() }, function(response){
+                $("#tbody-detalle").empty();
+                $("#tbody-detalle").html(response);
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
+
+            $.post('@Url.Action("ConstruirFormasPago", "Ventas")', { Estado: $("#EstadoFactura").val() }, function(response){
+                $("#tbody-formas-pago").empty();
+                $("#tbody-formas-pago").html(response);
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
+            
+            CalcularTotales();
         }
-    }
+
     </script>
 
     

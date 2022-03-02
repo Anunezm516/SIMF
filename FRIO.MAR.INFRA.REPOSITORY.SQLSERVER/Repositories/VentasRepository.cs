@@ -18,12 +18,17 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 
         public Factura GetFactura(long Id, EstadoFactura Estado)
         {
-            return _context.Factura.Include(x => x.FacturaDetalle).FirstOrDefault(x => x.Estado == Estado && x.FacturaId == Id);
+            return _context.Factura
+                .Include(x => x.FacturaFormaPago)
+                .Include(x => x.FacturaDetalle)
+                .FirstOrDefault(x => x.Estado == Estado && x.FacturaId == Id);
         }
 
         public List<Factura> GetFacturas(EstadoFactura[] Estados)
         {
-            return _context.Factura.Include(x => x.FacturaDetalle).Where(x => Estados.Contains(x.Estado)).ToList();
+            return _context.Factura
+                .Include(x => x.FacturaDetalle)
+                .Where(x => Estados.Contains(x.Estado)).ToList();
         }
     }
 }

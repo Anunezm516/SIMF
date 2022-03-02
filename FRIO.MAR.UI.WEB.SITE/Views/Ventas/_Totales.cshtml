@@ -1,39 +1,56 @@
 ﻿@model FRIO.MAR.APPLICATION.CORE.Models.FacturaModel
 
-<div class="">
+<div class="row">
+    <label class="col-sm-6 control-label text-right">
+        Subtotal<span style="color: red" class=""></span>
+    </label>
+    <div class="col-sm-6 ">
+        <input asp-for="Totales.Subtotal" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+    </div>
+</div>
+<div class="row">
+    <label class="col-sm-6 control-label text-right">
+        Importe IVA<span style="color: red" class=""></span>
+    </label>
+    <div class="col-sm-6 ">
+        <input asp-for="Totales.ImporteIva" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+    </div>
+</div>
+@*@if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
+{
     <div class="row">
         <label class="col-sm-6 control-label text-right">
-            Subtotal<span style="color: red" class=""></span>
+            Total Abono<span style="color: red" class=""></span>
         </label>
         <div class="col-sm-6 ">
-            <input asp-for="Totales.Subtotal" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+            <input asp-for="Totales.TotalAbono" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
         </div>
     </div>
-    <div class="row">
-        <label class="col-sm-6 control-label text-right">
-            Importe IVA<span style="color: red" class=""></span>
-        </label>
-        <div class="col-sm-6 ">
-            <input asp-for="Totales.ImporteIva" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
-        </div>
+}*@
+
+<div class="row">
+    <label class="col-sm-6 control-label text-right">
+        Total Abono<span style="color: red" class=""></span>
+    </label>
+    <div class="col-sm-6 ">
+        <input asp-for="Totales.TotalAbono" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
     </div>
-    @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
-    {
-        <div class="row">
-            <label class="col-sm-6 control-label text-right">
-                Total Abono<span style="color: red" class=""></span>
-            </label>
-            <div class="col-sm-6 ">
-                <input asp-for="Totales.TotalAbono" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
-            </div>
-        </div>
-    }
-    <div class="row">
-        <label class="col-sm-6 control-label text-right">
-            Total<span style="color: red" class=""></span>
-        </label>
-        <div class="col-sm-6 ">
-            <input asp-for="Totales.Total" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
-        </div>
+</div>
+
+<div class="row">
+    <label class="col-sm-6 control-label text-right">
+        Total a pagar<span style="color: red" class=""></span>
+    </label>
+    <div class="col-sm-6 ">
+        <input asp-for="Totales.Total" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-6 d-grid">
+        <button class="btn btn-success btn-block">Guardar Borrador</button>
+    </div>
+    <div class="col-6 d-grid">
+        <button class="btn btn-success btn-block">Facturar</button>
     </div>
 </div>

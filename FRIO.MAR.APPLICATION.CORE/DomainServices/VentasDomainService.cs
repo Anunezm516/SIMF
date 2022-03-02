@@ -26,9 +26,6 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                //EstadoFactura[] Estados = new EstadoFactura[] { EstadoFactura.Facturado };
-
-                //List<VentasDomainServiceResultDto> facturas = new List<VentasDomainServiceResultDto>();
                 var result = _ventasRepository.GetFactura(Id, (Estado));
                 if (result != null)
                 {

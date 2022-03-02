@@ -58,7 +58,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     {
                         FacturaModel factura = result.Data;
                         HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(factura.Detalle));
-                        //HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(factura.Detalle));
+                        HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(factura.FormaPago));
                         return View(factura);
                     }
                     else
@@ -98,72 +98,12 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult AgregarProducto(DetalleFacturaModel item, EstadoFactura Estado)
-        {
-            //CargarDatos();
-            FacturaModel model = new FacturaModel();
-
-            List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
-
-            try
-            {
-                model.EstadoFactura = Estado;
-                model.Detalle = new List<DetalleFacturaModel>();
-
-                item.CantidadDec = decimal.Parse(Utilidades.DepuraStrConvertNum(item.Cantidad));
-                item.PrecioUnitarioDec = decimal.Parse(Utilidades.DepuraStrConvertNum(item.PrecioUnitario));
-                item.IvaPorcentajeDec = decimal.Parse(Utilidades.DepuraStrConvertNum(item.IvaPorcentaje));
-
-                item.SubTotalDec = item.CantidadDec * item.PrecioUnitarioDec;
-                item.IvaValorDec = item.SubTotalDec * (item.IvaPorcentajeDec / 100);
-                item.TotalDec = item.SubTotalDec + item.IvaValorDec;
-
-                item.Id = Guid.NewGuid().ToString();
-                item.SubTotal = Utilidades.DoubleToString_FrontCO(item.SubTotalDec, 2);
-                item.IvaValor = Utilidades.DoubleToString_FrontCO(item.IvaValorDec, 2);
-                item.Total = Utilidades.DoubleToString_FrontCO(item.TotalDec, 2);
-
-                detalles.Add(item);
-                model.Detalle = detalles;
-
-                HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
-
-                return PartialView("_DetalleFactura", model);
-            }
-            catch (Exception ex)
-            {
-                return Json(new ResponseToViewDto { Estado = true, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CalcularFactura(EstadoFactura Estado)
-        {
-            try
-            {
-                FacturaModel model = new FacturaModel();
-
-                List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
-                //List<DetalleFacturaModel> formaPago = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
-                model.EstadoFactura = Estado;
-
-                model.Totales = new TotalesFacturaModel(detalles);
-
-                return PartialView("_Totales", model);
-            }
-            catch (Exception ex)
-            {
-                return Json(new ResponseToViewDto { Estado = true, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
-            }
-        }
-
         public IActionResult ListarFacturasProforma()
         {
             try
             {
                 EstadoFactura[] Estados = new EstadoFactura[] { EstadoFactura.Proforma };
-                
+
                 List<VentasDomainServiceResultDto> facturas = new List<VentasDomainServiceResultDto>();
                 var result = _ventasDomainService.ListarFacturas(Estados);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
@@ -181,23 +121,208 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult EliminarFormaPago(string Id)
+        {
+            try
+            {
+                List<FormaPagoFacturaModel> formaPagos = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
+                formaPagos.RemoveAll(x => x.Id == Id);
+                HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(formaPagos));
+                return Json(new ResponseToViewDto { Estado = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult EliminarItem(string Id)
+        {
+            try
+            {
+                List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+                detalles.RemoveAll(x => x.Id == Id);
+                HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
+                return Json(new ResponseToViewDto { Estado = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult AgregarServicio(DetalleFacturaModel Servicio, long ProductoClienteId)
+        {
+            try
+            {
+                List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+                var producto = _productoRepository.GetProducto(ProductoClienteId);
+                if (producto != null)
+                {
+                    Servicio.Descripcion += $" de {producto.Codigo} - {producto.Descripcion}";
+                }
+
+                detalles.Add(CalcularLinea(Servicio));
+                HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
+
+                return Json(new ResponseToViewDto { Estado = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult AgregarProducto(DetalleFacturaModel Producto)
+        {
+            try
+            {
+                List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+
+                detalles.Add(CalcularLinea(Producto));
+
+                HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
+
+                return Json(new ResponseToViewDto { Estado = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult AgregarFormaPago(FormaPagoFacturaModel FormaPago)
+        {
+            try
+            {
+                List<FormaPagoFacturaModel> formaPagos = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
+                FormaPago.Id = Guid.NewGuid().ToString();
+                formaPagos.Add(FormaPago);
+
+                HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(formaPagos));
+
+                return Json(new ResponseToViewDto { Estado = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
+        [HttpPost]
+        public PartialViewResult CalcularFactura(EstadoFactura Estado)
+        {
+            FacturaModel model = new FacturaModel();
+
+            List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+            List<FormaPagoFacturaModel> formaPagos = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
+
+            model.EstadoFactura = Estado;
+
+            model.Totales = new TotalesFacturaModel(detalles, formaPagos);
+
+            return PartialView("_Totales", model);
+        }
+
+        [HttpPost]
+        public JsonResult ActualizarItem(string Tipo, string Id, string Valor)
+        {
+            try
+            {
+                List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+
+                detalles.ForEach(item =>
+                {
+                    if (item.Id == Id)
+                    {
+                        if (Tipo == "Cantidad")
+                        {
+                            item.Cantidad = Valor;
+                            item.CantidadDec = decimal.Parse(Utilidades.DepuraStrConvertNum(Valor));
+                        }
+                        if (Tipo == "Precio")
+                        {
+                            item.PrecioUnitario = Valor;
+                            item.PrecioUnitarioDec = decimal.Parse(Utilidades.DepuraStrConvertNum(Valor));
+                        }
+                    }
+
+                    item = CalcularLinea(item);
+                });
+
+                HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
+
+                return Json(new ResponseToViewDto { Estado = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = true, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
+        public PartialViewResult ConstruirDetalles(EstadoFactura Estado)
+        {
+            FacturaModel model = new FacturaModel
+            {
+                EstadoFactura = Estado,
+                Detalle = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]")
+            };
+            return PartialView("_DetalleFactura", model);
+        }
+        
+        public PartialViewResult ConstruirFormasPago(EstadoFactura Estado)
+        {
+            FacturaModel model = new FacturaModel
+            {
+                EstadoFactura = Estado,
+                FormaPago = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]")
+            };
+            return PartialView("_FormasPago", model);
+        }
+
+        #region metodos privados
         private void CargarDatos()
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            foreach (var item in _clienteRepository.GetClientes())
-            {
-                items.Add(new SelectListItem
-                {
-                    Text = item.Identificacion + " - " + item.RazonSocial + " - " + item.NombreComercial,
-                    Value = item.ClienteId.ToString(),
-                });
-            }
+            //List<SelectListItem> items = new List<SelectListItem>();
+            //foreach (var item in _clienteRepository.GetClientes())
+            //{
+            //    items.Add(new SelectListItem
+            //    {
+            //        Text = item.Identificacion + " - " + item.RazonSocial + " - " + item.NombreComercial,
+            //        Value = item.ClienteId.ToString(),
+            //    });
+            //}
 
-            ViewData["clientes"] = new SelectList(items, "Value", "Text");
+            //ViewData["clientes"] = new SelectList(items, "Value", "Text");
             ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
 
+            ViewBag.Clientes = _clienteRepository.GetClientes();
             ViewBag.Producto = _productoRepository.GetProductos().Where(x => x.TipoProducto == TipoProducto.Bien).ToList();
             ViewBag.Servicios = _productoRepository.GetProductos().Where(x => x.TipoProducto == TipoProducto.Servicio).ToList();
         }
+
+        private DetalleFacturaModel CalcularLinea(DetalleFacturaModel Producto)
+        {
+            Producto.CantidadDec = decimal.Parse(Utilidades.DepuraStrConvertNum(Producto.Cantidad));
+            Producto.PrecioUnitarioDec = decimal.Parse(Utilidades.DepuraStrConvertNum(Producto.PrecioUnitario));
+            Producto.IvaPorcentajeDec = decimal.Parse(Utilidades.DepuraStrConvertNum(Producto.IvaPorcentaje));
+
+            Producto.SubTotalDec = Producto.CantidadDec * Producto.PrecioUnitarioDec;
+            Producto.IvaValorDec = Producto.SubTotalDec * (Producto.IvaPorcentajeDec / 100);
+            Producto.TotalDec = Producto.SubTotalDec + Producto.IvaValorDec;
+
+            Producto.Id = Guid.NewGuid().ToString();
+            Producto.SubTotal = Utilidades.DoubleToString_FrontCO(Producto.SubTotalDec, 2);
+            Producto.IvaValor = Utilidades.DoubleToString_FrontCO(Producto.IvaValorDec, 2);
+            Producto.Total = Utilidades.DoubleToString_FrontCO(Producto.TotalDec, 2);
+            return Producto;
+        }
+        #endregion
+    
     }
 }

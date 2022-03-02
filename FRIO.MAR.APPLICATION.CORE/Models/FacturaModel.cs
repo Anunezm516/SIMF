@@ -10,8 +10,10 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 {
     public class FacturaModel
     {
+        public string Id { get; set; }
         public string Fecha { get; set; }
         public long ClienteId { get; set; }
+        public string CorreoCliente { get; set; }
         public long SucursalId { get; set; }
         public List<DetalleFacturaModel> Detalle { get; set; }
         public List<FormaPagoFacturaModel> FormaPago { get; set; }
@@ -25,11 +27,14 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
         public FacturaModel(Factura factura)
         {
-            //Fecha = factura.FechaEmision.Value
+            Id = Crypto.CifrarId(factura.FacturaId);
+            Fecha = factura.FechaEmision.HasValue ? factura.FechaEmision.ToString() : "";
             ClienteId = factura.ClienteId;
+            CorreoCliente = factura.CorreoElectronico;
             SucursalId = factura.SucursalId;
             Detalle = factura.FacturaDetalle.Select(c => new DetalleFacturaModel(c)).ToList();
-            Totales = new TotalesFacturaModel(Detalle);
+            FormaPago = factura.FacturaFormaPago.Select(c => new FormaPagoFacturaModel(c)).ToList();
+            Totales = new TotalesFacturaModel(Detalle, FormaPago);
             EstadoFactura = factura.Estado;
         }
 
@@ -95,18 +100,36 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
     public class FormaPagoFacturaModel
     {
         public string Id { get; set; }
-        public string FormaPago { get; set; }
+        public string FormaPagoCodigo { get; set; }
+        public string FormaPagoDescripcion { get; set; }
         public string Valor { get; set; }
-        public string Descripcion { get; set; }
+        public decimal ValorDec { get; set; }
+        public string Observacion { get; set; }
+
+        public FormaPagoFacturaModel()
+        {
+
+        }
+
+        public FormaPagoFacturaModel(FacturaFormaPago facturaFormaPago)
+        {
+            Id = Guid.NewGuid().ToString();
+            FormaPagoCodigo = facturaFormaPago.CodigoFormaPago;
+            FormaPagoDescripcion = facturaFormaPago.DescripcionFormaPago;
+            Valor = Utilidades.DoubleToString_FrontCO(facturaFormaPago.Valor, 2);
+            ValorDec = facturaFormaPago.Valor;
+            Observacion = facturaFormaPago.Observacion;
+        }
+
     }
 
     public class TotalesFacturaModel
     {
-        public TotalesFacturaModel(List<DetalleFacturaModel> detalles)
+        public TotalesFacturaModel(List<DetalleFacturaModel> detalles, List<FormaPagoFacturaModel> formasPago)
         {
             Subtotal = Utilidades.DoubleToString_FrontCO(detalles.Sum(x => x.SubTotalDec), 2);
             ImporteIva = Utilidades.DoubleToString_FrontCO(detalles.Sum(x => x.IvaValorDec), 2);
-            //TotalAbono = Utilidades.DoubleToString_FrontCO(detalles.Sum(x => x.IvaValorDec), 2),
+            TotalAbono = Utilidades.DoubleToString_FrontCO(formasPago.Sum(x => x.ValorDec), 2);
             Total = Utilidades.DoubleToString_FrontCO(detalles.Sum(x => x.TotalDec), 2);
         }
 

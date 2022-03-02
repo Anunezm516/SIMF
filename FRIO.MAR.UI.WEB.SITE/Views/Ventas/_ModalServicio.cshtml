@@ -1,0 +1,64 @@
+﻿
+<!-- Modal -->
+<div class="modal fade" id="modal-agregar-servicio" aria-labelledby="agregarServicioModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="agregarServicioModalLabel">Agregar Servicio</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <label>Servicio</label>
+                <select id="servicio" class="form-control select2" style="width: 100%">
+                    <option disabled selected>--Seleccionar--</option>
+                    @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Servicios)
+                    {
+                        <option value='@item.ProductoId' data-descripcion='@item.Descripcion' data-codigo='@item.Codigo' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='@item.UnidadMedida' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
+                    }
+                </select>
+                <input id="servicio-unidad-medida" type="hidden" />
+                <input id="servicio-codigo" type="hidden" />
+                <input id="servicio-descripcion" type="hidden" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <label>Producto Cliente</label>
+                <select id="producto-cliente" class="form-control select2" style="width: 100%">
+                    <option disabled selected>--Seleccionar--</option>
+                    @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
+                    {
+                        <option value='@item.ProductoId' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='@item.UnidadMedida' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                <label>IVA</label>
+                <input id="servicio-iva" class="form-control" readonly />
+            </div>
+            <div class="col-md-4">
+                <label>Precio Unitario</label>
+                <input id="servicio-precio-unitario" class="form-control decimal" />
+            </div>
+            <div class="col-md-4">
+                <label>Cantidad</label>
+                <input id="servicio-cantidad" class="form-control decimal" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-12 d-grid">
+                <button id="btn-agrega-servicio" class='btn btn-success btn-block'>
+                    <i class='fa fa-plus'></i> Agregar Servicio
+                </button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

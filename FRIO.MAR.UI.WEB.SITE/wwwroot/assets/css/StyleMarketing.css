@@ -280,3 +280,7 @@ table.dataTable td, table.dataTable th {
 
     /*END STYLE LOGIN*/
 }
+
+.select2-container.select2-container--default.select2-container--open {
+    z-index: 5000;
+}
