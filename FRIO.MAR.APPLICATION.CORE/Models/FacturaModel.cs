@@ -12,8 +12,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
     {
         public string Id { get; set; }
         public string Fecha { get; set; }
-        public long ClienteId { get; set; }
-        public string CorreoCliente { get; set; }
+        public DateTime FechaEmision { get; set; }
+        public ClienteFacturaModel Cliente { get; set; }
         public long SucursalId { get; set; }
         public List<DetalleFacturaModel> Detalle { get; set; }
         public List<FormaPagoFacturaModel> FormaPago { get; set; }
@@ -29,8 +29,16 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         {
             Id = Crypto.CifrarId(factura.FacturaId);
             Fecha = factura.FechaEmision.HasValue ? factura.FechaEmision.ToString() : "";
-            ClienteId = factura.ClienteId;
-            CorreoCliente = factura.CorreoElectronico;
+            Cliente = new ClienteFacturaModel
+            {
+                ClienteId = factura.ClienteId,
+                CorreoCliente = factura.CorreoElectronico,
+                Identificacion = factura.Identificacion,
+                NombreComercial = factura.NombreComercial,
+                RazonSocial = factura.RazonSocial,
+                Telefono = factura.Telefono
+            };
+            
             SucursalId = factura.SucursalId;
             Detalle = factura.FacturaDetalle.Select(c => new DetalleFacturaModel(c)).ToList();
             FormaPago = factura.FacturaFormaPago.Select(c => new FormaPagoFacturaModel(c)).ToList();
@@ -38,11 +46,26 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             EstadoFactura = factura.Estado;
         }
 
+        public string Ip { get; set; }
+        public long Usuario { get; set; }
+
+    }
+
+    public class ClienteFacturaModel
+    {
+        public long ClienteId { get; set; }
+        public string CorreoCliente { get; set; }
+        public string Identificacion { get; set; }
+        public string RazonSocial { get; set; }
+        public string NombreComercial { get; set; }
+        public string Telefono { get; set; }
     }
 
     public class DetalleFacturaModel
     {
         public string Id { get; set; }
+
+        public long ProductoId { get; set; }
         public string Codigo { get; set; }
         public string CodigoSeguimiento { get; set; }
         public string Descripcion { get; set; }
@@ -73,6 +96,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public DetalleFacturaModel(FacturaDetalle detalle)
         {
             Id = Guid.NewGuid().ToString();
+            ProductoId = detalle.ProductoId;
+
             Codigo = detalle.Codigo;
             CodigoSeguimiento = detalle.CodigoSeguimiento;
             Descripcion = detalle.Descripcion;
@@ -100,6 +125,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
     public class FormaPagoFacturaModel
     {
         public string Id { get; set; }
+        public long FormaPagoId { get; set; }
         public string FormaPagoCodigo { get; set; }
         public string FormaPagoDescripcion { get; set; }
         public string Valor { get; set; }
@@ -114,6 +140,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public FormaPagoFacturaModel(FacturaFormaPago facturaFormaPago)
         {
             Id = Guid.NewGuid().ToString();
+            FormaPagoId = facturaFormaPago.FormaPagoId;
             FormaPagoCodigo = facturaFormaPago.CodigoFormaPago;
             FormaPagoDescripcion = facturaFormaPago.DescripcionFormaPago;
             Valor = Utilidades.DoubleToString_FrontCO(facturaFormaPago.Valor, 2);

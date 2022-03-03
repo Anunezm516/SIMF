@@ -14,29 +14,35 @@
 }
 
 <div class="">
-    <div class="">
+    <form id="form-factura" >
          <div class="card" >
              <div class="card-body">
                  <div class="row">
                 <input asp-for="Id" type="hidden" />
                 <input asp-for="EstadoFactura" type="hidden" />
+
+                <input asp-for="Cliente.Identificacion" type="hidden" />
+                <input asp-for="Cliente.RazonSocial" type="hidden" />
+                <input asp-for="Cliente.NombreComercial" type="hidden" />
+                <input asp-for="Cliente.Telefono" type="hidden" />
+
                 <div class="col-md-3">
                     <label>Fecha</label>
                     <input type="date" asp-for="Fecha" class="form-control" value="@DateTime.Now" />
                 </div>
                 <div class="col-md-3">
                     <label>Cliente</label>
-                    <select asp-for="ClienteId" class="form-control select2">
+                    <select asp-for="Cliente.ClienteId" class="form-control select2">
                         <option selected disabled>--SELECCIONAR--</option>
                         @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Cliente cliente in ViewBag.Clientes)
                         {
-                            <option value="@cliente.ClienteId" data-correo="@cliente.CorreoElectronico">@cliente.Identificacion - @cliente.RazonSocial - @cliente.NombreComercial</option>
+                            <option value="@cliente.ClienteId" data-identificacion="@cliente.Identificacion" data-razon-social="@cliente.RazonSocial" data-nombre-comercial="@cliente.NombreComercial" data-telefono="@cliente.Telefono" data-correo="@cliente.CorreoElectronico">@cliente.Identificacion - @cliente.RazonSocial - @cliente.NombreComercial</option>
                         }
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label>Correo</label>
-                    <input asp-for="CorreoCliente" class="form-control"/>
+                    <input asp-for="Cliente.CorreoCliente" class="form-control"/>
                 </div>
                 <div class="col-md-3">
                     <label>Sucursal</label>
@@ -56,10 +62,10 @@
                             <thead>
                                 <tr class="text-center bg-dark">
                                     <th>
-                                        <button id="btn-open-modal-producto" class="btn btn-success " title="agregar producto">
+                                        <button type="button"  id="btn-open-modal-producto" class="btn btn-success " title="agregar producto">
                                             <i class="fa fa-plus"></i> 
                                         </button>
-                                        <button id="btn-open-modal-servicio" class="btn btn-info " title="agregar servicio">
+                                        <button type="button" id="btn-open-modal-servicio" class="btn btn-info " title="agregar servicio">
                                             <i class="fa fa-plus"></i> 
                                         </button>
                                     </th>
@@ -98,7 +104,7 @@
                             <thead>
                                 <tr class="text-center bg-dark">
                                     <th>
-                                        <button id="btn-open-modal-forma-pago" class="btn btn-success " title="agregar forma de pago">
+                                        <button type="button" id="btn-open-modal-forma-pago" class="btn btn-success " title="agregar forma de pago">
                                             <i class="fa fa-plus"></i> 
                                         </button>
                                     </th>
@@ -135,7 +141,7 @@
                 
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <partial name="_ModalProducto" />
@@ -149,6 +155,12 @@
     <script>
         $(document).ready(function(){
             
+            $('#form-factura').submit(function(event) {
+                return;
+                event.preventDefault();
+                window.history.back();
+            });
+
             $(".select2").select2();
             $(".decimal").maskMoney();
 
@@ -164,8 +176,12 @@
                 $("#modal-agregar-forma-pago").modal("show");
             });
 
-            $("#ClienteId").change(function(){
-                $("#CorreoCliente").val($("#ClienteId option:selected").attr("data-correo"));
+            $("#Cliente_ClienteId").change(function(){
+                $("#Cliente_CorreoCliente").val($("#Cliente_ClienteId option:selected").attr("data-correo"));
+                $("#Cliente_Identificacion").val($("#Cliente_ClienteId option:selected").attr("data-identificacion"));
+                $("#Cliente_RazonSocial").val($("#Cliente_ClienteId option:selected").attr("data-razon-social"));
+                $("#Cliente_NombreComercial").val($("#Cliente_ClienteId option:selected").attr("data-nombre-comercial"));
+                $("#Cliente_Telefono").val($("#Cliente_ClienteId option:selected").attr("data-telefono"));
             });
             
             $("#producto").change(function(){
@@ -192,6 +208,21 @@
                 AgregarServicio();
             });
         });
+
+        function GuardarBorrador(){
+            var formContainer = $('form#form-factura');
+            $.post('@Url.Action("GuardarFactura", "Ventas")', formContainer.serialize())
+            .done(function(response){
+                if (response.estado){
+                    MensajeExitosoSwalConfirmacionRedireccion("Documento guardado", "", '@Url.Action("Index", "Ventas")');
+                }else{
+                    MensajeErrorSwal(response.mensaje, "");
+                }
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
+        }
 
         function EliminarItem(Id){
             $.post('@Url.Action("EliminarItem", "Ventas")', 
@@ -274,6 +305,7 @@
             $.post('@Url.Action("AgregarServicio", "Ventas")', 
             {
                 Servicio: {
+                    ProductoId: servicioId,
                     Codigo: codigo,
                     Descripcion: descripcion,
                     PrecioUnitario: precioUnitario,
@@ -319,6 +351,7 @@
             $.post('@Url.Action("AgregarProducto", "Ventas")', 
             {
                 Producto: {
+                    ProductoId: productoId,
                     Codigo: codigo,
                     Descripcion: descripcion,
                     PrecioUnitario: precioUnitario,

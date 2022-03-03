@@ -285,6 +285,37 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return PartialView("_FormasPago", model);
         }
 
+        [HttpPost]
+        public IActionResult GuardarFactura(FacturaModel model)
+        {
+            try
+            {
+                var usr = GetUserLogin();
+
+                model.EstadoFactura = EstadoFactura.Borrador;
+
+                model.Detalle = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+                model.FormaPago = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
+                model.Ip = usr.IPLogin;
+                model.Usuario = usr.IdUsuario;
+
+                var result = _ventasDomainService.GuardarFactura(model);
+                if (result.TieneErrores) throw new Exception(result.MensajeError);
+                if (result.Estado)
+                {
+                    HttpContext.Session.Remove("Detalle");
+                    HttpContext.Session.Remove("FormaPago");
+                    GS.TOOLS.GSUtilities.ClearMemory();
+                }
+                return Json(new ResponseToViewDto { Estado = result.Estado, Mensaje = result.Mensaje });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = true, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+
+            }
+        }
+
         #region metodos privados
         private void CargarDatos()
         {
