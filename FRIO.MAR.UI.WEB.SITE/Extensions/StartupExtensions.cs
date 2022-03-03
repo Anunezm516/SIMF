@@ -20,6 +20,7 @@ using FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices;
 using FRIO.MAR.INFRA.QUERY.QueryServices;
 using FRIO.MAR.INFRA.SERVICE.MAIL.Services;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
+using FRIO.MAR.APPLICATION.CORE.Interfaces;
 
 namespace FRIO.MAR.UI.WEB.SITE.Extensions
 {
@@ -68,6 +69,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IProductoAppService, ProductoAppService>();
             services.AddScoped<IInventarioDomainService, InventarioDomainService>();
             services.AddScoped<IVentasDomainService, VentasDomainService>();
+            services.AddScoped<IInitialData, InitialData>();
 
         }
 

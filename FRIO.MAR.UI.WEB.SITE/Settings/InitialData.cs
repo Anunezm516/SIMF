@@ -1,6 +1,7 @@
 ﻿
 using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Contants;
+using FRIO.MAR.APPLICATION.CORE.Interfaces;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Parameters;
 using GS.TOOLS;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FRIO.MAR.UI.WEB.SITE.Settings
 {
-    public class InitialData
+    public class InitialData : IInitialData
     {
         private readonly IUtilidadRepository _utilidadRepository;
         private string mensaje;
@@ -23,6 +24,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Settings
 
         public void Start()
         {
+            _utilidadRepository.InicializarDb();
+
             var settings = GSUtilities.LeerAppSettings<WebSiteSettings>(typeof(Program), ref mensaje);
 
             GlobalSettings.ConfiguracionMailUser = _utilidadRepository.GetParametro("CONFIGURACION_MAIL_USER")?.Valor ?? "";

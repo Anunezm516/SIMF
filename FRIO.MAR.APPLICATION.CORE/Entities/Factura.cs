@@ -39,6 +39,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "decimal(18,6)")]
         public decimal ValorTotal { get; set; }
 
+        public int ColumnaPrueba { get; set; }
 
         public DateTime FechaCreacion { get; set; }
 

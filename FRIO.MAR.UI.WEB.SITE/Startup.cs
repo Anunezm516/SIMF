@@ -1,5 +1,6 @@
 using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Contants;
+using FRIO.MAR.APPLICATION.CORE.Interfaces;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using FRIO.MAR.UI.WEB.SITE.Extensions;
@@ -117,7 +118,7 @@ namespace FRIO.MAR.UI.WEB.SITE
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IUtilidadRepository utilidadRepository)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IInitialData initialData)
         {
             if (env.IsDevelopment())
             {
@@ -163,8 +164,7 @@ namespace FRIO.MAR.UI.WEB.SITE
 
             });
 
-            InitialData start = new InitialData(utilidadRepository);
-            start.Start();
+            initialData.Start();
         }
     }
 }

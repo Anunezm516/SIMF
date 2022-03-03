@@ -5,6 +5,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
 {
     public interface IUtilidadRepository
     {
+        void InicializarDb();
         Parametros GetParametro(string Codigo);
         List<Rol> GetRolesPrincipales();
         bool AddRol(int Id, string Nombre);

@@ -21,6 +21,21 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             this._context = context;
         }
 
+        public void InicializarDb()
+        {
+            try
+            {
+                if (_context.Database.GetPendingMigrations().Count() > 0)
+                {
+                    _context.Database.Migrate();
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         public bool AddRol(int Id, string Nombre)
         {
             _context.Rol.Add(new Rol
