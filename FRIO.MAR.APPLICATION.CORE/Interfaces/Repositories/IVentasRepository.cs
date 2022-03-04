@@ -9,6 +9,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
     public interface IVentasRepository : IRepository<Factura>
     {
         Factura GetFactura(long Id, EstadoFactura Estado);
+        Factura GetFacturaNoIgualEstado(long Id, EstadoFactura Estado);
         List<Factura> GetFacturas(EstadoFactura[] Estados);
     }
 }

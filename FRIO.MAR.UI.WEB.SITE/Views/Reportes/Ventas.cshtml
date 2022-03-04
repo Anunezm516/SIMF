@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "Reportes";
+    ViewBag.pTitle = "Ventas";
+    ViewBag.pageTitle = "Ventas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <!-- Sweet Alert-->
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <!-- Select y DataPicker-->
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/doc-emitido.css" rel="stylesheet" />
+
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body" style="padding-bottom: 0;">
+                <div class="toolbar">
+                    <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                        Seleccione los parámetros para realizar la consulta.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <p id="sub-text">Parámetros de Consulta</p>
+                    </div>
+                    <div class="row">
+                        <!-- Estado EDOC -->
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <select id="estadoFactura" class="form-control select2" data-placeholder="Escoger ...">
+                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Todos">Todos</option>
+                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Facturado">Facturado</option>
+                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma">Proforma</option>
+
+                                </select>
+                                <small>Estado del Documento</small>
+                            </div>
+                        </div>
+
+                        <!-- Selector Rango de Fecha -->
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <div>
+                                    <div class="input-daterange input-group align-baseline" >
+                                        <input style="cursor: pointer" readonly placeholder="Desde" id="fechaInicio2" type="text" class="datepicker form-control" name="start" />
+                                        <input style="cursor: pointer" readonly placeholder="Hasta" id="fechaFin2" type="text" class="datepicker form-control" name="end" />
+                                    </div>
+                                    <small>Rango de Fecha</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <div class="input-group">
+                                    <button id="idBotonConsultarEmitidos" type="button" class="btn btn-outline-secondary btn-block">Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div id="tablaDocumentosEmitidos"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ViewPDFModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" id="PDFModal">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 8px 15px 8px">
+                <h4 class="modal-title" id="myModalLabel">
+                    <i class="glyphicon glyphicon-list-alt"></i> PDF
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="alert">
+
+                </div>
+                <div id="DivPdf">
+                    @*<embed id="ModalPDF" src="" type="application/pdf" width="100%" height="1000px" />*@
+                </div>
+            </div>
+            <div class="modal-footer text-right">
+                <button type="button" id="guardarArchivo" class="btn btn-primary" style="display: none">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <!-- Sweet Alerts js -->
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.es.js"></script>
+    @*<script src="~/assets/js/pages/form-advanced.init.js"></script>*@
+    <script src="~/assets/js/app.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $("#fechaInicio2").datepicker({
+                format: 'yyyy-mm-dd',
+                orientation: 'bottom auto',
+                language: 'es',
+                //todayHighlight: true,
+                endDate: '+1d',
+                datesDisabled: '+1d',
+            });
+
+            $("#fechaFin2").datepicker({
+                format: 'yyyy-mm-dd',
+                orientation: 'bottom auto',
+                language: 'es',
+                startDate: '-' + $('#fechaInicio2').val() + 'd',
+
+            });
+
+            $('#fechaInicio2').change(function () {
+                $('#fechaFin2').val("");
+                var fechaInicio = new Date($('#fechaInicio2').val());
+                fechaInicio.setDate(fechaInicio.getDate() + 1);
+                var fechaInicioMeses = new Date($('#fechaInicio2').val());
+                fechaInicioMeses.setDate(fechaInicioMeses.getDate() + 1);
+                fechaInicioMeses.setMonth(fechaInicioMeses.getMonth() + 1);
+                $('#fechaFin2').datepicker('setStartDate', fechaInicio);
+                $('#fechaFin2').datepicker('setEndDate', fechaInicioMeses);
+            });
+        });
+
+        $(function () {
+
+            $("#idBotonConsultarEmitidos").click(function () {
+
+                var estadoFactura = $("#estadoFactura").val();
+                var valorFechaInicio = $("#fechaInicio2").val();
+                var valorFechaFin = $("#fechaFin2").val();
+
+                if (ValidarCampos(estadoFactura, valorFechaInicio, valorFechaFin)) {
+                    GetDetalleDocumento(
+                        estadoFactura,
+                        valorFechaInicio,
+                        valorFechaFin
+                    );
+                } else {
+                    Swal.fire({
+                        title: 'Campos Incompletos!',
+                        text: 'Asegurese de enviar los parámetros completos para realizar la consulta.',
+                        type: "error",
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false,
+                        footer: " Por favor, intente nuevamente."
+                    });
+                }
+            });
+        });
+
+        function ValidarCampos(estadoFactura, valorFechaInicio, valorFechaFin) {
+
+            if (estadoFactura <= 0) {
+                return false;
+            }
+            if (valorFechaInicio == "") {
+                return false;
+            }
+            if (valorFechaFin == "") {
+                return false
+            }
+            return true;
+        }
+
+        function GetDetalleDocumento(estadoFactura, valorFechaInicio, valorFechaFin ) {
+            Swal.fire({
+                icon: "info",
+                allowOutsideClick: false,
+                title: 'Consultando Información',
+                text: 'Espere, por favor!...',
+                timer: 150000
+            });
+            Swal.showLoading();
+            $.get("@Url.Action("ReporteVentas", "Reportes")", {
+                
+                EstadoFactura: estadoFactura,
+                FechaInicio: valorFechaInicio,
+                FechaFin: valorFechaFin
+
+            }, function (response) {
+                // si sale todo perfecto, pinta la tabla recibida desde el parcial
+                $("#tablaDocumentosEmitidos").html(response);
+                Swal.close();
+            }).fail(function (error) {
+                // en caso de error
+                //console.log(error);
+                Swal.fire({
+                    title: '¡Lo sentimos!',
+                    text: 'Se ha generado un error técnico no controlado en el proceso.',
+                    type: "error",
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false,
+                    footer: "Técnico, por favor consulte el archivo.log"
+                });
+            });
+        }
+    </script>
+
+
+}

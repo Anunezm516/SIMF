@@ -30,8 +30,13 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 var result = _ventasRepository.GetFactura(Id, (Estado));
                 if (result != null)
                 {
-                responseDto.Data = new FacturaModel(result);
-                responseDto.Estado = true;
+                    responseDto.Data = new FacturaModel(result);
+                    responseDto.Estado = true;
+                }
+                else
+                {
+                    responseDto.CodigoError = DomainConstants.ERROR_FACTURA_ANONIMA;
+                    responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                 }
             }
             catch (Exception ex)
@@ -73,12 +78,34 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 Factura factura = null;
 
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(model.Id));
-                factura = _ventasRepository.GetFactura(Id, model.EstadoFactura);
+                if (model.EstadoFactura == EstadoFactura.Facturado)
+                {
+                    factura = _ventasRepository.GetFacturaNoIgualEstado(Id, EstadoFactura.Facturado);
+                }
+                else
+                {
+                    factura = _ventasRepository.GetFactura(Id, model.EstadoFactura);
+                }
+
                 if (factura is null)
                 {
                     esNuevo = true;
                     factura = new Factura();
                 }
+
+                if (factura.FacturaDetalle != null && factura.FacturaDetalle.Any())
+                {
+                    factura.FacturaDetalle.Clear();
+                    _ventasRepository.Save();
+                }
+
+                if (factura.FacturaFormaPago != null && factura.FacturaFormaPago.Any())
+                {
+                    factura.FacturaFormaPago.Clear();
+                    _ventasRepository.Save();
+
+                }
+
                 factura.FechaEmision = model.FechaEmision;
                 factura.SucursalId = model.SucursalId;
 
@@ -121,16 +148,16 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 
                 factura.Ip = model.Ip;
                 factura.IdUsuario = model.Usuario;
+                factura.Estado = model.EstadoFactura;
 
                 if (esNuevo)
                 {
                     factura.FechaCreacion = Utilities.Utilidades.GetHoraActual();
                 }
 
-                factura.Estado = model.EstadoFactura;
-
                 if (esNuevo)
                 {
+                    
                     _ventasRepository.Add(factura);
                 }
                 else
@@ -149,5 +176,75 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 
             return responseDto;
         }
+
+        public MethodResponseDto EliminarFactura(long Id)
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+            try
+            {
+                var factura = _ventasRepository.GetFacturaNoIgualEstado(Id, EstadoFactura.Facturado);
+                if (factura == null)
+                {
+                    responseDto.CodigoError = DomainConstants.ERROR_FACTURA_ANONIMA;
+                    responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                    return responseDto;
+                }
+
+                factura.Estado = EstadoFactura.Eliminado;
+                factura.FechaModificacion = Utilities.Utilidades.GetHoraActual();
+
+                _ventasRepository.Update(factura);
+
+                responseDto.Estado = _ventasRepository.Save() > 0;
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
+        }
+        
+        public MethodResponseDto ValidarFactura(FacturaModel model)
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+            try
+            {
+                if (model.Detalle == null || !model.Detalle.Any())
+                {
+                    responseDto.CodigoError = DomainConstants.ERROR_FACTURA_DETALLE;
+                    responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                    return responseDto;
+                }
+
+                if (model.FormaPago == null || !model.FormaPago.Any())
+                {
+                    responseDto.CodigoError = DomainConstants.ERROR_FACTURA_FORMA_PAGO;
+                    responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                    return responseDto;
+                }
+
+                if (model.EstadoFactura == EstadoFactura.Facturado)
+                {
+                    if (decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.Totales.TotalAbono)) < decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.Totales.Total)))
+                    {
+                        responseDto.CodigoError = DomainConstants.ERROR_FACTURA_MONTO_PAGAR;
+                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        return responseDto;
+                    }
+                }
+
+                responseDto.Estado = true;
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
+        }
+
     }
 }

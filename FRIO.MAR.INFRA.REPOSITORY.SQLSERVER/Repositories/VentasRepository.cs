@@ -24,6 +24,14 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                 .FirstOrDefault(x => x.Estado == Estado && x.FacturaId == Id);
         }
 
+        public Factura GetFacturaNoIgualEstado(long Id, EstadoFactura Estado)
+        {
+            return _context.Factura
+                .Include(x => x.FacturaFormaPago)
+                .Include(x => x.FacturaDetalle)
+                .FirstOrDefault(x => x.Estado != Estado && x.FacturaId == Id);
+        }
+
         public List<Factura> GetFacturas(EstadoFactura[] Estados)
         {
             return _context.Factura

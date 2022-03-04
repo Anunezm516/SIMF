@@ -23,11 +23,11 @@
                 <td>@item.CodigoSeguimiento</td>
             }
         
-             <td class="text-right">
-                <input class="form-control decimal input-precio-unitario" value="@item.PrecioUnitario" data-id="@item.Id" onchange="ActualizarItem('Precio', $(this).val(), $(this).attr('data-id'))"/>
+             <td class="text-end">
+                <input class="form-control decimal input-precio-unitario text-end" value="@item.PrecioUnitario" data-id="@item.Id" onchange="ActualizarItem('Precio', $(this).val(), $(this).attr('data-id'))"/>
             </td>
-            <td class="text-right">
-                <input class="form-control decimal input-cantidad" value="@item.Cantidad" data-id="@item.Id" onchange="ActualizarItem('Cantidad', $(this).val(), $(this).attr('data-id'))"/>
+            <td class="text-end">
+                <input class="form-control decimal input-cantidad text-end" value="@item.Cantidad" data-id="@item.Id" onchange="ActualizarItem('Cantidad', $(this).val(), $(this).attr('data-id'))"/>
             </td>
             <td>@item.IvaValor</td>
             <td>@item.Total</td>

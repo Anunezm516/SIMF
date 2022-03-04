@@ -29,6 +29,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         {
             Id = Crypto.CifrarId(factura.FacturaId);
             Fecha = factura.FechaEmision.HasValue ? factura.FechaEmision.ToString() : "";
+            FechaEmision = factura.FechaEmision.HasValue ? factura.FechaEmision.Value : Utilidades.GetHoraActual();
             Cliente = new ClienteFacturaModel
             {
                 ClienteId = factura.ClienteId,

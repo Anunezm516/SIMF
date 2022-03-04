@@ -1,56 +1,48 @@
 ﻿@model FRIO.MAR.APPLICATION.CORE.Models.FacturaModel
 
 <div class="row">
-    <label class="col-sm-6 control-label text-right">
+    <label class="col-sm-6 control-label text-end">
         Subtotal<span style="color: red" class=""></span>
     </label>
     <div class="col-sm-6 ">
-        <input asp-for="Totales.Subtotal" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+        <input asp-for="Totales.Subtotal" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-end">
     </div>
 </div>
 <div class="row">
-    <label class="col-sm-6 control-label text-right">
+    <label class="col-sm-6 control-label text-end">
         Importe IVA<span style="color: red" class=""></span>
     </label>
     <div class="col-sm-6 ">
-        <input asp-for="Totales.ImporteIva" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+        <input asp-for="Totales.ImporteIva" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-end">
     </div>
 </div>
 @*@if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
 {
     <div class="row">
-        <label class="col-sm-6 control-label text-right">
+        <label class="col-sm-6 control-label text-end">
             Total Abono<span style="color: red" class=""></span>
         </label>
         <div class="col-sm-6 ">
-            <input asp-for="Totales.TotalAbono" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+            <input asp-for="Totales.TotalAbono" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-end">
         </div>
     </div>
 }*@
 
 <div class="row">
-    <label class="col-sm-6 control-label text-right">
+    <label class="col-sm-6 control-label text-end">
         Total Abono<span style="color: red" class=""></span>
     </label>
     <div class="col-sm-6 ">
-        <input asp-for="Totales.TotalAbono" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+        <input asp-for="Totales.TotalAbono" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-end">
     </div>
 </div>
 
 <div class="row">
-    <label class="col-sm-6 control-label text-right">
+    <label class="col-sm-6 control-label text-end">
         Total a pagar<span style="color: red" class=""></span>
     </label>
     <div class="col-sm-6 ">
-        <input asp-for="Totales.Total" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-right">
+        <input asp-for="Totales.Total" id="" type="text" placeholder="$ 0.00" readonly class="form-control text-end">
     </div>
 </div>
 <br />
-<div class="row">
-    <div class="col-6 d-grid">
-        <button type="button"  class="btn btn-success btn-block" onclick="GuardarBorrador()">Guardar Borrador</button>
-    </div>
-    <div class="col-6 d-grid">
-        <button type="button" class="btn btn-success btn-block">Facturar</button>
-    </div>
-</div>

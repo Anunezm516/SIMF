@@ -8,7 +8,9 @@
 
 <div class = "card">
     <div class = "card-body">
-        <h5>Facturas Borrador</h5>
+        <h5>Borrador</h5>
+        <br />
+        <a asp-action="Factura" asp-route-tipo="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Borrador"  class="btn btn-success">Nueva Factura</a>
         <div id="div-facturas-borrador" class = "">
         </div>
     </div>
@@ -17,6 +19,8 @@
 <div class = "card">
     <div class = "card-body">
         <h5>Proforma</h5>
+         <br />
+        <a asp-action="Factura" asp-route-tipo="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma"  class="btn btn-success">Nueva Factura</a>
         <div id="div-facturas-proforma" class = "">
         </div>
     </div>

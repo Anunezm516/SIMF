@@ -28,7 +28,7 @@
 
                 <div class="col-md-3">
                     <label>Fecha</label>
-                    <input type="date" asp-for="Fecha" class="form-control" value="@DateTime.Now" />
+                    <input type="date" asp-for="FechaEmision" class="form-control"/>
                 </div>
                 <div class="col-md-3">
                     <label>Cliente</label>
@@ -138,7 +138,25 @@
                         <partial name="_Totales" />
                     </div>
                 </div>
-                
+                <div class="card">
+                    <div class="card-body" id="div-totales">
+                        <div class="row">
+                            <div class="col-6 d-grid">
+                                @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
+                                {
+                                    <button type="button"  class="btn btn-success btn-block" onclick="GuardarBorrador()">Guardar Proforma</button>
+                                }
+                                else
+                                {
+                                    <button type="button"  class="btn btn-success btn-block" onclick="GuardarBorrador()">Guardar Borrador</button>
+                                }
+                            </div>
+                            <div class="col-6 d-grid">
+                                <button type="button" class="btn btn-success btn-block" onclick="Facturar()">Facturar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
@@ -215,6 +233,47 @@
             .done(function(response){
                 if (response.estado){
                     MensajeExitosoSwalConfirmacionRedireccion("Documento guardado", "", '@Url.Action("Index", "Ventas")');
+                }else{
+                    MensajeErrorSwal(response.mensaje, "");
+                }
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
+        }
+
+        function Facturar(){
+
+            var FechaEmision = $("#FechaEmision").val();
+            var Cliente_ClienteId = $("#Cliente_ClienteId").val();
+            var Cliente_CorreoCliente = $("#Cliente_CorreoCliente").val();
+            var SucursalId = $("#SucursalId").val();
+
+            if (FechaEmision === null || FechaEmision === undefined || FechaEmision.trim() === ""){
+                MensajeGrowl("Ingrese una fecha de emisión");
+                return;
+            }
+
+            if (Cliente_ClienteId === null || Cliente_ClienteId === undefined || Cliente_ClienteId.trim() === ""){
+                MensajeGrowl("Seleccione un cliente");
+                return;
+            }
+
+            if (Cliente_CorreoCliente === null || Cliente_CorreoCliente === undefined || Cliente_CorreoCliente.trim() === ""){
+                MensajeGrowl("Ingrese un correo electrónico");
+                return;
+            }
+
+            if (SucursalId === null || SucursalId === undefined || SucursalId.trim() === ""){
+                MensajeGrowl("Seleccione una sucursal");
+                return;
+            }
+
+            var formContainer = $('form#form-factura');
+            $.post('@Url.Action("Facturar", "Ventas")', formContainer.serialize())
+            .done(function(response){
+                if (response.estado){
+                    MensajeExitosoSwalConfirmacionRedireccion("Documento facturado", "", '@Url.Action("Index", "Ventas")');
                 }else{
                     MensajeErrorSwal(response.mensaje, "");
                 }
@@ -312,10 +371,12 @@
                     Cantidad: cantidad,
                     IvaPorcentaje: iva
                 },
-                ProductoClienteId: productoClienteId
+                ProductoClienteId: productoClienteId,
+                Estado: $("#EstadoFactura").val()
             }, function(response){
                 if (response.estado){
                     ConstruirDetalles();
+                    LimpiarModal();
                 }else{
                     MensajeErrorSwal(response.mensaje, "");
                 }
@@ -361,6 +422,7 @@
             }, function(response){
                 if (response.estado){
                     ConstruirDetalles();
+                    LimpiarModal();
                 }else{
                     MensajeErrorSwal(response.mensaje, "");
                 }
@@ -399,6 +461,7 @@
             }, function(response){
                 if (response.estado){
                     ConstruirDetalles();
+                    LimpiarModal();
                 }else{
                     MensajeErrorSwal(response.mensaje, "");
                 }
@@ -435,6 +498,11 @@
             });
             
             CalcularTotales();
+        }
+
+        function LimpiarModal(){
+            $(".limiar-input-modal").val("");
+            $(".limiar-select-modal").val("").trigger('change');
         }
 
     </script>

@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md-12">
                 <label>Producto</label>
-                <select id="producto" class="form-control select2" style="width: 100%">
+                <select id="producto" class="form-control select2 limiar-select-modal" style="width: 100%">
                     <option disabled selected>--Seleccionar--</option>
                     @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
                     {
@@ -28,15 +28,15 @@
         <div class="row">
             <div class="col-md-4">
                 <label>IVA</label>
-                <input id="producto-iva" class="form-control" readonly />
+                <input id="producto-iva" class="form-control limiar-input-modal" readonly />
             </div>
             <div class="col-md-4">
                 <label>Precio Unitario</label>
-                <input id="producto-precio-unitario" class="form-control decimal" />
+                <input id="producto-precio-unitario" class="form-control decimal limiar-input-modal" />
             </div>
             <div class="col-md-4">
                 <label>Cantidad</label>
-                <input id="producto-cantidad" class="form-control decimal" />
+                <input id="producto-cantidad" class="form-control decimal limiar-input-modal" />
             </div>
         </div>
         <br />

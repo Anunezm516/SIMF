@@ -12,5 +12,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices
         MethodResponseDto ListarFacturas(EstadoFactura[] Estados);
         MethodResponseDto ConsultarFactura(long Id, EstadoFactura Estado);
         MethodResponseDto GuardarFactura(FacturaModel model);
+        MethodResponseDto EliminarFactura(long Id);
+        MethodResponseDto ValidarFactura(FacturaModel model);
     }
 }

@@ -44,6 +44,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Constants
         Inventario=600,
 
         Reportes=700,
+        ReportesVentas=701,
+        ReportesCompras=702,
+        ReportesInventario=703,
         
     }
 }

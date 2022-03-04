@@ -37,6 +37,10 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         public const string ERROR_PRODUCTO_REGISTRADO_CODIGO = "P602";
         public const string ERROR_PRODUCTO_REGISTRADO_BODEGA = "P603";
 
+        public const string ERROR_FACTURA_ANONIMA = "P701";
+        public const string ERROR_FACTURA_DETALLE = "P702";
+        public const string ERROR_FACTURA_FORMA_PAGO = "P703";
+        public const string ERROR_FACTURA_MONTO_PAGAR = "P704";
 
         public const string ERROR_ENVIAR_MAIL = "P018";
 
@@ -77,6 +81,11 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
             ERROR_PRODUCTO_ANONIMO => $"{CodigoError}: El producto no se encuetra registrado.",
             ERROR_PRODUCTO_REGISTRADO_CODIGO => $"{CodigoError}: El código del producto ya se encuentra registrada.",
             ERROR_PRODUCTO_REGISTRADO_BODEGA => $"{CodigoError}: No se puede eliminar el producto, la producto se encuentra registrado en una bodega.",
+
+            ERROR_FACTURA_ANONIMA => $"{CodigoError}: La factura no se encuestra registrada.",
+            ERROR_FACTURA_DETALLE => $"{CodigoError}: La factura no contiene detalle.",
+            ERROR_FACTURA_FORMA_PAGO => $"{CodigoError}: La factura no contiene forma de pago.",
+            ERROR_FACTURA_MONTO_PAGAR => $"{CodigoError}: La suma de las formas de pago es menor al valor total de la factura.",
         };
     }
 
@@ -119,7 +128,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         Eliminado = 0,
         Facturado = 1,
         Borrador = 2,
-        Proforma = 3
+        Proforma = 3,
+        Todos = 99
     }
 
     public class RespuestaVentaDto

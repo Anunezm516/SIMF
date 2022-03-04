@@ -18,6 +18,8 @@ using System.Linq;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    //[Filters.MenuFilter(Constants.VentanasSoporte.Sucursales)]
     public class VentasController : BaseController
     {
         private readonly IProductoRepository _productoRepository;
@@ -48,6 +50,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             FacturaModel model = new FacturaModel();
             try
             {
+                HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(new List<DetalleFacturaModel>()));
+                HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(new List<FormaPagoFacturaModel>()));
+
                 CargarDatos();
 
                 if (!string.IsNullOrEmpty(Id))
@@ -56,15 +61,18 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     if (result.Estado)
                     {
-                        FacturaModel factura = result.Data;
-                        HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(factura.Detalle));
-                        HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(factura.FormaPago));
-                        return View(factura);
+                        model = result.Data;
+                        HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(model.Detalle));
+                        HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(model.FormaPago));
                     }
                     else
                     {
                         TempData["msg"] = WebSiteConstants.MENSAJE_SWEET_ALERT_ERROR.Replace("{Mensaje_Respuesta}", result.Mensaje);
                     }
+                }
+                else
+                {
+                    model.EstadoFactura = Tipo;
                 }
             }
             catch (System.Exception ex)
@@ -154,7 +162,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public JsonResult AgregarServicio(DetalleFacturaModel Servicio, long ProductoClienteId)
+        public JsonResult AgregarServicio(DetalleFacturaModel Servicio, long ProductoClienteId, EstadoFactura Estado)
         {
             try
             {
@@ -202,6 +210,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 List<FormaPagoFacturaModel> formaPagos = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
                 FormaPago.Id = Guid.NewGuid().ToString();
+
+                FormaPago.ValorDec = decimal.Parse(Utilidades.DepuraStrConvertNum(FormaPago.Valor));
                 formaPagos.Add(FormaPago);
 
                 HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(formaPagos));
@@ -292,7 +302,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 var usr = GetUserLogin();
 
-                model.EstadoFactura = EstadoFactura.Borrador;
+                //model.EstadoFactura = EstadoFactura.Proforma;
 
                 model.Detalle = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
                 model.FormaPago = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
@@ -315,6 +325,62 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
             }
         }
+
+        public IActionResult Facturar(FacturaModel model)
+        {
+            try
+            {
+                var usr = GetUserLogin();
+
+                model.EstadoFactura = EstadoFactura.Facturado;
+
+                model.Detalle = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+                model.FormaPago = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
+                model.Totales = new TotalesFacturaModel(model.Detalle, model.FormaPago);
+
+                var validaciones = _ventasDomainService.ValidarFactura(model);
+                if (validaciones.TieneErrores) throw new Exception(validaciones.MensajeError);
+                if (!validaciones.Estado)
+                {
+                    return Json(new ResponseToViewDto { Estado = validaciones.Estado, Mensaje = validaciones.Mensaje });
+                }
+
+                model.Ip = usr.IPLogin;
+                model.Usuario = usr.IdUsuario;
+
+                var result = _ventasDomainService.GuardarFactura(model);
+                if (result.TieneErrores) throw new Exception(result.MensajeError);
+                if (result.Estado)
+                {
+                    HttpContext.Session.Remove("Detalle");
+                    HttpContext.Session.Remove("FormaPago");
+                    GS.TOOLS.GSUtilities.ClearMemory();
+                }
+                return Json(new ResponseToViewDto { Estado = result.Estado, Mensaje = result.Mensaje });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = true, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+
+            }
+        }
+
+        [HttpPost]
+        public JsonResult EliminarFactura(string Id)
+        {
+            try
+            {
+                var result = _ventasDomainService.EliminarFactura(long.Parse(Crypto.DescifrarId(Id)));
+                if (result.TieneErrores) throw new Exception(result.MensajeError);
+
+                return Json(new ResponseToViewDto { Estado = result.Estado, Mensaje =(result.Estado? "Factura eliminada correctamente" : result.Mensaje) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = true, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
 
         #region metodos privados
         private void CargarDatos()
