@@ -22,7 +22,10 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 
         public Producto GetProducto(long Id)
         {
-            return _context.Producto.Include(x => x.InventarioProveedor).Include(x => x.InventarioVenta).FirstOrDefault(x => x.ProductoId == Id);
+            return _context.Producto
+                .Include(x => x.ProductoImagen)
+                .Include(x => x.InventarioProveedor)
+                .Include(x => x.InventarioVenta).FirstOrDefault(x => x.ProductoId == Id);
         }
     }
 }

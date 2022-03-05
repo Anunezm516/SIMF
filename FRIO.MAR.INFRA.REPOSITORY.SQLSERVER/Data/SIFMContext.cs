@@ -9,8 +9,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
     {
         public string DefaultConecctionString = string.Empty;
 
-        public SIFMContext()
-               : base()
+        public SIFMContext() : base()
         {
         }
 

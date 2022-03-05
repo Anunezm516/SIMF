@@ -22,5 +22,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Contants
         public static int NumeroIntentosEnvioBloqueo { get; set; }
 
         public static string TimeZoneId { get; set; }
+
+        public static string ConnectionString { get; set; }
+        public static string DirectorioImagenes { get; set; }
+        public static string TipoAlmacenamiento { get; set; }
     }
 }

@@ -11,8 +11,9 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
     public partial class SIFMContext
     {
         public virtual DbSet<Cliente> Clientes { get; set; }
-        public virtual DbSet<Factura> Factura { get; set; }
-        public virtual DbSet<FacturaFormaPago> FacturaFormaPago { get; set; }
+        public DbSet<Factura> Factura { get; set; }
+        public DbSet<FacturaDetalle> FacturaDetalle { get; set; }
+        public DbSet<FacturaFormaPago> FacturaFormaPago { get; set; }
 
 
         partial void OnModelCreatingPartialUtilidad(ModelBuilder modelBuilder) 

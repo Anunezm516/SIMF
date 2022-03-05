@@ -14,6 +14,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<Sucursal> Sucursal { get; set; }
         public virtual DbSet<SucursalBodega> SucursalBodega { get; set; }
         public virtual DbSet<Producto> Producto { get; set; }
+        public virtual DbSet<ProductoImagen> ProductoImagen { get; set; }
         //public virtual DbSet<InventarioBogedas> InventarioBogedas { get; set; }
         public virtual DbSet<InventarioMovimientoEntrada> InventarioMovimientoEntrada { get; set; }
         public virtual DbSet<InventarioMovimientoSalida> InventarioMovimientoSalida { get; set; }

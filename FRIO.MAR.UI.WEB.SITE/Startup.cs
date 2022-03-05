@@ -98,14 +98,14 @@ namespace FRIO.MAR.UI.WEB.SITE
             services.AddServicesMediate(Configuration);
             services.AddLoggerServices(Configuration);
 
-            var CadenaConexion = $"Server={settings.SIFM.DataSource};Database={settings.SIFM.InitialCatalog};User Id={settings.SIFM.UserId};Password={settings.SIFM.Password};"; 
+            GlobalSettings.ConnectionString = $"Server={settings.SIFM.DataSource};Database={settings.SIFM.InitialCatalog};User Id={settings.SIFM.UserId};Password={settings.SIFM.Password};"; 
             /* GSUtilities.CadenaConexion(settings.SIFM.DataSource,
                     settings.SIFM.InitialCatalog,
                     settings.SIFM.UserId,
                     settings.SIFM.Password, DomainConstants.ENCRIPTA_KEY, ref mensaje);*/
-            if (CadenaConexion == null) throw new Exception("Cadena de conexión inválida");
+            if (GlobalSettings.ConnectionString == null) throw new Exception("Cadena de conexión inválida");
 
-            services.AddDbContext<SIFMContext>(options => options.UseSqlServer(CadenaConexion));
+            services.AddDbContext<SIFMContext>(options => options.UseSqlServer(GlobalSettings.ConnectionString));
 
             GlobalSettings.TimeZoneId = settings.SITIOWEB.TimeZoneId;
             WebSiteParameters.WebLimiteConsulta = settings.SITIOWEB.LimiteConsulta;

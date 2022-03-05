@@ -1,12 +1,16 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using GS.TOOLS;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -14,10 +18,12 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 {
     public class ProductoAppService : IProductoAppService
     {
+        private readonly IStorageService _storageService;
         private readonly IProductoRepository _ProductoRepository;
 
-        public ProductoAppService(IProductoRepository ProductoRepository)
+        public ProductoAppService(IStorageService storageService, IProductoRepository ProductoRepository)
         {
+            _storageService = storageService;
             _ProductoRepository = ProductoRepository;
         }
 
@@ -47,9 +53,12 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
 
-                Producto Producto = _ProductoRepository.Get(Id);
+                Producto Producto = _ProductoRepository.GetProducto(Id);
 
-                responseDto.Data = new ProductoModel(Producto);
+                var prod = new ProductoModel(Producto);
+                prod.ImagenBase64 = ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, prod.ImagenRuta, "");
+
+                responseDto.Data = prod;
 
                 responseDto.Estado = true;
             }
@@ -74,6 +83,8 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     return responseDto;
                 }
 
+                List<(string, string)> imagenes = GuardarImagenes(model.Imagen);
+
                 Producto = new Producto
                 {
                     Codigo = model.Codigo,
@@ -87,7 +98,13 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     Ip = model.Ip,
                     UsuarioCreacion = model.Usuario,
                     FechaCreacion = Utilities.Utilidades.GetHoraActual(),
-                    Estado = true
+                    Estado = true,
+                    ProductoImagen = imagenes.Select(c => new ProductoImagen
+                    {
+                        Nombre = c.Item2,
+                        Ruta = c.Item1,
+                        Estado = true,
+                    }).ToList()
                 };
 
                 _ProductoRepository.Add(Producto);
@@ -109,7 +126,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(model.Id));
 
-                Producto Producto = _ProductoRepository.Get(Id);
+                Producto Producto = _ProductoRepository.GetProducto(Id);
                 if (Producto == null)
                 {
                     responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_ANONIMO;
@@ -126,6 +143,22 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                         responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                         return responseDto;
                     }
+                }
+
+                List<(string, string)> imagenes = new List<(string, string)>();
+
+                if (model.Imagen != null && model.Imagen.Any())
+                {
+                    imagenes = GuardarImagenes(model.Imagen);
+                    Producto.ProductoImagen.Clear();
+                    _ProductoRepository.Save();
+
+                    Producto.ProductoImagen = imagenes.Select(c => new ProductoImagen
+                    {
+                        Nombre = c.Item2,
+                        Ruta = c.Item1,
+                        Estado = true,
+                    }).ToList();
                 }
 
                 Producto.Codigo = model.Codigo;
@@ -189,6 +222,61 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 responseDto.TieneErrores = true;
             }
             return responseDto;
+        }
+
+        private List<(string, string)> GuardarImagenes(List<IFormFile> imagenes)
+        {
+            string RutaImagen = "";
+            string mensaje = "";
+            List<(string, string)> rutas = new List<(string, string)>();
+
+            foreach (var item in imagenes)
+            {
+                using MemoryStream ms = new MemoryStream();
+                item.CopyTo(ms);
+
+                if (GlobalSettings.TipoAlmacenamiento == "1")
+                {
+                    RutaImagen = Path.Combine(GlobalSettings.DirectorioImagenes, Guid.NewGuid().ToString() + Path.GetExtension(item.FileName));
+                    if (ms != null)
+                    {
+                        if (_storageService.GuardarArchivo(ms, Path.Combine("wwwroot", RutaImagen), ref mensaje))
+                        {
+                            rutas.Add((RutaImagen, item.FileName));
+                        }
+                    }
+                }
+                else
+                {
+                    if (ms != null)
+                    {
+                        RutaImagen = Guid.NewGuid().ToString() + Path.GetExtension(item.FileName);
+                        if (_storageService.GuardarArchivo(ms, RutaImagen, ref mensaje, "images"))
+                        {
+                            rutas.Add((RutaImagen, item.FileName));
+                        }
+                    }
+                }
+            }
+
+            return rutas;
+        }
+
+        private string ObtenerImagenBase64(string TipoAlmacenamiento, string Imagen, string FileName)
+        {
+            string mensaje = "";
+            MemoryStream ms = null;
+            if (TipoAlmacenamiento == "1")
+            {
+                ms = _storageService.ObtenerArchivo(Path.Combine("wwwroot", Imagen), ref mensaje, "images");
+            }
+            else
+            {
+                ms = _storageService.ObtenerArchivo(Imagen, ref mensaje, "images");
+            }
+
+            return ms == null ? "" : Convert.ToBase64String(ms.ToArray());
+
         }
     }
 }

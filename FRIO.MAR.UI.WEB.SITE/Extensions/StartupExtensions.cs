@@ -21,6 +21,8 @@ using FRIO.MAR.INFRA.QUERY.QueryServices;
 using FRIO.MAR.INFRA.SERVICE.MAIL.Services;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.APPLICATION.CORE.Interfaces;
+using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices;
+using FRIO.MAR.INFRA.SERVICE.STORAGE.Services;
 
 namespace FRIO.MAR.UI.WEB.SITE.Extensions
 {
@@ -58,8 +60,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IRolAppService, RolAppService>();
             services.AddScoped<IUsuarioQueryService, UsuarioQueryService>();
 
-
-            services.AddScoped<IEnvioMail, EnvioMail>();
             services.AddScoped<INotificacionAppService, NotificacionAppService>();
 
             services.AddScoped<IClienteAppService, ClienteAppService>();
@@ -70,11 +70,16 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IInventarioDomainService, InventarioDomainService>();
             services.AddScoped<IVentasDomainService, VentasDomainService>();
             services.AddScoped<IInitialData, InitialData>();
+            services.AddScoped<IReporteQueryService, ReporteQueryService>();
 
         }
 
         public static void AddServicesMediate(this IServiceCollection services, IConfiguration Configuration)
         {
+            GlobalSettings.DirectorioImagenes = Configuration["DirectorioImagenes"];
+            GlobalSettings.TipoAlmacenamiento = Configuration["TipoAlmacenamiento"];
+            services.AddScoped<IEnvioMail, EnvioMail>();
+            services.AddScoped<IStorageService, DiskStorageService>();
 
         }
 

@@ -15,6 +15,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
             InventarioMovimientoSalida = new HashSet<InventarioMovimientoSalida>();
             InventarioVenta = new HashSet<InventarioVenta>();
             InventarioProveedor = new HashSet<InventarioProveedor>();
+            ProductoImagen = new HashSet<ProductoImagen>();
         }
 
         [Key]
@@ -49,5 +50,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public virtual ICollection<InventarioMovimientoSalida> InventarioMovimientoSalida { get; set; }
         public virtual ICollection<InventarioVenta> InventarioVenta { get; set; }
         public virtual ICollection<InventarioProveedor> InventarioProveedor { get; set; }
+        public virtual ICollection<ProductoImagen> ProductoImagen { get; set; }
     }
 }

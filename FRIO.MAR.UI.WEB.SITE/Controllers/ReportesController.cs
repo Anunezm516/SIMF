@@ -1,6 +1,7 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,14 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.ReportesVentas)]
     public class ReportesController : BaseController
     {
+        private readonly IReporteQueryService _reporteQueryService;
         private readonly IUtilidadRepository _utilidadRepository;
 
-        public ReportesController(IUtilidadRepository utilidadRepository, ILogInfraServices logInfraServices) : base(logInfraServices)
+        public ReportesController(
+            IReporteQueryService reporteQueryService,
+            IUtilidadRepository utilidadRepository, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _reporteQueryService = reporteQueryService;
             _utilidadRepository = utilidadRepository;
         }
 
@@ -29,19 +34,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
         public PartialViewResult ReporteVentas(EstadoFactura EstadoFactura, DateTime FechaInicio, DateTime FechaFin)
         {
-            List<VentasDomainServiceResultDto> detalles = new List<VentasDomainServiceResultDto>()
-            {
-                new VentasDomainServiceResultDto
-                {
-                    Id = "",
-                    Adquiriente = "Bolivar",
-                    Estado = EstadoFactura.Facturado,
-                    Fecha = DateTime.Now.ToString(),
-                    Identificacion = "",
-                    ValorTotal = ""
-                }
-            };
-            return PartialView("_VentasDetalle", detalles);
+            return PartialView("_VentasDetalle", _reporteQueryService.GetFacturas(EstadoFactura, FechaInicio, FechaFin));
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.Models
@@ -59,6 +61,11 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
         public bool RegistrarInventario { get; set; }
 
+
+        public List<IFormFile> Imagen { get; set; }
+        public string ImagenBase64 { get; set; }
+        public string ImagenRuta { get; set; }
+
         public string Ip { get; set; }
         public long Usuario { get; set; }
 
@@ -76,6 +83,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             PrecioUnitarioStr = APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(producto.PrecioUnitario, 2);
             IVA = producto.IvaCodigo + "|" + producto.IvaPorcentaje;
             TipoProducto = producto.TipoProducto;
+            ImagenRuta = producto.ProductoImagen?.FirstOrDefault()?.Ruta ?? "";
+
         } 
     }
 }

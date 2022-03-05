@@ -23,12 +23,12 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
 
         public VentasDomainServiceResultDto(Factura factura)
         {
-            Id = Crypto.CifrarId(factura.FacturaId); ;
+            Id = Crypto.CifrarId(factura.FacturaId);
             Fecha = factura.FechaModificacion.ToString("yyyy-MM-dd HH:mm:ss");
             Identificacion = factura.Identificacion;
             Adquiriente = factura.RazonSocial;
             ValorTotal = Utilidades.DoubleToString_FrontCO(factura.ValorTotal, 2);
-            Estado = (EstadoFactura)factura.Estado;
+            Estado = factura.Estado;
 
         }
     }

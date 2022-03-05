@@ -11,10 +11,21 @@
 <div class="card">
     <div class="card-body">
         @{await Html.RenderPartialAsync("_camposObligatorios");}
-        <form asp-action="Registrar" method="post">
+        <form asp-action="Registrar" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="Id" type="hidden" />
+
+            <div class="row text-center">
+                <div class="col-4">
+                    
+                </div>
+                <div class="col-4">
+                    <div class="">
+                        <img id="ImagenBase64" src="data:image/png;base64, @Model.ImagenBase64" class="img-fluid img-thumbnail" alt="" />
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-3">
@@ -73,6 +84,14 @@
                         <span asp-validation-for="PrecioUnitarioStr" class="text-danger"></span>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Imagen" class="control-label">Imagen <span class="text-danger">*</span></label>
+                        <input asp-for="Imagen" class="form-control decimal" onchange="loadFile(event)" accept="image/*" />
+                        <span asp-validation-for="Imagen" class="text-danger"></span>
+                    </div>
+                </div>
+
             </div>
             <br />
             
@@ -178,7 +197,16 @@
                     }
                 });
             });
+
         });
+
+        var loadFile = function (event) {
+            var output = document.getElementById('ImagenBase64');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
 
         function InicarCamposInventario(){
             if(!$('#RegistrarInventario').is(':checked') ) {

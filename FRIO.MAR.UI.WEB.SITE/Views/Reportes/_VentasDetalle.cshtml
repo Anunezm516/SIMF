@@ -12,9 +12,8 @@
                 <th class="text-center">Fecha Facturación</th>
                 <th class="text-center">NIT Receptor</th>
                 <th class="text-center">Razón Social Receptor</th>
-                <th class="text-center">Subtotal</th>
                 <th class="text-center">Total</th>
-                <th class="text-left">Observación</th>
+                <th class="text-center">Estado</th>
             </tr>
         </thead>
         <tbody>
@@ -22,12 +21,13 @@
             {
                 <tr>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>@row.Fecha</td>
+                    <td>@row.Identificacion</td>
+                    <td>@row.Adquiriente</td>
+                    <td class='text-center'>@row.ValorTotal</td>
+                    <td class='text-center'>
+                        <span class='badge bg-success' style='font-size: 12px'>@row.Estado</span>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -95,66 +95,7 @@ else
                             doc.pageOrientation = 'landscape';
                         }
                     }
-                }, "excel",
-                {
-                    //className: 'btn btn-success btn-rounded',
-                    text: 'ZIP',
-                    titleAttr: 'Descargar archivos',
-                    action: function (e, dt, node, config) {
-
-                        try {
-                            IniciarLoading(500000);
-                            $.get('@Url.Action("DescargarArchivosEmision", "Reporte")',
-                                {
-                                    tipoDocumento: $("#tipoDocumento").val(),
-                                    estadoEdoc: $("#estadoEdoc").val(),
-                                    fechaInicio: $("#fechaInicio2").val(),
-                                    fechaFin: $("#fechaFin2").val()
-                                })
-                                .done(function (response) {
-                                    responseURL = response;
-
-                                    switch (response) {
-                                        case "--NO_ZIP":
-                                            Swal.fire({
-                                                title: '¡No ZIP!',
-                                                text: 'No se ha podido generar el .zip del documento.',
-                                                type: "warning",
-                                                confirmButtonText: 'OK',
-                                                allowOutsideClick: false,
-                                            });
-                                            break;
-                                        case "--NO_ADJUNTOS_SERVICIO":
-                                            Swal.fire({
-                                                title: '¡No existen adjuntos!',
-                                                text: 'El documento no posee adjuntos.',
-                                                type: "info",
-                                                confirmButtonText: 'OK',
-                                                allowOutsideClick: false,
-                                            });
-                                            break;
-                                        case "--ZIP_VACIO":
-                                            Swal.fire({
-                                                title: '¡El .zip vacío!',
-                                                text: 'El .zip está vacío.',
-                                                type: "info",
-                                                confirmButtonText: 'OK',
-                                                allowOutsideClick: false,
-                                            });
-                                            break;
-
-                                        default:
-                                                window.location = "@Url.Action("DownloadZip", "Reporte")" + '?fileGuid=' + response + '&filename=' + response;
-                                                Swal.close();
-                                            break;
-                                    }
-                                })
-                                .fail(function (error) { MsgAjaxError(error); } )
-                        } catch (e) {
-                            MsgAjaxError(e)
-                        }
-                    }
-                }]
+                }, "excel"]
             }).buttons().container().appendTo("#datatable-documentos-emitidos_wrapper .col-md-6:eq(0)");
          // FIN DATATABLE
     });

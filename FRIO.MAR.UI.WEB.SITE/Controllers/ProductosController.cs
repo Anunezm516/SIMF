@@ -4,16 +4,20 @@ using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using FRIO.MAR.APPLICATION.CORE.Utilities;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using FRIO.MAR.UI.WEB.SITE.Constants;
 using GS.TOOLS;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
@@ -21,6 +25,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.ProductosInternos)]
     public class ProductosController : BaseController
     {
+        private readonly IConfiguration _configuration;
+        private readonly IStorageService _storageService;
         private readonly IBodegaRepository _bodegaRepository;
         private readonly IInventarioDomainService _inventarioDomainService;
         private readonly ISucursalRepository _sucursalRepository;
@@ -28,6 +34,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private readonly IProductoAppService _ProductoAppService;
 
         public ProductosController(
+            IConfiguration configuration,
+            IStorageService storageService,
             IBodegaRepository bodegaRepository,
             IInventarioDomainService inventarioDomainService,
             ISucursalRepository sucursalRepository,
@@ -35,6 +43,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             IProductoAppService ProductoAppService, 
             ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _configuration = configuration;
+            _storageService = storageService;
             _bodegaRepository = bodegaRepository;
             _inventarioDomainService = inventarioDomainService;
             _sucursalRepository = sucursalRepository;
@@ -215,6 +225,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
             return View(model);
         }
+
+        
 
         [HttpPost]
         public JsonResult Eliminar(string Id)
