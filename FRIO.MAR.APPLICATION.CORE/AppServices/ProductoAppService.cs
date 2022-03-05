@@ -54,13 +54,22 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
 
                 Producto Producto = _ProductoRepository.GetProducto(Id);
+                if (Producto != null)
+                {
+                    var prod = new ProductoModel(Producto);
+                    string imagen = ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, prod.ImagenRuta, "");
+                    prod.ImagenBase64 = string.IsNullOrEmpty(imagen) ? AppConstants.SinImagen : imagen;
 
-                var prod = new ProductoModel(Producto);
-                prod.ImagenBase64 = ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, prod.ImagenRuta, "");
+                    responseDto.Data = prod;
 
-                responseDto.Data = prod;
-
-                responseDto.Estado = true;
+                    responseDto.Estado = true;
+                }
+                else
+                {
+                    responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_ANONIMO;
+                    responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                }
+                
             }
             catch (Exception ex)
             {

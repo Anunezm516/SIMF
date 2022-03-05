@@ -22,7 +22,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
         public FacturaModel()
         {
-
+            FechaEmision = Utilidades.GetHoraActual();
+            Fecha = FechaEmision.ToString();
         }
 
         public FacturaModel(Factura factura)

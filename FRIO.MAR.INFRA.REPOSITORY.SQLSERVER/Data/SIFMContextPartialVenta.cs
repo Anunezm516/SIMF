@@ -15,6 +15,9 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public DbSet<FacturaDetalle> FacturaDetalle { get; set; }
         public DbSet<FacturaFormaPago> FacturaFormaPago { get; set; }
 
+        public DbSet<ProductoCliente> ProductoCliente { get; set; }
+        public DbSet<ProductoClienteImagen> ProductoClienteImagen { get; set; }
+
 
         partial void OnModelCreatingPartialUtilidad(ModelBuilder modelBuilder) 
         {

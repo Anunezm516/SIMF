@@ -26,11 +26,11 @@
                 <input asp-for="Cliente.NombreComercial" type="hidden" />
                 <input asp-for="Cliente.Telefono" type="hidden" />
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Fecha</label>
                     <input type="date" asp-for="FechaEmision" class="form-control"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Cliente</label>
                     <select asp-for="Cliente.ClienteId" class="form-control select2">
                         <option selected disabled>--SELECCIONAR--</option>
@@ -249,7 +249,7 @@
             var Cliente_CorreoCliente = $("#Cliente_CorreoCliente").val();
             var SucursalId = $("#SucursalId").val();
 
-            if (FechaEmision === null || FechaEmision === undefined || FechaEmision.trim() === ""){
+            if (FechaEmision === null || FechaEmision === undefined || FechaEmision.trim() === "0001-01-01"){
                 MensajeGrowl("Ingrese una fecha de emisión");
                 return;
             }

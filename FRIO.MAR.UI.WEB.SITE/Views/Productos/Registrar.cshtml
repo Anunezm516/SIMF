@@ -16,85 +16,87 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="Id" type="hidden" />
 
-            <div class="row text-center">
-                <div class="col-4">
-                    
-                </div>
-                <div class="col-4">
-                    <div class="">
-                        <img id="ImagenBase64" src="data:image/png;base64, @Model.ImagenBase64" class="img-fluid img-thumbnail" alt="" />
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="TipoProducto" class="control-label">Tipo de Producto <span class="text-danger">*</span></label>
-                        <select asp-for="TipoProducto" class=" form-control" >
-                            <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Bien">Bien</option>
-                            <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Servicio">Servicio</option>
-                        </select>
-                        <span asp-validation-for="TipoProducto" class="text-danger"></span>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="TipoProducto" class="control-label">Tipo de Producto <span class="text-danger">*</span></label>
+                                <select asp-for="TipoProducto" class=" form-control" >
+                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Bien">Bien</option>
+                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.TipoProducto.Servicio">Servicio</option>
+                                </select>
+                                <span asp-validation-for="TipoProducto" class="text-danger"></span>
+                            </div>
+                        </div>
+                         <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Codigo" class="control-label">Código <span class="text-danger">*</span></label>
+                                <input asp-for="Codigo" class="form-control"  />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Descripcion" class="control-label">Descripción <span class="text-danger">*</span></label>
+                                <input asp-for="Descripcion" class="form-control"  />
+                                <span asp-validation-for="Descripcion" class="text-danger"></span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="Codigo" class="control-label">Código <span class="text-danger">*</span></label>
-                        <input asp-for="Codigo" class="form-control"  />
-                        <span asp-validation-for="Codigo" class="text-danger"></span>
+
+                     <br />
+                     <div class="row">
+                         <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="UnidadMedida" class="control-label">Unidad de Medida <span class="text-danger">*</span></label>
+                                <select asp-for="UnidadMedida" class=" form-control select2" asp-items="ViewBag.unidadMeida" >
+                                    <option value="" selected disabled>--Seleccionar--</option>
+                                </select>
+                                <span asp-validation-for="UnidadMedida" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="IVA" class="control-label">IVA <span class="text-danger">*</span></label>
+                                <select asp-for="IVA" class=" form-control" >
+                                    <option value="" selected disabled>--Seleccionar--</option>
+                                    @foreach(var iva in ViewBag.IVA as List<FRIO.MAR.APPLICATION.CORE.Entities.Impuesto>){
+                                        <option value="@iva.TipoImpuesto.Codigo|@iva.Porcentaje">@iva.Nombre</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="IVA" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="PrecioUnitarioStr" class="control-label">Precio Unitario <span class="text-danger">*</span></label>
+                                <input asp-for="PrecioUnitarioStr" class="form-control decimal text-end"  />
+                                <span asp-validation-for="PrecioUnitarioStr" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Imagen" class="control-label">Imagen <span class="text-danger">*</span></label>
+                                <input asp-for="Imagen" class="form-control decimal" onchange="loadFile(event)" accept="image/*" />
+                                <span asp-validation-for="Imagen" class="text-danger"></span>
+                            </div>
+                        </div>
+
                     </div>
+                    <br />
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Descripcion" class="control-label">Descripción <span class="text-danger">*</span></label>
-                        <input asp-for="Descripcion" class="form-control"  />
-                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                <div class="col-md-2">
+                    <div class="row text-center">
+                        <div class="col-12">
+                            <div class="">
+                                <img id="ImagenBase64" src="data:image/png;base64, @Model.ImagenBase64" class="img-fluid img-thumbnail" alt="" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-             <br />
-             <div class="row">
-                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="UnidadMedida" class="control-label">Unidad de Medida <span class="text-danger">*</span></label>
-                        <select asp-for="UnidadMedida" class=" form-control select2" asp-items="ViewBag.unidadMeida" >
-                            <option value="" selected disabled>--Seleccionar--</option>
-                        </select>
-                        <span asp-validation-for="UnidadMedida" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="IVA" class="control-label">IVA <span class="text-danger">*</span></label>
-                        <select asp-for="IVA" class=" form-control" >
-                            <option value="" selected disabled>--Seleccionar--</option>
-                            @foreach(var iva in ViewBag.IVA as List<FRIO.MAR.APPLICATION.CORE.Entities.Impuesto>){
-                                <option value="@iva.TipoImpuesto.Codigo|@iva.Porcentaje">@iva.Nombre</option>
-                            }
-                        </select>
-                        <span asp-validation-for="IVA" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="PrecioUnitarioStr" class="control-label">Precio Unitario <span class="text-danger">*</span></label>
-                        <input asp-for="PrecioUnitarioStr" class="form-control decimal"  />
-                        <span asp-validation-for="PrecioUnitarioStr" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="Imagen" class="control-label">Imagen <span class="text-danger">*</span></label>
-                        <input asp-for="Imagen" class="form-control decimal" onchange="loadFile(event)" accept="image/*" />
-                        <span asp-validation-for="Imagen" class="text-danger"></span>
-                    </div>
-                </div>
-
-            </div>
-            <br />
-            
             @if (ViewBag.EsNuevo)
             {
                 <hr />

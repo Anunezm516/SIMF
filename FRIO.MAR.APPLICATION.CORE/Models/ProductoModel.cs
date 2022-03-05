@@ -1,4 +1,5 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -71,7 +72,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
         public ProductoModel()
         {
-
+            ImagenBase64 = AppConstants.SinImagen;
         }
 
         public ProductoModel(Producto producto)

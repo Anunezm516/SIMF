@@ -7,19 +7,15 @@ using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.Entities
 {
-    public class Producto : Auditoria
+    public class ProductoCliente : Auditoria
     {
-        public Producto()
+        public ProductoCliente()
         {
-            InventarioMovimientoEntrada = new HashSet<InventarioMovimientoEntrada>();
-            InventarioMovimientoSalida = new HashSet<InventarioMovimientoSalida>();
-            InventarioVenta = new HashSet<InventarioVenta>();
-            InventarioProveedor = new HashSet<InventarioProveedor>();
-            ProductoImagen = new HashSet<ProductoImagen>();
+            ProductoClienteImagen = new HashSet<ProductoClienteImagen>();
         }
 
         [Key]
-        public long ProductoId { get; set; }
+        public long ProductoClienteId { get; set; }
         public TipoProducto TipoProducto { get; set; }
 
         [Column(TypeName = "varchar(20)")]
@@ -46,10 +42,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "varchar(50)")]
         public string UnidadMedida { get; set; }
 
-        public virtual ICollection<InventarioMovimientoEntrada> InventarioMovimientoEntrada { get; set; }
-        public virtual ICollection<InventarioMovimientoSalida> InventarioMovimientoSalida { get; set; }
-        public virtual ICollection<InventarioVenta> InventarioVenta { get; set; }
-        public virtual ICollection<InventarioProveedor> InventarioProveedor { get; set; }
-        public virtual ICollection<ProductoImagen> ProductoImagen { get; set; }
+        public virtual ICollection<ProductoClienteImagen> ProductoClienteImagen { get; set; }
     }
 }
