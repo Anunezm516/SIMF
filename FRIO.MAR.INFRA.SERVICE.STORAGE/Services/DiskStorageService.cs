@@ -1,5 +1,8 @@
 ﻿
+using FRIO.MAR.APPLICATION.CORE.Contants;
+using FRIO.MAR.APPLICATION.CORE.DTOs.Services;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -150,5 +153,71 @@ namespace FRIO.MAR.INFRA.SERVICE.STORAGE.Services
         //        return null;
         //    }
         //}
+
+        public List<ArchivoServiceDto> GuardarImagenes(List<IFormFile> imagenes, string Tipo)
+        {
+            string RutaImagen = "";
+            string mensaje = "";
+            string path = Path.Combine(GlobalSettings.DirectorioImagenes, Tipo);
+            List<ArchivoServiceDto> rutas = new List<ArchivoServiceDto>();
+
+            foreach (var item in imagenes)
+            {
+                using MemoryStream ms = new MemoryStream();
+                item.CopyTo(ms);
+
+                RutaImagen = Path.Combine(path, Guid.NewGuid().ToString() + Path.GetExtension(item.FileName));
+
+                if (GlobalSettings.TipoAlmacenamiento == "1")
+                {
+                    if (ms != null)
+                    {
+                        if (GuardarArchivo(ms, Path.Combine("wwwroot", RutaImagen), ref mensaje))
+                        {
+                            rutas.Add(new ArchivoServiceDto
+                            {
+                                Base64 = Convert.ToBase64String(ms.ToArray()),
+                                Nombre = item.FileName,
+                                Ruta = RutaImagen
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    if (ms != null)
+                    {
+                        if (GuardarArchivo(ms, RutaImagen, ref mensaje, "images"))
+                        {
+                            rutas.Add(new ArchivoServiceDto
+                            {
+                                Base64 = Convert.ToBase64String(ms.ToArray()),
+                                Nombre = item.FileName,
+                                Ruta = RutaImagen
+                            });
+                        }
+                    }
+                }
+            }
+
+            return rutas;
+        }
+
+        public string ObtenerImagenBase64(string TipoAlmacenamiento, string Imagen, string FileName)
+        {
+            string mensaje = "";
+            MemoryStream ms = null;
+            if (TipoAlmacenamiento == "1")
+            {
+                ms = ObtenerArchivo(Path.Combine("wwwroot", Imagen), ref mensaje, "images");
+            }
+            else
+            {
+                ms = ObtenerArchivo(Imagen, ref mensaje, "images");
+            }
+
+            return ms == null ? "" : Convert.ToBase64String(ms.ToArray());
+
+        }
     }
 }

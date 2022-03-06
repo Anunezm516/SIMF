@@ -166,7 +166,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 cliente.Ip = Ip;
                 cliente.UsuarioEliminacion = Usuario;
-                cliente.FechaCreacion = Utilities.Utilidades.GetHoraActual();
+                cliente.FechaEliminacion = Utilities.Utilidades.GetHoraActual();
                 cliente.Estado = false;
 
                 _clienteRepository.Update(cliente);

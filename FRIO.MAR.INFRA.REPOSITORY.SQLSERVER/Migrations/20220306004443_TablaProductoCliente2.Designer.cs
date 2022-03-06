@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220306004443_TablaProductoCliente2")]
+    partial class TablaProductoCliente2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +86,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("BodegaId");
@@ -143,7 +145,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("ClienteId");
@@ -476,7 +478,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("IdInventarioMovimiento")
@@ -566,7 +568,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("IdInventarioMovimiento")
@@ -634,7 +636,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("IdInventarioProveedor")
@@ -702,7 +704,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("IdInventarioVenta")
@@ -933,7 +935,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("ProductoId");
@@ -947,9 +949,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("ClienteId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Codigo")
                         .HasColumnType("varchar(20)");
@@ -990,12 +989,10 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("ProductoClienteId");
-
-                    b.HasIndex("ClienteId");
 
                     b.ToTable("ProductoCliente");
                 });
@@ -1107,7 +1104,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("ProveedorId");
@@ -1230,7 +1227,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("SucursalId");
@@ -1272,7 +1269,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long?>("UsuarioEliminacion")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioModificacion")
+                    b.Property<long>("UsuarioModificacion")
                         .HasColumnType("bigint");
 
                     b.HasKey("SucursalBodegaId");
@@ -1551,15 +1548,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .WithMany("InventarioVenta")
                         .HasForeignKey("IdSucursal")
                         .HasConstraintName("FK__Inventa__IdSuc__21E0EDE6");
-                });
-
-            modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.ProductoCliente", b =>
-                {
-                    b.HasOne("FRIO.MAR.APPLICATION.CORE.Entities.Cliente", "Cliente")
-                        .WithMany("ProductoCliente")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FRIO.MAR.APPLICATION.CORE.Entities.ProductoClienteImagen", b =>

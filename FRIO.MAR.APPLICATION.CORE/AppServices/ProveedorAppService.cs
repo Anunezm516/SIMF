@@ -164,7 +164,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 Proveedor.Ip = Ip;
                 Proveedor.UsuarioEliminacion = Usuario;
-                Proveedor.FechaCreacion = Utilities.Utilidades.GetHoraActual();
+                Proveedor.FechaEliminacion = Utilities.Utilidades.GetHoraActual();
                 Proveedor.Estado = false;
 
                 _proveedorRepository.Update(Proveedor);

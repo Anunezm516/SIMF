@@ -224,25 +224,25 @@
             }
         }
 
-        //function addOptionsBodegas(domElement, result) {
-        //    var select = document.getElementById(domElement);
-        //    LimpiarSelect(domElement);
-        //    result.forEach(bodega => {
-        //        var option = document.createElement("option");
-        //        option.value = bodega.bodegaId;
-        //        option.text = bodega.codigo + " - " + bodega.nombre;
-        //        select.add(option);
-        //    });
-        //}
+        function addOptionsBodegas(domElement, result) {
+            var select = document.getElementById(domElement);
+            LimpiarSelect(domElement);
+            result.forEach(bodega => {
+                var option = document.createElement("option");
+                option.value = bodega.bodegaId;
+                option.text = bodega.codigo + " - " + bodega.nombre;
+                select.add(option);
+            });
+        }
 
-        //function LimpiarSelect(domElement) {
-        //    $('#' + domElement).empty();
-        //    var select = document.getElementById(domElement);
-        //    var option = document.createElement("option");
-        //    option.text = "-- SELECCIONAR --";
-        //    option.value = "";
-        //    select.add(option);
-        //}
+        function LimpiarSelect(domElement) {
+            $('#' + domElement).empty();
+            var select = document.getElementById(domElement);
+            var option = document.createElement("option");
+            option.text = "-- SELECCIONAR --";
+            option.value = "";
+            select.add(option);
+        }
 
     </script>
     @Html.Raw(TempData["msg"])

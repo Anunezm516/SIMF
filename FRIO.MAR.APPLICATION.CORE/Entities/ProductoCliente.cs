@@ -16,22 +16,15 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
 
         [Key]
         public long ProductoClienteId { get; set; }
-        public TipoProducto TipoProducto { get; set; }
 
         [Column(TypeName = "varchar(20)")]
         public string Codigo { get; set; }
 
         [Column(TypeName = "varchar(100)")]
+        public string Nombre { get; set; }
+
+        [Column(TypeName = "varchar(1000)")]
         public string Descripcion { get; set; }
-
-        [Column(TypeName = "decimal(18, 6)")]
-        public decimal PrecioUnitario { get; set; }
-
-        [Column(TypeName = "decimal(5,2)")]
-        public decimal? IvaPorcentaje { get; set; }
-
-        [Column(TypeName = "varchar(50)")]
-        public string IvaCodigo { get; set; }
 
         [Column(TypeName = "varchar(50)")]
         public string Marca { get; set; }
@@ -42,6 +35,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "varchar(50)")]
         public string UnidadMedida { get; set; }
 
+        public virtual long ClienteId { get; set; }
+        public virtual Cliente Cliente { get; set; }
         public virtual ICollection<ProductoClienteImagen> ProductoClienteImagen { get; set; }
     }
 }

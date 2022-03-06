@@ -1,0 +1,74 @@
+﻿@model List<FRIO.MAR.APPLICATION.CORE.Models.ProductoClienteModel>
+
+@{
+    ViewBag.Title = "Productos Clientes";
+    ViewBag.pTitle = "Productos Clientes";
+    ViewBag.pageTitle = "Configuración";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+
+        <a asp-action="ProductosRegistrar" asp-route-cliente="@ViewBag.ClienteId" class="btn btn-success">Nuevo</a>
+        <a asp-action="Index" class="btn btn-secondary">Regresar</a>
+
+        <table class="datatable table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                </tr>
+            </thead>
+            <thebody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            <a asp-action="ProductosRegistrar" asp-route-id="@item.Id" asp-route-cliente="@ViewBag.ClienteId" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                            <button type="button" class="btn btn-danger btn-eliminar" value="@item.Id" data-cliente="@ViewBag.ClienteId"><i class="fa fa-trash"></i></button>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Codigo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Marca)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Modelo)</td>
+                    </tr>
+                }
+            </thebody>
+        </table>
+    </div>
+
+    
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            var table = $(".datatable").DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                "pageLength": 6,
+                "columnDefs": [
+                    {
+
+                    }
+                ]
+            });
+
+            $(".btn-eliminar").click(function () {
+                var id = $(this).val();
+                var cliente = $(this).attr("data-cliente");
+                console.log(id)
+                ConfirmacionEliminar("@Url.Action("EliminarProductoCliente", "Clientes")", '@Url.Action("Productos", "Clientes")', { Id: id, Cliente: cliente } );
+            });
+        });
+    </script>
+    @Html.Raw(TempData["msg"])
+}

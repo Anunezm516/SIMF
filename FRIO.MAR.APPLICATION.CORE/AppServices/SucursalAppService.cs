@@ -156,7 +156,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 Sucursal.Ip = Ip;
                 Sucursal.UsuarioEliminacion = Usuario;
-                Sucursal.FechaCreacion = Utilities.Utilidades.GetHoraActual();
+                Sucursal.FechaEliminacion = Utilities.Utilidades.GetHoraActual();
                 Sucursal.Estado = false;
 
                 _SucursalRepository.Update(Sucursal);

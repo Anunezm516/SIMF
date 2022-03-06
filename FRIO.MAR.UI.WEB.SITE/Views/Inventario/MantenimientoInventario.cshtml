@@ -352,51 +352,51 @@
             });
         }
 
-        // Rutina para agregar opciones a un <select>
-        function addOptionsProductos(domElement, result) {
-            console.log(result);
-            var select = document.getElementById(domElement);
-            LimpiarSelect(domElement);
-            result.forEach(producto => {
-                var option = document.createElement("option");
-                option.value = producto.productoId;
-                option.text = producto.codigo + " - " + producto.descripcion;
-                option.setAttribute("data-stock", producto.stock);
-                select.add(option);
-            });
-        }
+        //// Rutina para agregar opciones a un <select>
+        //function addOptionsProductos(domElement, result) {
+        //    console.log(result);
+        //    var select = document.getElementById(domElement);
+        //    LimpiarSelect(domElement);
+        //    result.forEach(producto => {
+        //        var option = document.createElement("option");
+        //        option.value = producto.productoId;
+        //        option.text = producto.codigo + " - " + producto.descripcion;
+        //        option.setAttribute("data-stock", producto.stock);
+        //        select.add(option);
+        //    });
+        //}
 
-        function addOptionsSucursales(domElement, result) {
-            console.log(result);
-            var select = document.getElementById(domElement);
-            LimpiarSelect(domElement);
-            result.forEach(sucursal => {
-                var option = document.createElement("option");
-                option.value = sucursal.sucursalId;
-                option.text = sucursal.nombre;
-                select.add(option);
-            });
-        }
+        //function addOptionsSucursales(domElement, result) {
+        //    console.log(result);
+        //    var select = document.getElementById(domElement);
+        //    LimpiarSelect(domElement);
+        //    result.forEach(sucursal => {
+        //        var option = document.createElement("option");
+        //        option.value = sucursal.sucursalId;
+        //        option.text = sucursal.nombre;
+        //        select.add(option);
+        //    });
+        //}
 
-        function addOptionsBodegas(domElement, result) {
-            var select = document.getElementById(domElement);
-            LimpiarSelect(domElement);
-            result.forEach(bodega => {
-                var option = document.createElement("option");
-                option.value = bodega.bodegaId;
-                option.text = bodega.codigo + " - " + bodega.nombre;
-                select.add(option);
-            });
-        }
+        //function addOptionsBodegas(domElement, result) {
+        //    var select = document.getElementById(domElement);
+        //    LimpiarSelect(domElement);
+        //    result.forEach(bodega => {
+        //        var option = document.createElement("option");
+        //        option.value = bodega.bodegaId;
+        //        option.text = bodega.codigo + " - " + bodega.nombre;
+        //        select.add(option);
+        //    });
+        //}
 
-        function LimpiarSelect(domElement) {
-            console.log(domElement);
-            $('#' + domElement).empty();
-            var select = document.getElementById(domElement);
-            var option = document.createElement("option");
-            option.text = "-- SELECCIONAR --";
-            option.value = "0";
-            select.add(option);
-        }
+        //function LimpiarSelect(domElement) {
+        //    console.log(domElement);
+        //    $('#' + domElement).empty();
+        //    var select = document.getElementById(domElement);
+        //    var option = document.createElement("option");
+        //    option.text = "-- SELECCIONAR --";
+        //    option.value = "0";
+        //    select.add(option);
+        //}
     </script>
 }

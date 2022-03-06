@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.Entities
 {
-    public sealed class Cliente : Auditoria
+    public class Cliente : Auditoria
     {
         [Key]
         public long ClienteId { get; set; }
@@ -26,10 +26,14 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "varchar(300)")]
         public string Direccion { get; set; }
 
+
         [Column(TypeName = "varchar(100)")]
         public string CorreoElectronico { get; set; }
 
         [Column(TypeName = "varchar(50)")]
         public string Telefono { get; set; }
+
+        public virtual ICollection<ProductoCliente> ProductoCliente { get; set; }
+
     }
 }

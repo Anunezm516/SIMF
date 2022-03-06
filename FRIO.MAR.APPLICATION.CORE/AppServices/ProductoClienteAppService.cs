@@ -17,25 +17,25 @@ using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.AppServices
 {
-    public class ProductoAppService : IProductoAppService
+    public class ProductoClienteAppService : IProductoClienteAppService
     {
         private readonly IStorageService _storageService;
-        private readonly IProductoRepository _ProductoRepository;
-        private readonly string Tipo = "Productos";
-        public ProductoAppService(IStorageService storageService, IProductoRepository ProductoRepository)
+        private readonly IProductoClienteRepository _ProductoRepository;
+        private readonly string Tipo = "Clientes";
+        public ProductoClienteAppService(IStorageService storageService, IProductoClienteRepository ProductoRepository)
         {
             _storageService = storageService;
             _ProductoRepository = ProductoRepository;
         }
 
-        public MethodResponseDto ConsultarProductos()
+        public MethodResponseDto ConsultarProductos(long ClienteId)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                var result = _ProductoRepository.GetProductos();
+                var result = _ProductoRepository.GetProductos(ClienteId);
 
-                responseDto.Data = result.Select(Producto => new ProductoModel(Producto)).ToList();
+                responseDto.Data = result.Select(Producto => new ProductoClienteModel(Producto)).ToList();
 
                 responseDto.Estado = true;
             }
@@ -47,17 +47,18 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto ConsultarProducto(string ID)
+        public MethodResponseDto ConsultarProducto(string ProductoClienteId, string ClienteId)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
+                long ProductoCliente = long.Parse(Utilities.Crypto.DescifrarId(ProductoClienteId));
+                long Cliente = long.Parse(Utilities.Crypto.DescifrarId(ClienteId));
 
-                Producto Producto = _ProductoRepository.GetProducto(Id);
+                var Producto = _ProductoRepository.GetProducto(Cliente, ProductoCliente);
                 if (Producto != null)
                 {
-                    var prod = new ProductoModel(Producto);
+                    var prod = new ProductoClienteModel(Producto);
                     string imagen = _storageService.ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, prod.ImagenRuta, "");
                     prod.ImagenBase64 = string.IsNullOrEmpty(imagen) ? AppConstants.SinImagen : imagen;
 
@@ -79,12 +80,14 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto CrearProducto(ProductoModel model)
+        public MethodResponseDto CrearProducto(ProductoClienteModel model)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                Producto Producto = _ProductoRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado);
+                long Cliente = long.Parse(Utilities.Crypto.DescifrarId(model.ClienteId));
+
+                var Producto = _ProductoRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado);
                 if (Producto != null)
                 {
                     responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_REGISTRADO_CODIGO;
@@ -94,31 +97,33 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 List<ArchivoServiceDto> imagenes =_storageService.GuardarImagenes(model.Imagen, this.Tipo);
 
-                Producto = new Producto
+                Producto = new ProductoCliente
                 {
                     Codigo = model.Codigo,
-                    IvaCodigo = model.IVA.Split("|")[0],
-                    IvaPorcentaje = decimal.Parse(model.IVA.Split("|")[1]),
                     UnidadMedida = model.UnidadMedida,
+                    Nombre = model.Nombre,
                     Descripcion = model.Descripcion,
-                    PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitarioStr)),
-                    TipoProducto = model.TipoProducto,
-
+                    Marca = model.Marca,
+                    Modelo = model.Modelo,
+                    
                     Ip = model.Ip,
                     UsuarioCreacion = model.Usuario,
                     FechaCreacion = Utilities.Utilidades.GetHoraActual(),
                     Estado = true,
-                    ProductoImagen = imagenes.Select(c => new ProductoImagen
+
+                    ProductoClienteImagen = imagenes.Select(c => new ProductoClienteImagen
                     {
                         Nombre = c.Nombre,
                         Ruta = c.Ruta,
                         Estado = true,
-                    }).ToList()
+                    }).ToList(),
+
+                    ClienteId = Cliente
                 };
 
                 _ProductoRepository.Add(Producto);
                 responseDto.Estado = _ProductoRepository.Save() > 0;
-                model.ProductoId = Producto.ProductoId;
+                model.ProductoClienteId = Producto.ProductoClienteId;
             }
             catch (Exception ex)
             {
@@ -128,14 +133,15 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto EditarProducto(ProductoModel model)
+        public MethodResponseDto EditarProducto(ProductoClienteModel model)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
                 long Id = long.Parse(Utilities.Crypto.DescifrarId(model.Id));
+                long Cliente = long.Parse(Utilities.Crypto.DescifrarId(model.ClienteId));
 
-                Producto Producto = _ProductoRepository.GetProducto(Id);
+                var Producto = _ProductoRepository.GetProducto(Cliente, Id);
                 if (Producto == null)
                 {
                     responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_ANONIMO;
@@ -145,7 +151,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 if (Producto.Codigo != model.Codigo)
                 {
-                    var existe = _ProductoRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado && x.ProductoId != Id);
+                    var existe = _ProductoRepository.GetFirstOrDefault(x => x.Codigo == model.Codigo && x.Estado && x.ProductoClienteId != Id);
                     if (existe != null)
                     {
                         responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_REGISTRADO_CODIGO;
@@ -159,10 +165,10 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 if (model.Imagen != null && model.Imagen.Any())
                 {
                     imagenes = _storageService.GuardarImagenes(model.Imagen, this.Tipo);
-                    Producto.ProductoImagen.Clear();
+                    Producto.ProductoClienteImagen.Clear();
                     _ProductoRepository.Save();
 
-                    Producto.ProductoImagen = imagenes.Select(c => new ProductoImagen
+                    Producto.ProductoClienteImagen = imagenes.Select(c => new ProductoClienteImagen
                     {
                         Nombre = c.Nombre,
                         Ruta = c.Ruta,
@@ -171,12 +177,11 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 }
 
                 Producto.Codigo = model.Codigo;
-                Producto.IvaCodigo = model.IVA.Split("|")[0];
-                Producto.IvaPorcentaje = decimal.Parse(model.IVA.Split("|")[1]);
                 Producto.UnidadMedida = model.UnidadMedida;
+                Producto.Nombre = model.Nombre;
                 Producto.Descripcion = model.Descripcion;
-                Producto.PrecioUnitario = decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.PrecioUnitarioStr));
-                Producto.TipoProducto = model.TipoProducto;
+                Producto.Marca = model.Marca;
+                Producto.Modelo = model.Modelo;
 
                 Producto.Ip = model.Ip;
                 Producto.UsuarioModificacion = model.Usuario;
@@ -193,28 +198,20 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             return responseDto;
         }
 
-        public MethodResponseDto EliminarProducto(string ID, string Ip, long Usuario)
+        public MethodResponseDto EliminarProducto(string ProductoClienteId, string ClienteId, string Ip, long Usuario)
         {
             MethodResponseDto responseDto = new MethodResponseDto();
             try
             {
-                long Id = long.Parse(Utilities.Crypto.DescifrarId(ID));
-                Producto Producto = _ProductoRepository.GetProducto(Id);
+                long ProductoCliente = long.Parse(Utilities.Crypto.DescifrarId(ProductoClienteId));
+                long Cliente = long.Parse(Utilities.Crypto.DescifrarId(ClienteId));
+
+                var Producto = _ProductoRepository.GetProducto(Cliente, ProductoCliente);
                 if (Producto == null)
                 {
                     responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_ANONIMO;
                     responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                     return responseDto;
-                }
-
-                if (Producto.InventarioVenta.Any() || Producto.InventarioProveedor.Any())
-                {
-                    if (Producto.InventarioVenta.Sum(x => x.StockActual) > 0 || Producto.InventarioProveedor.Sum(x => x.StockActual) > 0)
-                    {
-                        responseDto.CodigoError = DomainConstants.ERROR_PRODUCTO_REGISTRADO_BODEGA;
-                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
-                        return responseDto;
-                    }
                 }
 
                 Producto.Ip = Ip;
@@ -232,6 +229,5 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
             }
             return responseDto;
         }
-
     }
 }

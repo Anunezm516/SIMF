@@ -28,10 +28,10 @@
                 <label>Producto Cliente</label>
                 <select id="producto-cliente" class="form-control select2 limiar-select-modal" style="width: 100%">
                     <option disabled selected>--Seleccionar--</option>
-                    @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
+                    @*@foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
                     {
                         <option value='@item.ProductoId' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='@item.UnidadMedida' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
-                    }
+                    }*@
                 </select>
             </div>
         </div>

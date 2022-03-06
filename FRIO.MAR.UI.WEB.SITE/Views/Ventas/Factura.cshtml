@@ -33,7 +33,7 @@
                 <div class="col-md-4">
                     <label>Cliente</label>
                     <select asp-for="Cliente.ClienteId" class="form-control select2">
-                        <option selected disabled>--SELECCIONAR--</option>
+                        <option selected disabled>--Seleccionar--</option>
                         @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Cliente cliente in ViewBag.Clientes)
                         {
                             <option value="@cliente.ClienteId" data-identificacion="@cliente.Identificacion" data-razon-social="@cliente.RazonSocial" data-nombre-comercial="@cliente.NombreComercial" data-telefono="@cliente.Telefono" data-correo="@cliente.CorreoElectronico">@cliente.Identificacion - @cliente.RazonSocial - @cliente.NombreComercial</option>
@@ -47,7 +47,7 @@
                 <div class="col-md-3">
                     <label>Sucursal</label>
                     <select asp-for="SucursalId" class="form-control select2" asp-items="ViewBag.sucursales">
-                        <option selected disabled>--SELECCIONAR--</option>
+                        <option selected disabled>--Seleccionar--</option>
                     </select>
                 </div>
             </div>
@@ -173,12 +173,6 @@
     <script>
         $(document).ready(function(){
             
-            $('#form-factura').submit(function(event) {
-                return;
-                event.preventDefault();
-                window.history.back();
-            });
-
             $(".select2").select2();
             $(".decimal").maskMoney();
 
@@ -194,12 +188,15 @@
                 $("#modal-agregar-forma-pago").modal("show");
             });
 
+            ActualizarProductosCliente($("#Cliente_ClienteId").val());
+
             $("#Cliente_ClienteId").change(function(){
                 $("#Cliente_CorreoCliente").val($("#Cliente_ClienteId option:selected").attr("data-correo"));
                 $("#Cliente_Identificacion").val($("#Cliente_ClienteId option:selected").attr("data-identificacion"));
                 $("#Cliente_RazonSocial").val($("#Cliente_ClienteId option:selected").attr("data-razon-social"));
                 $("#Cliente_NombreComercial").val($("#Cliente_ClienteId option:selected").attr("data-nombre-comercial"));
                 $("#Cliente_Telefono").val($("#Cliente_ClienteId option:selected").attr("data-telefono"));
+                ActualizarProductosCliente($("#Cliente_ClienteId").val());
             });
             
             $("#producto").change(function(){
@@ -337,6 +334,7 @@
         }
 
         function AgregarServicio(){
+            var cliente = $("#Cliente_ClienteId").val();
             var servicioId = $("#servicio").val();
             var productoClienteId = $("#producto-cliente").val();
             var iva = $("#servicio-iva").val();
@@ -372,6 +370,7 @@
                     IvaPorcentaje: iva
                 },
                 ProductoClienteId: productoClienteId,
+                Cliente: cliente,
                 Estado: $("#EstadoFactura").val()
             }, function(response){
                 if (response.estado){
@@ -503,6 +502,16 @@
         function LimpiarModal(){
             $(".limiar-input-modal").val("");
             $(".limiar-select-modal").val("").trigger('change');
+        }
+
+        function ActualizarProductosCliente(cliente){
+            $.post('@Url.Action("ActualizarProductosCliente", "Ventas")', { Cliente: cliente  })
+            .done(function(response){
+                addOptionsProductosCliente("producto-cliente", response.data);
+            })
+            .fail(function(error){
+                MsgAjaxError(error);
+            });
         }
 
     </script>

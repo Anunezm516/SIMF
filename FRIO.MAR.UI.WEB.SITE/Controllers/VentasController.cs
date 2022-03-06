@@ -22,18 +22,21 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.Sucursales)]
     public class VentasController : BaseController
     {
+        private readonly IProductoClienteRepository _productoClienteRepository;
         private readonly IProductoRepository _productoRepository;
         private readonly ISucursalRepository _sucursalRepository;
         private readonly IClienteRepository _clienteRepository;
         private readonly IVentasDomainService _ventasDomainService;
 
         public VentasController(
+            IProductoClienteRepository productoClienteRepository,
             IProductoRepository productoRepository,
             ISucursalRepository sucursalRepository,
             IClienteRepository clienteRepository,
             IVentasDomainService ventasDomainService, 
             ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _productoClienteRepository = productoClienteRepository;
             _productoRepository = productoRepository;
             _sucursalRepository = sucursalRepository;
             _clienteRepository = clienteRepository;
@@ -162,15 +165,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public JsonResult AgregarServicio(DetalleFacturaModel Servicio, long ProductoClienteId, EstadoFactura Estado)
+        public JsonResult AgregarServicio(DetalleFacturaModel Servicio, long ProductoClienteId, long Cliente, EstadoFactura Estado)
         {
             try
             {
                 List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
-                var producto = _productoRepository.GetProducto(ProductoClienteId);
+                var producto = _productoClienteRepository.GetProducto(Cliente, ProductoClienteId);
                 if (producto != null)
                 {
-                    Servicio.Descripcion += $" de {producto.Codigo} - {producto.Descripcion}";
+                    Servicio.Descripcion += $" de {producto.Codigo} - {producto.Nombre}";
                 }
 
                 detalles.Add(CalcularLinea(Servicio));
@@ -382,20 +385,24 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
 
+        [HttpPost]
+        public JsonResult ActualizarProductosCliente(long Cliente)
+        {
+            try
+            {
+                var result = _productoClienteRepository.GetProductos(Cliente);
+
+                return Json(new ResponseToViewDto { Estado = result != null, Data = result });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = true, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
         #region metodos privados
         private void CargarDatos()
         {
-            //List<SelectListItem> items = new List<SelectListItem>();
-            //foreach (var item in _clienteRepository.GetClientes())
-            //{
-            //    items.Add(new SelectListItem
-            //    {
-            //        Text = item.Identificacion + " - " + item.RazonSocial + " - " + item.NombreComercial,
-            //        Value = item.ClienteId.ToString(),
-            //    });
-            //}
-
-            //ViewData["clientes"] = new SelectList(items, "Value", "Text");
             ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
 
             ViewBag.Clientes = _clienteRepository.GetClientes();

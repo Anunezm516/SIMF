@@ -10,6 +10,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
         public const string MENSAJE_CAMPO_REQUIRED = "Este campo es requerido";
         public const string MENSAJE_CAMPO_MAX_LENGTH = "Ha excedido la capacidad máxima de caracteres";
+        public const string MENSAJE_CAMPO_EMAIL_ADDRESS = "El correo electrónico ingresado no es correcto";
 
         public const string ERROR_GENERAL = "E999";
         public const string ENCRIPTA_KEY = "-L4gRa(3*.!,";

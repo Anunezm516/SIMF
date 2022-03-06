@@ -186,7 +186,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 Bodega.Ip = Ip;
                 Bodega.UsuarioEliminacion = Usuario;
-                Bodega.FechaCreacion = Utilities.Utilidades.GetHoraActual();
+                Bodega.FechaEliminacion = Utilities.Utilidades.GetHoraActual();
                 Bodega.Estado = false;
 
                 _bodegaRepository.Update(Bodega);

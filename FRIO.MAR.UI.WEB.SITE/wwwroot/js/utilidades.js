@@ -174,3 +174,62 @@ function ConfirmacionEditar(urlAction, urlRedirect, data) {
 function isEmpty(val) {
     return (val === undefined || val === null || val.length <= 0 || val.length === "") ? true : false;
 }
+
+// Rutina para agregar opciones a un <select>
+function addOptionsProductos(domElement, result) {
+    console.log(result);
+    var select = document.getElementById(domElement);
+    LimpiarSelect(domElement);
+    result.forEach(producto => {
+        var option = document.createElement("option");
+        option.value = producto.productoId;
+        option.text = producto.codigo + " - " + producto.descripcion;
+        option.setAttribute("data-stock", producto.stock);
+        select.add(option);
+    });
+}
+
+function addOptionsSucursales(domElement, result) {
+    console.log(result);
+    var select = document.getElementById(domElement);
+    LimpiarSelect(domElement);
+    result.forEach(sucursal => {
+        var option = document.createElement("option");
+        option.value = sucursal.sucursalId;
+        option.text = sucursal.nombre;
+        select.add(option);
+    });
+}
+
+function addOptionsBodegas(domElement, result) {
+    var select = document.getElementById(domElement);
+    LimpiarSelect(domElement);
+    result.forEach(bodega => {
+        var option = document.createElement("option");
+        option.value = bodega.bodegaId;
+        option.text = bodega.codigo + " - " + bodega.nombre;
+        select.add(option);
+    });
+}
+
+function addOptionsProductosCliente(domElement, result) {
+    console.log(result);
+    var select = document.getElementById(domElement);
+    LimpiarSelect(domElement);
+    result.forEach(producto => {
+        var option = document.createElement("option");
+        option.value = producto.productoClienteId;
+        option.text = producto.codigo + " - " + producto.nombre;
+        //option.setAttribute("data-stock", producto.stock);
+        select.add(option);
+    });
+}
+
+function LimpiarSelect(domElement) {
+    $('#' + domElement).empty();
+    var select = document.getElementById(domElement);
+    var option = document.createElement("option");
+    option.text = "--seleccionar--";
+    option.value = "";
+    select.add(option);
+}
