@@ -7,6 +7,7 @@ using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Utilities;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -138,5 +139,31 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         {
             return _context.UnidadMedida.Where(x => x.Estado == true).ToList();
         }
+
+        public string GenerarCodigoSeguimientoProducto(long ProductoClienteId)
+        {
+            CodigoSeguimiento codigoSeguimiento = new CodigoSeguimiento
+            {
+                Codigo = "",
+                FechaRegistro = Utilidades.GetHoraActual(),
+                ProductoClienteId = ProductoClienteId
+            };
+
+            string codigo = "";
+            _context.CodigoSeguimiento.Add(codigoSeguimiento);
+            if (_context.SaveChanges() > 0)
+            {
+                codigo = $"{codigoSeguimiento.FechaRegistro.ToString("yyyyMMdd")}-{codigoSeguimiento.CodigoSeguimientoId}";
+                codigoSeguimiento.Codigo = codigo;
+                _context.SaveChanges();
+            }
+
+            return codigo;
+        }
+
+        //public bool ActualizarCodigoSeguimiento()
+        //{
+
+        //}
     }
 }

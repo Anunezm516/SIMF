@@ -22,6 +22,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.Sucursales)]
     public class VentasController : BaseController
     {
+        private readonly IUtilidadRepository _utilidadRepository;
         private readonly IProductoClienteRepository _productoClienteRepository;
         private readonly IProductoRepository _productoRepository;
         private readonly ISucursalRepository _sucursalRepository;
@@ -29,6 +30,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private readonly IVentasDomainService _ventasDomainService;
 
         public VentasController(
+            IUtilidadRepository utilidadRepository,
             IProductoClienteRepository productoClienteRepository,
             IProductoRepository productoRepository,
             ISucursalRepository sucursalRepository,
@@ -36,6 +38,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             IVentasDomainService ventasDomainService, 
             ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _utilidadRepository = utilidadRepository;
             _productoClienteRepository = productoClienteRepository;
             _productoRepository = productoRepository;
             _sucursalRepository = sucursalRepository;
@@ -174,6 +177,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 if (producto != null)
                 {
                     Servicio.Descripcion += $" de {producto.Codigo} - {producto.Nombre}";
+                    Servicio.CodigoSeguimiento = _utilidadRepository.GenerarCodigoSeguimientoProducto(producto.ProductoClienteId);
                 }
 
                 detalles.Add(CalcularLinea(Servicio));

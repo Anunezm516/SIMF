@@ -13,6 +13,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
         List<Impuesto> GetImpuestos(int TipoImpuesto);
         List<TipoIdentificacion> GetTipoIdentificaciones();
         List<UnidadMedida> GetUnidadesMedida();
+        string GenerarCodigoSeguimientoProducto(long ProductoClienteId);
     }
 }
     
