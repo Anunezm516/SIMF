@@ -1,0 +1,54 @@
+﻿@model List<FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.ComprasDomainServiceResultDto>
+
+<table class="datatable-borrador table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Acción</th>
+            <th>Fecha</th>
+            <th>Identificación</th>
+            <th>Adquiriente</th>
+            <th>Valor Total</th>
+            @*<th>Estado</th>*@
+        </tr>
+    </thead>
+    <thebody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-center">
+                    <a asp-action="Factura" asp-route-id="@item.Id" asp-route-tipo="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                    <button type="button" class="btn btn-danger btn-eliminar" value="@item.Id"><i class="fa fa-trash"></i></button>
+                </td>
+                <td>@item.Fecha</td>
+                <td>@item.Identificacion</td>
+                <td>@item.Adquiriente</td>
+                <td>@item.ValorTotal</td>
+                @*<td>@item.Estado</td>*@
+
+            </tr>
+        }
+    </thebody>
+</table>
+
+
+<script>
+        $(document).ready(function () {
+            var table = $(".datatable-borrador").DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                "pageLength": 6,
+                "columnDefs": [
+                    {
+
+                    }
+                ]
+            });
+
+            $(".btn-eliminar").click(function () {
+                var id = $(this).val();
+                console.log(id)
+                ConfirmacionEliminar("@Url.Action("EliminarFactura", "Ventas")", '@Url.Action("Index", "Ventas")', { Id: id } );
+            });
+        });
+    </script>

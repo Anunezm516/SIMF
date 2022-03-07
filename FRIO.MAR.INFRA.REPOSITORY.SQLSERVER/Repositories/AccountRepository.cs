@@ -33,7 +33,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                 var rol = _context.UsuarioRol.Include(x => x.IdRolNavigation).FirstOrDefault(x => x.Estado == true && x.IdUsuario == IdUsuario);
                 var permisos = _context.RolPermiso.Include(x => x.IdPermisoNavigation).Where(x => x.Estado == true && x.IdRol == rol.IdRol);
 
-                return permisos.Select(c => new VentanaLoginQueryDto
+                return permisos.Where(x => x.IdPermisoNavigation.Estado == 1).Select(c => new VentanaLoginQueryDto
                 {
                     Codigo = c.IdPermisoNavigation.Codigo ?? 0,
                     Icono = c.IdPermisoNavigation.Icono ?? "",

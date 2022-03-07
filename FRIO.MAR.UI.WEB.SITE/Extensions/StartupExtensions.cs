@@ -45,6 +45,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IProductoClienteRepository, ProductoClienteRepository>();
             services.AddScoped<IInventarioRepository, InventarioRepository>();
             services.AddScoped<IVentasRepository, VentasRepository>();
+            services.AddScoped<IComprasRepository, ComprasRepository>();
 
         }
 
@@ -71,6 +72,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IProductoAppService, ProductoAppService>();
             services.AddScoped<IInventarioDomainService, InventarioDomainService>();
             services.AddScoped<IVentasDomainService, VentasDomainService>();
+            services.AddScoped<IComprasDomainService, ComprasDomainService>();
             services.AddScoped<IInitialData, InitialData>();
             services.AddScoped<IReporteQueryService, ReporteQueryService>();
 

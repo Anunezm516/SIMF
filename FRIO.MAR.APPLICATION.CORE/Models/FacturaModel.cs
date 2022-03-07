@@ -48,6 +48,30 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             EstadoFactura = factura.Estado;
         }
 
+
+        public FacturaModel(CFactura factura)
+        {
+            Id = Crypto.CifrarId(factura.FacturaId);
+            Fecha = factura.FechaEmision.HasValue ? factura.FechaEmision.ToString() : "";
+            FechaEmision = factura.FechaEmision.HasValue ? factura.FechaEmision.Value : Utilidades.GetHoraActual();
+            Cliente = new ClienteFacturaModel
+            {
+                ClienteId = factura.ProveedorId,
+                CorreoCliente = factura.CorreoElectronico,
+                Identificacion = factura.Identificacion,
+                NombreComercial = factura.NombreComercial,
+                RazonSocial = factura.RazonSocial,
+                Telefono = factura.Telefono
+            };
+
+            SucursalId = factura.SucursalId;
+            Detalle = factura.FacturaDetalle.Select(c => new DetalleFacturaModel(c)).ToList();
+            FormaPago = factura.FacturaFormaPago.Select(c => new FormaPagoFacturaModel(c)).ToList();
+            Totales = new TotalesFacturaModel(Detalle, FormaPago);
+            EstadoFactura = factura.Estado;
+        }
+
+
         public string Ip { get; set; }
         public long Usuario { get; set; }
 
@@ -122,6 +146,34 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             Total = Utilities.Utilidades.DoubleToString_FrontCO(detalle.Total, 2);
             TotalDec = detalle.Total;
         }
+
+        public DetalleFacturaModel(CFacturaDetalle detalle)
+        {
+            Id = Guid.NewGuid().ToString();
+            ProductoId = detalle.ProductoId;
+
+            Codigo = detalle.Codigo;
+            CodigoSeguimiento = detalle.CodigoSeguimiento;
+            Descripcion = detalle.Descripcion;
+
+            PrecioUnitario = Utilities.Utilidades.DoubleToString_FrontCO(detalle.PrecioUnitario, 2);
+            PrecioUnitarioDec = detalle.PrecioUnitario;
+
+            Cantidad = Utilities.Utilidades.DoubleToString_FrontCO(detalle.Cantidad, 2);
+            CantidadDec = detalle.Cantidad;
+
+            IvaValor = Utilities.Utilidades.DoubleToString_FrontCO(detalle.IvaValor, 2);
+            IvaValorDec = detalle.IvaValor;
+
+            IvaPorcentaje = Utilities.Utilidades.DoubleToString_FrontCO(detalle.IvaPorcentaje, 2);
+            IvaPorcentajeDec = detalle.IvaPorcentaje;
+
+            SubTotal = Utilities.Utilidades.DoubleToString_FrontCO(detalle.Subtotal, 2);
+            SubTotalDec = detalle.Subtotal;
+
+            Total = Utilities.Utilidades.DoubleToString_FrontCO(detalle.Total, 2);
+            TotalDec = detalle.Total;
+        }
     }
 
     public class FormaPagoFacturaModel
@@ -140,6 +192,17 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         }
 
         public FormaPagoFacturaModel(FacturaFormaPago facturaFormaPago)
+        {
+            Id = Guid.NewGuid().ToString();
+            FormaPagoId = facturaFormaPago.FormaPagoId;
+            FormaPagoCodigo = facturaFormaPago.CodigoFormaPago;
+            FormaPagoDescripcion = facturaFormaPago.DescripcionFormaPago;
+            Valor = Utilidades.DoubleToString_FrontCO(facturaFormaPago.Valor, 2);
+            ValorDec = facturaFormaPago.Valor;
+            Observacion = facturaFormaPago.Observacion;
+        }
+        
+        public FormaPagoFacturaModel(CFacturaFormaPago facturaFormaPago)
         {
             Id = Guid.NewGuid().ToString();
             FormaPagoId = facturaFormaPago.FormaPagoId;

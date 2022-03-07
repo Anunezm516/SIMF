@@ -9,6 +9,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices
 {
     public interface IReporteQueryService
     {
-        List<VentasDomainServiceResultDto> GetFacturas(EstadoFactura estadoFactura, DateTime fechaInicio, DateTime fechaFin);
+        List<ComprasDomainServiceResultDto> GetFacturasCompras(long ProveedorId, DateTime fechaInicio, DateTime fechaFin);
+        List<VentasDomainServiceResultDto> GetFacturasVentas(EstadoFactura estadoFactura, DateTime fechaInicio, DateTime fechaFin);
     }
 }

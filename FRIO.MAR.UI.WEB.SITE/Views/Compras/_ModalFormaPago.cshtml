@@ -1,0 +1,41 @@
+﻿
+<!-- Modal -->
+<div class="modal fade" id="modal-agregar-forma-pago" aria-labelledby="agregarFormaPagoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="agregarFormaPagoModalLabel">Agregar Forma Pago</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Formas de Pago: <span class="text-danger">*</span></label>
+                <select id="forma-pago" class="form-control select2 limiar-select-modal" style="width: 100%">
+                    <option disabled selected>--Seleccionar--</option>
+                    <option value="01" data-descripcion="Efectivo">Efectivo</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label>Valor: <span class="text-danger">*</span></label>
+                <input id="forma-pago-valor" class="form-control decimal limiar-input-modal" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <label>Observación: </label>
+                <textarea id="forma-pago-observacion" class="form-control limiar-input-modal" ></textarea>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-12 d-grid">
+                <button  type="button"  id="btn-agrega-forma-pago" class='btn btn-success btn-block' onclick='AgregarFormaPago()'>
+                    <i class='fa fa-plus'></i> Agregar Forma Pago
+                </button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

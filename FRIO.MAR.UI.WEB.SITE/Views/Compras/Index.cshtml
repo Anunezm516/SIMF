@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Compras";
+    ViewBag.pTitle = "Compras";
+    ViewBag.pageTitle = "Compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class = "card">
+    <div class = "card-body">
+        <h5>Borrador</h5>
+        <br />
+        <a asp-action="Factura" asp-route-tipo="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Borrador"  class="btn btn-success">Nueva Factura</a>
+        <div id="div-facturas-borrador" class = "">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $.get("@Url.Action("ListarFacturasBorrador", "Compras")", function(response){
+                if (!response.estado){
+                    $("#div-facturas-borrador").empty();
+                    $("#div-facturas-borrador").html(response);
+                }else{
+                    MensajeErrorSwal(response.mensaje);
+                }
+            }).fail(function(error) {
+                MsgAjaxError(error);
+            });
+        });
+    </script>
+    @Html.Raw(TempData["msg"])
+}

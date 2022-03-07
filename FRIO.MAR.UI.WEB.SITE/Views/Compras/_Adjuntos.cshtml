@@ -1,0 +1,81 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <h6 class="text-center">Adjuntos</h6>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th class="text-center">Documento</th>
+                </tr>
+            </thead>
+            <tbody id="TblDetalleAdjunto">
+                                
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div class="align-center text-center" style="width: 80%; height: 50%">
+            <form class="dropzone" enctype="multipart/form-data" action = "Ventas/">
+                <div class="fallback">
+                    <input name="files" type="file" multiple="multiple" value="">
+                </div>
+                <div class="dz-message needsclick">
+                    <div class="">
+                        <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                    </div>
+                    <h4>Agregar archivos adjuntos para enviar al destinatario.</h4>
+                </div>
+            </form>
+            @*<form action="/file-upload"
+              class="dropzone"
+              id="my-awesome-dropzone">
+              <input type="file" name="file" />
+          </form>*@
+        </div>
+    </div>
+</div>
+
+ <script type="text/javascript">
+
+        Dropzone.options.dropzone =
+            {
+                maxFilesize: 12,
+                renameFile: function(file) {
+                    var dt = new Date();
+                    var time = dt.getTime();
+                    return time+file.name;
+                },
+                acceptedFiles: ".jpeg,.jpg,.png,.gif",
+                addRemoveLinks: true,
+                timeout: 50000,
+                removedfile: function(file)
+                {
+                    var name = file.upload.filename;
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        },
+                        type: 'POST',
+                        url: '{{ url("delete") }}',
+                        data: {filename: name},
+                        success: function (data){
+                            console.log("File has been successfully removed!!");
+                        },
+                        error: function(e) {
+                            console.log(e);
+                        }});
+                    var fileRef;
+                    return (fileRef = file.previewElement) != null ?
+                        fileRef.parentNode.removeChild(file.previewElement) : void 0;
+                },
+
+                success: function(file, response)
+                {
+                    console.log(response);
+                },
+                error: function(file, response)
+                {
+                    return false;
+                }
+            };
+    </script>

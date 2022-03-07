@@ -11,6 +11,9 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
     public partial class SIFMContext
     {
         public virtual DbSet<Proveedor> Proveedores { get; set; }
+        public virtual DbSet<CFactura> CFactura { get; set; }
+        public virtual DbSet<CFacturaDetalle> CFacturaDetalle { get; set; }
+        public virtual DbSet<CFacturaFormaPago> CFacturaFormaPago { get; set; }
 
 
         partial void OnModelCreatingPartialCompra(ModelBuilder modelBuilder) 
