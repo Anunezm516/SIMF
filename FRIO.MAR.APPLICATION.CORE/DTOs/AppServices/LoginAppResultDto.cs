@@ -22,6 +22,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
         public long Rol { get; set; }
         public string TimeZoneId { get; set; }
         public int CantidadNotificaciones { get; set; }
+        public string Foto { get; set; }
 
     }
 }

@@ -117,7 +117,7 @@ namespace FRIO.MAR.INFRA.SERVICE.STORAGE.Services
             throw new NotImplementedException();
         }
 
-        public List<ArchivoServiceDto> GuardarImagenes(List<IFormFile> imagenes, string Tipo)
+        public List<ArchivoServiceDto> GuardarImagenes(List<IFormFile> imagenes, string Tipo, string NombreArchivo = "")
         {
             string RutaImagen = "";
             string mensaje = "";
@@ -128,8 +128,8 @@ namespace FRIO.MAR.INFRA.SERVICE.STORAGE.Services
             {
                 using MemoryStream ms = new MemoryStream();
                 item.CopyTo(ms);
-
-                RutaImagen = Path.Combine(path, Guid.NewGuid().ToString() + Path.GetExtension(item.FileName));
+                NombreArchivo = string.IsNullOrEmpty(NombreArchivo) ? Guid.NewGuid().ToString() : NombreArchivo;
+                RutaImagen = Path.Combine(path, NombreArchivo + Path.GetExtension(item.FileName));
 
                 if (GlobalSettings.TipoAlmacenamiento == "1")
                 {

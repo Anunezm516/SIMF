@@ -2,6 +2,7 @@
 using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.APPLICATION.CORE.Parameters;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using FRIO.MAR.UI.WEB.SITE.Constants;
@@ -23,10 +24,12 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
     public class AccountController : BaseController
     {
+        private readonly IStorageService _storageService;
         private readonly IAccountAppService _accountAppService;
 
-        public AccountController(IAccountAppService accountAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
+        public AccountController(IStorageService storageService, IAccountAppService accountAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _storageService = storageService;
             _accountAppService = accountAppService;
         }
 
@@ -84,6 +87,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                         LoginAppResultDto loginAppResult = resultLogin.Data;
 
+                        string imagen = _storageService.ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, loginAppResult.Foto ?? "", "");
+
+                        HttpContext.Session.SetString("FotoBase64", string.IsNullOrEmpty(imagen) ? AppConstants.SinImagen : imagen);
                         HttpContext.Session.SetString("Menu", JsonConvert.SerializeObject(loginAppResult.Menu));
                         HttpContext.Session.SetInt32("CantidadNotificaciones", loginAppResult.CantidadNotificaciones);
 

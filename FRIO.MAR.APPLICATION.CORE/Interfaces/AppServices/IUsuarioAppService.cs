@@ -1,6 +1,7 @@
 ﻿
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Models;
 
 namespace FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices
 {
@@ -11,5 +12,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices
         MethodResponseDto ConsultarUsuarios();
         MethodResponseDto ObtenerUsuario(long idUsuario);
         (bool, string) EliminarUsuario(string IdCifrado, long IdUsuario, string Ip);
+        MethodResponseDto ConsultarPerfil(long Id);
+        MethodResponseDto ActualizarPerfil(PerfilModel model, long IdUsuarioCreacion, string Ip);
     }
 }

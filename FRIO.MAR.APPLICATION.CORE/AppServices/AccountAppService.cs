@@ -143,6 +143,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     Menu = GenerarVentanaHabilitadas(resultVentana, null),
                     VentanasActivasConcat = GenerarVentanaHabilitadasConcat(resultVentana),
                     Rol = roles?.FirstOrDefault()?.IdRol ?? 0,
+                    Foto = usuario.Foto,
                     //TimeZoneId
                 };
 

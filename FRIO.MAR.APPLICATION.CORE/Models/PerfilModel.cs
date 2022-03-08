@@ -1,20 +1,16 @@
-﻿
-using FRIO.MAR.APPLICATION.CORE.Constants;
-using FRIO.MAR.APPLICATION.CORE.Contants;
+﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Entities;
-using FRIO.MAR.APPLICATION.CORE.Utilities;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 
-namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
+namespace FRIO.MAR.APPLICATION.CORE.Models
 {
-    public class UsuariosAppResultDto
+    public class PerfilModel
     {
-        public string IdUsuario { get; set; }
-
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string Usuario { get; set; }
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
@@ -26,20 +22,17 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string CorreoElectronico { get; set; }
         public string Telefono { get; set; }
-
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
-        public long IdRol { get; set; }
+        public List<IFormFile> Imagen { get; set; }
+        public string ImagenBase64 { get; set; }
+        public string ImagenRuta { get; set; }
         public string NombreRol { get; set; }
 
-        
-        public UsuariosAppResultDto()
+        public PerfilModel()
         {
 
         }
 
-
-        
-        public UsuariosAppResultDto(Usuario usuario, List<UsuarioRol> usuarioRol)
+        public PerfilModel(Usuario usuario, List<UsuarioRol> usuarioRol)
         {
             Rol rol = null;
 
@@ -48,18 +41,14 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
                 rol = usuarioRol.FirstOrDefault().IdRolNavigation;
             }
 
-            IdRol = rol?.IdRol ?? 0;
             NombreRol = rol?.Nombre ?? "";
-
-            IdUsuario = Crypto.CifrarId(usuario.IdUsuario);
-            Nombre = usuario.Nombre;
             Usuario = usuario.Username;
-            CorreoElectronico = usuario.CorreoElectronico;
+            Nombre = usuario.Nombre;
             Apellido = usuario.Apellido;
+            CorreoElectronico = usuario.CorreoElectronico;
             Telefono = usuario.Telefono;
-            
-            //ImagenBase64 = AppConstants.SinImagen;
+            ImagenRuta = usuario.Foto;
         }
-    
+
     }
 }

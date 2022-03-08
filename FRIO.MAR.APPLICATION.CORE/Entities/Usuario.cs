@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -33,6 +34,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public int? Estado { get; set; }
         public string Password { get; set; }
 
+        [Column(TypeName = "varchar(max)")]
+        public string Foto { get; set; }
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
     }
 }

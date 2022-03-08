@@ -1,7 +1,8 @@
 ﻿
 @using Microsoft.AspNetCore.Http
-@{ 
+@{
     int CantidadNotificaciones = Context.Session.GetInt32("CantidadNotificaciones") ?? 0;
+    string FotoBase64 = Context.Session.GetString("FotoBase64");
 }
 
 <header id="page-topbar">
@@ -50,7 +51,7 @@
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="~/assets/images/users/avatar-1.jpg"
+                    <img class="rounded-circle header-profile-user" src="data:image/png;base64, @FotoBase64" @* src="~/assets/images/users/avatar-1.jpg"*@
                          alt="Header Avatar">
                     <span class="d-none d-xl-inline-block ms-1" key="t-henry">@User.Identity.Name</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>

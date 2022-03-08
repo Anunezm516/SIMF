@@ -15,7 +15,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Services
         bool ValidarRutaArchivo(string RutaArchivo, ref string mensaje, string containerName = null);
         MemoryStream ObtenerArchivo(string RutaArchivo, ref string mensaje, string containerName = null);
         bool GenerarDirectorio(string RutaDirectorio, ref string mensaje, string containerName = null);
-        List<ArchivoServiceDto> GuardarImagenes(List<IFormFile> imagenes, string Tipo);
+        List<ArchivoServiceDto> GuardarImagenes(List<IFormFile> imagenes, string Tipo, string NombreArchivo = "");
         string ObtenerImagenBase64(string TipoAlmacenamiento, string Imagen, string FileName);
     }
 }
