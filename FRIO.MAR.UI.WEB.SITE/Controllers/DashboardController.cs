@@ -1,5 +1,7 @@
-﻿using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
+﻿using FRIO.MAR.APPLICATION.CORE.Contants;
+using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using GS.TOOLS;
 using Microsoft.AspNetCore.Authorization;
@@ -16,13 +18,16 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     [Filters.MenuFilter(Constants.VentanasSoporte.Dashboard)]
     public class DashboardController : BaseController
     {
+        private readonly IStorageService _storageService;
         private readonly INotificacionAppService _notificacionAppService;
         private readonly IAccountAppService _accountAppService;
 
         public DashboardController(
+            IStorageService storageService,
             INotificacionAppService notificacionAppService,
             IAccountAppService accountAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _storageService = storageService;
             _notificacionAppService = notificacionAppService;
             _accountAppService = accountAppService;
         }
@@ -37,6 +42,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 {
                     var IdRol = menu.OrderBy(x => x.IdRol).FirstOrDefault()?.IdRol ?? 0;
                     HttpContext.Session.SetString("Menu", JsonConvert.SerializeObject(menu));
+
+                    string imagen = _storageService.ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, usr.Foto ?? "", "");
+
+                    HttpContext.Session.SetString("FotoBase64", string.IsNullOrEmpty(imagen) ? AppConstants.SinImagen : imagen);
+
                     //HttpContext.Session.SetInt32("IdRol", (int)IdRol);
                     //HttpContext.Session.SetString("Roles", "");
                 }

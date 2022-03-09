@@ -9,5 +9,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
     {
         bool RegistrarAccesoUsuario(AccesoUsuario acceso);
         List<VentanaLoginQueryDto> ConsultarVentana(long IdUsuario, ref string mensaje);
+        Facturador GetFacturador();
+        bool UpdateFacturador(Facturador facturador);
     }
 }

@@ -1,0 +1,112 @@
+﻿@model FRIO.MAR.APPLICATION.CORE.Models.FacturadorModel
+
+@{
+    ViewBag.Title = "Facturador";
+    ViewBag.pTitle = "Facturador";
+    ViewBag.pageTitle = "Configuración";
+
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                 <div class="row text-center">
+                    <div class="col-12">
+                        <img id="ImagenBase64-panel" 
+                                    src="data:image/png;base64, @Model.ImagenBase64" 
+                                    class="img-fluid img-thumbnail rounded-circle" 
+                                    style="height: 250px; width: 250px"
+                                    alt="" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <form asp-action="Index" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @*<input asp-for="ImagenBase64" type="hidden" />*@
+
+                    <div class="mb-3 row">
+                        <label asp-for="RazonSocial" class="col-sm-2 col-form-label">Razón Social: <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input asp-for="RazonSocial" class="form-control decimal" />
+                             <span asp-validation-for="RazonSocial" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="Identificacion" class="col-sm-2 col-form-label">Identificación: <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Identificacion" class="form-control decimal" />
+                            <span asp-validation-for="Identificacion" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="TipoIdentificacion" class="col-sm-2 col-form-label">Tipo Identificación: <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <select asp-for="TipoIdentificacion" class=" form-control" asp-items="ViewBag.tipoIdentificacion" >
+                            </select>
+                            <span asp-validation-for="TipoIdentificacion" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="CorreoElectronico" class="col-sm-2 col-form-label">Correo Electrónico: <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input asp-for="CorreoElectronico" class="form-control decimal" />
+                            <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 row">
+                        <label asp-for="Direccion" class="col-sm-2 col-form-label">Dirección: <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Direccion" class="form-control decimal" />
+                            <span asp-validation-for="Direccion" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="Telefono" class="col-sm-2 col-form-label">Teléfono: <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Telefono" class="form-control decimal" />
+                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="Imagen" class="col-sm-2 col-form-label">Logo: <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Imagen" class="form-control decimal" onchange="loadFile(event)" accept="image/*"  />
+                           <span asp-validation-for="Imagen" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-success">Actualizar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+ <script>
+     $(document).ready(function () { });
+
+     var loadFile = function (event) {
+        //var output = document.getElementById('ImagenBase64');
+        var output = document.getElementById('ImagenBase64-panel');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+ </script>    
+}

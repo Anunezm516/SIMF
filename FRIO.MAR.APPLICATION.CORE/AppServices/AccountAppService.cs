@@ -3,10 +3,13 @@ using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices;
+using FRIO.MAR.APPLICATION.CORE.DTOs.Services;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
+using FRIO.MAR.APPLICATION.CORE.Models;
 using FRIO.MAR.APPLICATION.CORE.Utilities;
 using GS.TOOLS;
 using System;
@@ -22,15 +25,74 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
         private readonly IRolRepository _rolRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMailDomainService _envioMailService;
+        private readonly IStorageService _storageService;
         private readonly INotificacionRepository _notificacionRepository;
 
-        public AccountAppService(INotificacionRepository notificacionRepository, IMailDomainService envioMailService, IRolRepository rolRepository, IAccountRepository accountRepository, IUsuarioRepository usuarioRepository)
+        public AccountAppService(
+            IStorageService storageService,
+            INotificacionRepository notificacionRepository, 
+            IMailDomainService envioMailService, 
+            IRolRepository rolRepository, 
+            IAccountRepository accountRepository,
+            IUsuarioRepository usuarioRepository)
         {
+            _storageService = storageService;
             _notificacionRepository = notificacionRepository;
             _envioMailService = envioMailService;
             _rolRepository = rolRepository;
             _accountRepository = accountRepository;
             _usuarioRepository = usuarioRepository;
+        }
+
+        public MethodResponseDto ActualizarFacturador(FacturadorModel model, long IdUsuarioCreacion, string Ip)
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+            try
+            {
+                var facturador = _accountRepository.GetFacturador();
+                if (facturador == null)
+                {
+                    facturador = new Facturador();
+                    facturador.UsuarioCreacion = IdUsuarioCreacion;
+                    facturador.FechaCreacion = Utilidades.GetHoraActual();
+                    facturador.Estado = true;
+                }
+                else
+                {
+                    facturador.UsuarioModificacion = IdUsuarioCreacion;
+                    facturador.FechaModificacion = Utilidades.GetHoraActual();
+                }
+
+                model.ImagenRuta = facturador.Logo ?? "";
+
+                if (model.Imagen != null && model.Imagen.Any())
+                {
+                    List<ArchivoServiceDto> imagenes = _storageService.GuardarImagenes(model.Imagen, "Logo", "logo");
+                    facturador.Logo = imagenes.FirstOrDefault()?.Ruta ?? "";
+                }
+
+                string imagen = _storageService.ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, facturador.Logo ?? "", "");
+                model.ImagenBase64 = string.IsNullOrEmpty(imagen) ? AppConstants.SinImagen : imagen;
+
+                facturador.TipoIdentificacion = model.TipoIdentificacion;
+                facturador.Identificacion = model.Identificacion;
+                facturador.RazonSocial = model.RazonSocial;
+                facturador.Telefono = model.Telefono;
+                facturador.CorreoElectronico = model.CorreoElectronico;
+                facturador.Direccion = model.Direccion;
+
+                facturador.Ip = Ip;
+                
+                responseDto.Estado = _accountRepository.UpdateFacturador(facturador);
+
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
         }
 
         public MethodResponseDto CambiarPassword(long id, string ClaveActual, string ClaveNueva, string ClaveNuevaConfirma, bool EsCorreoRecuperacion)
@@ -62,6 +124,47 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 _usuarioRepository.Update(usuario);
                 responseDto.Estado = _usuarioRepository.Save() > 0;
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
+        }
+
+        public MethodResponseDto ConsultarFacturador()
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+            try
+            {
+                FacturadorModel model = new FacturadorModel();
+
+                var result = _accountRepository.GetFacturador();
+                if (result == null)
+                {
+                    model.ImagenBase64 = AppConstants.SinImagen;
+                }
+                else
+                {
+                    model = new FacturadorModel
+                    {
+                        CorreoElectronico = result.CorreoElectronico,
+                        Direccion = result.Direccion,
+                        Identificacion = result.Identificacion,
+                        RazonSocial = result.RazonSocial,
+                        Telefono = result.Telefono,
+                        TipoIdentificacion = result.TipoIdentificacion,
+                        ImagenRuta = result.Logo
+                    };
+
+                    string imagen = _storageService.ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, result.Logo ?? "", "");
+                    model.ImagenBase64 = string.IsNullOrEmpty(imagen) ? AppConstants.SinImagen : imagen;
+                }
+
+                responseDto.Data = model;
+                responseDto.Estado = true;
             }
             catch (Exception ex)
             {

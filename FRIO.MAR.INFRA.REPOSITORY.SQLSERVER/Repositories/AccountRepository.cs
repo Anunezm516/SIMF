@@ -56,5 +56,20 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                 return null;
             }
         }
+
+        public Facturador GetFacturador()
+        {
+            return _context.Facturador.FirstOrDefault(x => x.Estado);
+        }
+
+        public bool UpdateFacturador(Facturador facturador)
+        {
+            if (facturador.FacturadorId > 0)
+                _context.Facturador.Update(facturador);
+            else
+                _context.Facturador.Add(facturador);
+
+            return _context.SaveChanges() > 0;
+        }
     }
 }

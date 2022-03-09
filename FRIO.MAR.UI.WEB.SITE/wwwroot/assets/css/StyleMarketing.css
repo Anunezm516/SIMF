@@ -284,3 +284,9 @@ table.dataTable td, table.dataTable th {
 .select2-container.select2-container--default.select2-container--open {
     z-index: 5000;
 }
+
+/*.table-scrollX {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}*/

@@ -17,6 +17,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<TipoImpuesto> TipoImpuesto { get; set; }
         public virtual DbSet<TipoIdentificacion> TipoIdentificacion { get; set; }
         public virtual DbSet<UnidadMedida> UnidadMedida { get; set; }
+        public virtual DbSet<Facturador> Facturador { get; set; }
 
         partial void OnModelCreatingPartialVenta(ModelBuilder modelBuilder) 
         {
