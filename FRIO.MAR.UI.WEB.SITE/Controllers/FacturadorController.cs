@@ -8,6 +8,7 @@ using GS.TOOLS;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
@@ -31,6 +32,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones().ToList(), "Codigo", "Nombre");
+                ViewData["Sucursales"] = GenerarCodigos();
+                ViewData["PuntoEmision"] = ViewData["Sucursales"];
 
                 var result = _accountAppService.ConsultarFacturador();
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
@@ -58,6 +61,8 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 var usr = GetUserLogin();
                 ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones().ToList(), "Codigo", "Nombre");
+                ViewData["Sucursales"] = GenerarCodigos();
+                ViewData["PuntoEmision"] = ViewData["Sucursales"];
 
                 var result = _accountAppService.ActualizarFacturador(model, usr.IdUsuario, usr.IPLogin);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
@@ -76,6 +81,22 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
 
             return View(model);
+        }
+
+        private List<SelectListItem> GenerarCodigos()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            
+            for (int i = 1; i <= 999; i++)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = i.ToString().PadLeft(3, '0'),
+                    Value = i.ToString().PadLeft(3, '0'),
+                });
+            }
+
+            return items;
         }
     }
 }

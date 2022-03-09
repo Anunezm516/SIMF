@@ -80,7 +80,9 @@
                                         </button>*@
                                     </th>
 
-                                    <th colspan="7" style="color: #fff">Detalle</th>
+                                    <th colspan="7">
+                                        <h5 style="color: #fff">Detalle</h5>
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Acciones</th>
@@ -121,10 +123,14 @@
 
                                     @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
                                     {
-                                        <th colspan="2" style="color: #fff">Abonos</th>
+                                        <th colspan="2" >
+                                             <h5 style="color: #fff">Abonos</h5>
+                                        </th>
                                     }else
                                     {
-                                        <th colspan="2" style="color: #fff">Forma de Pago</th>
+                                        <th colspan="2">
+                                             <h5 style="color: #fff">Forma de Pago</h5>
+                                        </th>
                                     }
                             
                                 </tr>

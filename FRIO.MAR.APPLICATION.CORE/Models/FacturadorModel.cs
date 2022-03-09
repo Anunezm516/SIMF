@@ -35,6 +35,15 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public string Direccion { get; set; }
 
 
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        public string Sucursal { get; set; }
+
+
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        public string PuntoEmision { get; set; }
+
+
+
         public List<IFormFile> Imagen { get; set; }
         public string ImagenBase64 { get; set; }
         public string ImagenRuta { get; set; }

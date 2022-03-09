@@ -61,16 +61,28 @@
                         <table class="table table-hover table-bordered table table-hover table-bordered ">
                             <thead>
                                 <tr class="text-center bg-dark">
-                                    <th>
-                                        <button type="button"  id="btn-open-modal-producto" class="btn btn-success " title="agregar producto">
+                                    <th >
+                                        <div class="dropdown">
+                                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-plus"></i>  Agregar
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li><a id="btn-open-modal-producto" class="dropdown-item" href="#">Agregar producto</a></li>
+                                                <li><a id="btn-open-modal-servicio" class="dropdown-item" href="#">Agregar servicio</a></li>
+                                            </ul>
+
+                                        </div>
+                                        @*<button type="button"   class="btn btn-success " title="agregar producto">
                                             <i class="fa fa-plus"></i> 
                                         </button>
                                         <button type="button" id="btn-open-modal-servicio" class="btn btn-info " title="agregar servicio">
                                             <i class="fa fa-plus"></i> 
-                                        </button>
+                                        </button>*@
                                     </th>
 
-                                    <th colspan="7" style="color: #fff">Detalle</th>
+                                    <th colspan="7" >
+                                        <h5 style="color: #fff">Detalle</h5>
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Acciones</th>
@@ -111,10 +123,14 @@
 
                                     @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
                                     {
-                                        <th colspan="2" style="color: #fff">Abonos</th>
+                                        <th colspan="2" >
+                                             <h5 style="color: #fff">Abonos</h5>
+                                        </th>
                                     }else
                                     {
-                                        <th colspan="2" style="color: #fff">Forma de Pago</th>
+                                        <th colspan="2">
+                                             <h5 style="color: #fff">Forma de Pago</h5>
+                                        </th>
                                     }
                             
                                 </tr>

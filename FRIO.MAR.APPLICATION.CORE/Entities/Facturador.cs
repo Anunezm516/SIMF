@@ -32,8 +32,16 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         
         [Column(TypeName = "varchar(500)")]
         public string Direccion { get; set; }
-        
-        
+
+
+        [Column(TypeName = "varchar(5)")]
+        public string Sucursal { get; set; }
+
+
+        [Column(TypeName = "varchar(5)")]
+        public string PuntoEmision { get; set; }
+
+
         [Column(TypeName = "varchar(max)")]
         public string Logo { get; set; }
 

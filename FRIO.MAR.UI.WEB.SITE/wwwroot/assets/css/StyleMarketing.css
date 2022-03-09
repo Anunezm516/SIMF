@@ -290,3 +290,7 @@ table.dataTable td, table.dataTable th {
     overflow-x: auto;
     white-space: nowrap;
 }*/
+
+.bg-dark {
+    background-color: rgba(28, 51, 94,1) !important;
+}

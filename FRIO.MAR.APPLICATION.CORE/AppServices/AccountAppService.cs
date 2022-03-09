@@ -80,6 +80,8 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 facturador.Telefono = model.Telefono;
                 facturador.CorreoElectronico = model.CorreoElectronico;
                 facturador.Direccion = model.Direccion;
+                facturador.Sucursal = model.Sucursal;
+                facturador.PuntoEmision = model.PuntoEmision;
 
                 facturador.Ip = Ip;
                 
@@ -156,7 +158,9 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                         RazonSocial = result.RazonSocial,
                         Telefono = result.Telefono,
                         TipoIdentificacion = result.TipoIdentificacion,
-                        ImagenRuta = result.Logo
+                        ImagenRuta = result.Logo,
+                        Sucursal = result.Sucursal,
+                        PuntoEmision = result.PuntoEmision,
                     };
 
                     string imagen = _storageService.ObtenerImagenBase64(GlobalSettings.TipoAlmacenamiento, result.Logo ?? "", "");
