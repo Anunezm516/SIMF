@@ -4,10 +4,12 @@ using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using GS.TOOLS;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -15,10 +17,15 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 {
     public class ComprasDomainService : IComprasDomainService
     {
+        private readonly IStorageService _storageService;
         private readonly IComprasRepository _comprasRepository;
 
-        public ComprasDomainService(IComprasRepository comprasRepository)
+        public ComprasDomainService(
+            IStorageService storageService,
+            IComprasRepository comprasRepository
+            )
         {
+            _storageService = storageService;
             _comprasRepository = comprasRepository;
         }
 
@@ -145,6 +152,40 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     Observacion = c.Observacion,
                     Valor = c.ValorDec,
                 }).ToList();
+
+                if (factura.FacturaAdjunto != null && factura.FacturaAdjunto.Any())
+                {
+                    factura.FacturaAdjunto.Clear();
+                }
+                else
+                {
+                    factura.FacturaAdjunto = new List<CFacturaAdjunto>();
+                }
+
+                if (model.Adjunto != null && model.Adjunto.Any())
+                {
+                    model.Adjunto.ForEach(c =>
+                    {
+                        string ruta = Path.Combine("wwwroot", "Compras", "Factura", c.Identificador + "-" + c.Nombre);
+                        string mensaje = "";
+                        if (c.Adjunto != null)
+                        {
+                            _storageService.GuardarArchivo(new System.IO.MemoryStream(c.Adjunto ?? new byte[] { }), ruta, ref mensaje);
+                        }
+                        else
+                        {
+                            ruta = c.Ruta;
+                        }
+
+                        factura.FacturaAdjunto.Add(new CFacturaAdjunto
+                        {
+                            Estado = true,
+                            Nombre = c.Nombre,
+                            Ruta = ruta,
+                            ImagenBase64 = c.Identificador
+                        });
+                    });
+                }
 
                 factura.Ip = model.Ip;
                 factura.IdUsuario = model.Usuario;

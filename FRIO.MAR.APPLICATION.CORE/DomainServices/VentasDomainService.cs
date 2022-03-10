@@ -4,10 +4,12 @@ using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.APPLICATION.CORE.Models;
 using GS.TOOLS;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -15,13 +17,16 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 {
     public class VentasDomainService : IVentasDomainService
     {
+        private readonly IStorageService _storageService;
         private readonly IClienteRepository _clienteRepository;
         private readonly IVentasRepository _ventasRepository;
 
         public VentasDomainService(
+            IStorageService storageService,
             IClienteRepository clienteRepository,
             IVentasRepository ventasRepository)
         {
+            _storageService = storageService;
             _clienteRepository = clienteRepository;
             _ventasRepository = ventasRepository;
         }
@@ -115,10 +120,43 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 {
                     factura.FacturaFormaPago.Clear();
                     _ventasRepository.Save();
-
                 }
 
-                
+                if (factura.FacturaAdjunto != null && factura.FacturaAdjunto.Any())
+                {
+                    factura.FacturaAdjunto.Clear();
+                }
+                else
+                {
+                    factura.FacturaAdjunto = new List<FacturaAdjunto>();
+                }
+
+                if (model.Adjunto != null && model.Adjunto.Any())
+                {
+                    model.Adjunto.ForEach(c =>
+                    {
+                        string ruta = Path.Combine("wwwroot", "Ventas", "Factura", c.Identificador + "-" + c.Nombre);
+                        string mensaje = "";
+                        if (c.Adjunto != null)
+                        {
+                            _storageService.GuardarArchivo(new System.IO.MemoryStream(c.Adjunto ?? new byte[] { }), ruta, ref mensaje);
+                        }
+                        else
+                        {
+                            ruta = c.Ruta;
+                        }
+
+                        factura.FacturaAdjunto.Add(new FacturaAdjunto
+                        {
+                            Estado = true,
+                            Nombre = c.Nombre,
+                            Ruta = ruta,
+                            ImagenBase64 = c.Identificador
+                        });
+                    });
+                }
+
+
                 factura.SucursalId = model.SucursalId;
 
                 factura.ClienteId = model.Cliente.ClienteId;

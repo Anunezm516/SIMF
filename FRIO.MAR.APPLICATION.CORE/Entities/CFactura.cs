@@ -47,5 +47,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
 
         public virtual ICollection<CFacturaDetalle> FacturaDetalle { get; set; }
         public virtual ICollection<CFacturaFormaPago> FacturaFormaPago { get; set; }
+        public virtual ICollection<CFacturaAdjunto> FacturaAdjunto { get; set; }
     }
 }

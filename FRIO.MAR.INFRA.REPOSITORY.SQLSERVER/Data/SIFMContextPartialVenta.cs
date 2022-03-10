@@ -14,6 +14,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public DbSet<Factura> Factura { get; set; }
         public DbSet<FacturaDetalle> FacturaDetalle { get; set; }
         public DbSet<FacturaFormaPago> FacturaFormaPago { get; set; }
+        public DbSet<FacturaAdjunto> FacturaAdjunto { get; set; }
         public DbSet<CodigoSeguimiento> CodigoSeguimiento { get; set; }
 
         public DbSet<ProductoCliente> ProductoCliente { get; set; }

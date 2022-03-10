@@ -21,6 +21,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             return _context.CFactura
                 .Include(x => x.FacturaFormaPago)
                 .Include(x => x.FacturaDetalle)
+                .Include(x => x.FacturaAdjunto)
                 .FirstOrDefault(x => x.Estado == Estado && x.FacturaId == Id);
         }
 

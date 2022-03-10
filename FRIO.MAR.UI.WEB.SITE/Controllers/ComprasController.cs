@@ -1,5 +1,6 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
+using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
@@ -58,7 +60,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(new List<DetalleFacturaModel>()));
                 HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(new List<FormaPagoFacturaModel>()));
-
+                HttpContext.Session.SetString(("Adjuntos"), JsonConvert.SerializeObject(new List<AdjuntoDto>()));
                 CargarDatos();
 
                 if (!string.IsNullOrEmpty(Id))
@@ -70,6 +72,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                         model = result.Data;
                         HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(model.Detalle));
                         HttpContext.Session.SetString("FormaPago", JsonConvert.SerializeObject(model.FormaPago));
+                        HttpContext.Session.SetString("Adjuntos", JsonConvert.SerializeObject(model.Adjunto));
                     }
                     else
                     {
@@ -290,6 +293,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                 model.Detalle = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
                 model.FormaPago = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
+                model.Adjunto = JsonConvert.DeserializeObject<List<AdjuntoDto>>(HttpContext.Session.GetString("Adjuntos") ?? "[]");
                 model.Ip = usr.IPLogin;
                 model.Usuario = usr.IdUsuario;
 
@@ -299,6 +303,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 {
                     HttpContext.Session.Remove("Detalle");
                     HttpContext.Session.Remove("FormaPago");
+                    HttpContext.Session.Remove("Adjuntos");
                     GS.TOOLS.GSUtilities.ClearMemory();
                 }
                 return Json(new ResponseToViewDto { Estado = result.Estado, Mensaje = result.Mensaje });
@@ -320,6 +325,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                 model.Detalle = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
                 model.FormaPago = JsonConvert.DeserializeObject<List<FormaPagoFacturaModel>>(HttpContext.Session.GetString("FormaPago") ?? "[]");
+                model.Adjunto = JsonConvert.DeserializeObject<List<AdjuntoDto>>(HttpContext.Session.GetString("Adjuntos") ?? "[]");
                 model.Totales = new TotalesFacturaModel(model.Detalle, model.FormaPago);
 
                 var validaciones = _comprasDomainService.ValidarFactura(model);
@@ -338,6 +344,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 {
                     HttpContext.Session.Remove("Detalle");
                     HttpContext.Session.Remove("FormaPago");
+                    HttpContext.Session.Remove("Adjuntos");
                     GS.TOOLS.GSUtilities.ClearMemory();
                 }
                 return Json(new ResponseToViewDto { Estado = result.Estado, Mensaje = result.Mensaje });
@@ -365,6 +372,68 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult AgregarAdjuntos(IEnumerable<IFormFile> file)
+        {
+            try
+            {
+                List<AdjuntoDto> listaAdjunto = JsonConvert.DeserializeObject<List<AdjuntoDto>>(HttpContext.Session.GetString("Adjuntos") ?? "[]");
+
+                decimal TotalMaxFileSize = listaAdjunto.Sum(x => x.FileSize);
+
+                foreach (var item in file)
+                {
+                    TotalMaxFileSize += item.Length;
+
+                    //if (TotalMaxFileSize <= TamanoMaximoAdjuntosByte)
+                    //{
+                    AdjuntoDto archivo = new AdjuntoDto();
+                        archivo.Identificador = Guid.NewGuid().ToString();
+                        archivo.Nombre = item.FileName;
+                        archivo.FileSize = item.Length;
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            item.CopyTo(memoryStream);
+                            archivo.Adjunto = memoryStream.ToArray();
+                        }
+
+                        if (archivo.Adjunto != null)
+                            listaAdjunto.Add(archivo);
+                    //}
+                    //else
+                    //{
+                    //    return Json(new RespuestaVistaDto { Estado = false, Mensaje = $"Ha superado el tamaño máximo total ({Utilities.DoubleToString_FrontCO((TotalMaxFileSize / 1048576), 2)}/{TamanoMaximoAdjuntosByte / 1048576} MB)" });
+                    //}
+                }
+
+                HttpContext.Session.SetString(("Adjuntos"), JsonConvert.SerializeObject(listaAdjunto));
+
+                return Json(new ResponseToViewDto { Estado = true, Data = listaAdjunto });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult EliminarAdjunto(string Tipo, string identificador)
+        {
+            try
+            {
+                List<AdjuntoDto> listaAdjunto = JsonConvert.DeserializeObject<List<AdjuntoDto>>(HttpContext.Session.GetString("Adjuntos"));
+                listaAdjunto.RemoveAll(x => x.Identificador == identificador);
+
+                HttpContext.Session.SetString(("Adjuntos"), JsonConvert.SerializeObject(listaAdjunto));
+
+                return Json(new ResponseToViewDto { Estado = true, Data = listaAdjunto });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
+        }
 
         [HttpPost]
         public JsonResult ActualizarProductosCliente(long Cliente)

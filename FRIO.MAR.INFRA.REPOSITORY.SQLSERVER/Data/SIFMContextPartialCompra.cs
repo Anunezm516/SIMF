@@ -14,6 +14,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data
         public virtual DbSet<CFactura> CFactura { get; set; }
         public virtual DbSet<CFacturaDetalle> CFacturaDetalle { get; set; }
         public virtual DbSet<CFacturaFormaPago> CFacturaFormaPago { get; set; }
+        public virtual DbSet<CFacturaAdjunto> CFacturaAdjunto { get; set; }
 
 
         partial void OnModelCreatingPartialCompra(ModelBuilder modelBuilder) 

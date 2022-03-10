@@ -11,5 +11,8 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.AppServices
         public string Archivo { get; set; }
         public string Ruta { get; set; }
         public string Identificador { get; set; }
+
+        public byte[] Adjunto { get; set; }
+        public long FileSize { get; set; }
     }
 }

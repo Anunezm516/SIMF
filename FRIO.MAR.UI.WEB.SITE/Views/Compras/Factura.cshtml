@@ -8,7 +8,8 @@
 }
 
 @section Styles {
-    <link href="~/assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" />
+    <!-- Plugins css -->
+    <link href="~/assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css" />
     <style>
         /*.btn-success {
             background-color: red !important;
@@ -75,9 +76,6 @@
                                         <button type="button"  id="btn-open-modal-producto" class="btn btn-success " title="agregar producto">
                                             <i class="fa fa-plus"></i> 
                                         </button>
-                                       @* <button type="button" id="btn-open-modal-servicio" class="btn btn-info " title="agregar servicio">
-                                            <i class="fa fa-plus"></i> 
-                                        </button>*@
                                     </th>
 
                                     <th colspan="7">
@@ -180,6 +178,7 @@
             </div>
         </div>
     </form>
+
 </div>
 
 <partial name="_ModalProducto" />
@@ -200,12 +199,11 @@
         }
 
         $(document).ready(function(){
-            console.log(Dropzone);
             $(".dropzone").dropzone({
-                url: "@Url.Action("CargarAdjunto", "Ventas")",
+                url: "@Url.Action("AgregarAdjuntos", "Compras")",
                 paramName: myParamName, // The name that will be used to transfer the file
                 maxFilesize: 2, // MB
-                acceptedFiles: ".pdf",
+                acceptedFiles: ".pdf, .doc, .docx, .png, .jpg, .xls, .xlsx, .xml",
                 method: "Post",
                 parallelUploads: 20,
                 autoProcessQueue: true,
@@ -214,29 +212,18 @@
                 addRemoveLinks: true,
                 createImageThumbnails: true,
                 success: function (file, response) {
-                    if (isEmpty(response)) {
-                        MensajeSesionFinalizada();
-                        setTimeout(function () {
-                            window.location.href = "@Url.Action("index", "Auth")";
-                        }, 3000);
+                    if (response.estado) {
+                        MensajeExitoso("Documento cargado");
+                        Dropzone.forElement(".dropzone").removeAllFiles(true);
+
+                        ActualizarTablaAdjunto(response.data);
+
                     } else {
-                        if (response.status === "success") {
-                            MensajeExitoso("Documento cargado");
-                            Dropzone.forElement(".dropzone").removeAllFiles(true);
-
-                            response.adjuntos.forEach(elemet => {
-                                Adjuntos.push(elemet);
-                            });
-
-                            ActualizarTablaAdjunto(Adjuntos);
-
-                        } else {
-                            MensajeErrorSwal("Ha existido un problema al cargar los documentos", "");
-                        }
+                        MensajeErrorSwal("Ha existido un problema al cargar los documentos", "");
                     }
                 },
                 error: function (file, response) {
-                    MensajeErrorSwal(response, "Factura Estandar");
+                    MensajeErrorSwal(response.mensaje, "");
                 }
             });
 
@@ -566,6 +553,28 @@
         function LimpiarModal(){
             $(".limiar-input-modal").val("");
             $(".limiar-select-modal").val("").trigger('change');
+        }
+
+        function ActualizarTablaAdjunto(Adjuntos) {
+            $("#TblDetalleAdjunto").empty();
+            Adjuntos.forEach(fila => {
+                var item = "";
+                item += "<tr>";
+                item += "<td class='text-center' style='width: 15px; padding: 2px 2px 2px 2px'><a title='Eliminar registro' class='btn btn-danger'  onclick='EliminarFilaTablaAdjunto(&#39;" + fila['identificador'] + "&#39;)'> <i class='fas fa-trash-alt' style='color: white'></i></a></td>";
+                item += "<td class='text-left'>" + fila['nombre'] + "</td>";
+                item += "</tr>";
+                $("#TblDetalleAdjunto").append(item);
+            });
+        }
+
+        function EliminarFilaTablaAdjunto(codigo) {
+            var url = '@Url.Action("EliminarAdjunto", "Compras")';
+            $.post(url, { identificador: codigo }, function (returnedData) {
+                if (returnedData.estado) {
+                    Adjuntos = returnedData.data;
+                    ActualizarTablaAdjunto(Adjuntos);
+                }
+            });
         }
     </script>
 

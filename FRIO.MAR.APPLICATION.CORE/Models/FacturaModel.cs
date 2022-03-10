@@ -1,4 +1,5 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Utilities;
 using System;
@@ -17,6 +18,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public long SucursalId { get; set; }
         public List<DetalleFacturaModel> Detalle { get; set; }
         public List<FormaPagoFacturaModel> FormaPago { get; set; }
+        public List<AdjuntoDto> Adjunto { get; set; }
         public TotalesFacturaModel Totales { get; set; }
         public EstadoFactura EstadoFactura { get; set; }
 
@@ -44,6 +46,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             SucursalId = factura.SucursalId;
             Detalle = factura.FacturaDetalle.Select(c => new DetalleFacturaModel(c)).ToList();
             FormaPago = factura.FacturaFormaPago.Select(c => new FormaPagoFacturaModel(c)).ToList();
+            Adjunto = factura.FacturaAdjunto.Select(c => new AdjuntoDto { Identificador = c.ImagenBase64, Nombre = c.Nombre, Ruta = c.Ruta }).ToList();
             Totales = new TotalesFacturaModel(Detalle, FormaPago);
             EstadoFactura = factura.Estado;
         }
@@ -67,6 +70,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             SucursalId = factura.SucursalId;
             Detalle = factura.FacturaDetalle.Select(c => new DetalleFacturaModel(c)).ToList();
             FormaPago = factura.FacturaFormaPago.Select(c => new FormaPagoFacturaModel(c)).ToList();
+            Adjunto = factura.FacturaAdjunto.Select(c => new AdjuntoDto { Identificador = c.ImagenBase64, Nombre = c.Nombre, Ruta = c.Ruta }).ToList();
             Totales = new TotalesFacturaModel(Detalle, FormaPago);
             EstadoFactura = factura.Estado;
         }
