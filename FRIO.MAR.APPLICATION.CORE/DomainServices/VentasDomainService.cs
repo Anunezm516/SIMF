@@ -15,10 +15,14 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 {
     public class VentasDomainService : IVentasDomainService
     {
+        private readonly IClienteRepository _clienteRepository;
         private readonly IVentasRepository _ventasRepository;
 
-        public VentasDomainService(IVentasRepository ventasRepository)
+        public VentasDomainService(
+            IClienteRepository clienteRepository,
+            IVentasRepository ventasRepository)
         {
+            _clienteRepository = clienteRepository;
             _ventasRepository = ventasRepository;
         }
 
@@ -93,6 +97,14 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     factura = new Factura();
                 }
 
+                var cliente = _clienteRepository.Get(model.Cliente.ClienteId);
+                if (cliente == null)
+                {
+                    responseDto.CodigoError = DomainConstants.ERROR_CLIENTE_ANONIMO;
+                    responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                    return responseDto;
+                }
+
                 if (factura.FacturaDetalle != null && factura.FacturaDetalle.Any())
                 {
                     factura.FacturaDetalle.Clear();
@@ -106,7 +118,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 
                 }
 
-                factura.FechaEmision = model.FechaEmision;
+                
                 factura.SucursalId = model.SucursalId;
 
                 factura.ClienteId = model.Cliente.ClienteId;
@@ -115,8 +127,12 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 factura.RazonSocial = model.Cliente.RazonSocial;
                 factura.NombreComercial = model.Cliente.NombreComercial;
                 factura.Telefono = model.Cliente.Telefono;
+                factura.Direccion = cliente.Direccion;
 
                 factura.FechaModificacion = Utilities.Utilidades.GetHoraActual();
+                factura.FechaEmision = new DateTime(model.FechaEmision.Year, model.FechaEmision.Month, model.FechaEmision.Day, factura.FechaModificacion.Hour, factura.FechaModificacion.Minute, factura.FechaModificacion.Second);
+
+
                 factura.NumeroDocumento = "";
                 factura.ValorTotal = model.Detalle.Sum(c => c.TotalDec);
 

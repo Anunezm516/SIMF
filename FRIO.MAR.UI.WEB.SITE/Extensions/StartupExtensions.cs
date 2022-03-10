@@ -23,6 +23,7 @@ using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.APPLICATION.CORE.Interfaces;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices;
 using FRIO.MAR.INFRA.SERVICE.STORAGE.Services;
+using FRIO.MAR.INFRA.SERVICE.GEMBOX.Services;
 
 namespace FRIO.MAR.UI.WEB.SITE.Extensions
 {
@@ -84,6 +85,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             GlobalSettings.TipoAlmacenamiento = Configuration["TipoAlmacenamiento"];
             services.AddScoped<IEnvioMail, EnvioMail>();
             services.AddScoped<IStorageService, DiskStorageService>();
+            services.AddScoped<IGemboxService, GemboxService>();
 
         }
 

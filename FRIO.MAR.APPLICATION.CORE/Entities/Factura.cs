@@ -19,6 +19,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "varchar(100)")]
         public string NumeroDocumento { get; set; }
 
+        [Column(TypeName = "varchar(300)")]
+        public string Direccion { get; set; }
+
         [Column(TypeName = "varchar(25)")]
         public string Identificacion { get; set; }
 

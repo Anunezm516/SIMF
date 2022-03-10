@@ -8,6 +8,15 @@
         public LogSettings LOG { get; set; }
         //public RedisSettings REDIS { get; set; }
 
+        public Reporte FormatoReporte { get; set; }
+
+        internal sealed class Reporte
+        {
+            public string RutaBase { get; set; }
+            public string NombreArchivo { get; set; }
+            public string Extension { get; set; }
+        }
+
         internal sealed class DBSettings
         {
             public string DataSource { get; set; }

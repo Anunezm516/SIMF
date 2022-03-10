@@ -20,7 +20,11 @@
             @foreach (FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.VentasDomainServiceResultDto row in Model)
             {
                 <tr>
-                    <td></td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-danger" onclick="ImprimirFactura('@row.Id')">
+                            <i class="fa fa-file"></i>
+                        </button>
+                    </td>
                     <td>@row.Fecha</td>
                     <td>@row.Identificacion</td>
                     <td>@row.Adquiriente</td>

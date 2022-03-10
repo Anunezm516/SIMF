@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="GemBox.Spreadsheet" Version="*" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\FRIO.MAR.APPLICATION.CORE\FRIO.MAR.APPLICATION.CORE.csproj" />
+	</ItemGroup>
+	
+</Project>

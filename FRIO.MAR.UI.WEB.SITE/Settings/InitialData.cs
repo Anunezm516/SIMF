@@ -39,6 +39,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Settings
             GlobalSettings.NumeroDiasReaperturaTicket = int.Parse(_utilidadRepository.GetParametro("NUMERO_DIAS_REAPERTURA_TICKET")?.Valor ?? "30");
             GlobalSettings.NumeroIntentosEnvioBloqueo = int.Parse(_utilidadRepository.GetParametro("NUMERO_INTENTOS_ENVIO_BLOQUEO")?.Valor ?? "5");
 
+            GlobalSettings.FormatoReporte_RutaBase = settings.FormatoReporte.RutaBase;
+            GlobalSettings.FormatoReporte_NombreArchivo = settings.FormatoReporte.NombreArchivo;
+            GlobalSettings.FormatoReporte_Extension = settings.FormatoReporte.Extension;
 
             #region Verificar Existencia de roles
             var roles = _utilidadRepository.GetRolesPrincipales();

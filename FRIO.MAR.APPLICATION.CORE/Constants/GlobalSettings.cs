@@ -26,5 +26,10 @@ namespace FRIO.MAR.APPLICATION.CORE.Contants
         public static string ConnectionString { get; set; }
         public static string DirectorioImagenes { get; set; }
         public static string TipoAlmacenamiento { get; set; }
+
+
+        public static string FormatoReporte_RutaBase { get; set; }
+        public static string FormatoReporte_NombreArchivo { get; set; }
+        public static string FormatoReporte_Extension { get; set; }
     }
 }

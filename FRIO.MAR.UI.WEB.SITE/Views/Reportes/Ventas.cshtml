@@ -231,6 +231,10 @@
                 });
             });
         }
+
+        function ImprimirFactura(Id){
+            window.location = '@Url.Action("ImprimirFactura", "Reportes")' + '?data=' + Id;
+        }
     </script>
 
 

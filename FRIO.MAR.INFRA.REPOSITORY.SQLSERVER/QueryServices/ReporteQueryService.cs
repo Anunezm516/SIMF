@@ -16,6 +16,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices
     {
         public List<VentasDomainServiceResultDto> GetFacturasVentas(EstadoFactura estadoFactura, DateTime fechaInicio, DateTime fechaFin)
         {
+            fechaFin = fechaFin.AddDays(1);
             List<VentasDomainServiceResultDto> facturas = new List<VentasDomainServiceResultDto>();
             using var context = new SIFMContext(GlobalSettings.ConnectionString);
 
@@ -33,6 +34,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices
 
         public List<ComprasDomainServiceResultDto> GetFacturasCompras(long ProveedorId, DateTime fechaInicio, DateTime fechaFin)
         {
+            fechaFin = fechaFin.AddDays(1);
             List<VentasDomainServiceResultDto> facturas = new List<VentasDomainServiceResultDto>();
             using var context = new SIFMContext(GlobalSettings.ConnectionString);
 
