@@ -16,6 +16,15 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         {
         }
 
+        public Factura GetFactura(long Id)
+        {
+            return _context.Factura
+                .Include(x => x.FacturaFormaPago)
+                .Include(x => x.FacturaDetalle)
+                .Include(x => x.FacturaAdjunto)
+                .FirstOrDefault(x => x.FacturaId == Id);
+        }
+        
         public Factura GetFactura(long Id, EstadoFactura Estado)
         {
             return _context.Factura

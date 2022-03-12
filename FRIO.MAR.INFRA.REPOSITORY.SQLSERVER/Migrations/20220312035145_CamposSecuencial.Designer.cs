@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220312035145_CamposSecuencial")]
+    partial class CamposSecuencial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -422,9 +424,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<DateTime?>("FechaEmision")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaEntrega")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
@@ -528,9 +527,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 
                     b.Property<decimal>("IvaValor")
                         .HasColumnType("decimal(18,6)");
-
-                    b.Property<int>("MesesGarantia")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("PrecioUnitario")
                         .HasColumnType("decimal(18,6)");

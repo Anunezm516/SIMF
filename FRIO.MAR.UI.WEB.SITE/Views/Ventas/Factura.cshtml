@@ -28,11 +28,15 @@
                 <input asp-for="Cliente.NombreComercial" type="hidden" />
                 <input asp-for="Cliente.Telefono" type="hidden" />
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label>Fecha</label>
                     <input type="date" asp-for="FechaEmision" class="form-control"/>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label>Secuencial</label>
+                    <input asp-for="Secuencial" class="form-control"/>
+                </div>
+                <div class="col-md-6">
                     <label>Cliente</label>
                     <select asp-for="Cliente.ClienteId" class="form-control select2">
                         <option selected disabled>--Seleccionar--</option>
@@ -42,8 +46,8 @@
                         }
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label>Correo</label>
+                <div class="col-md-6">
+                    <label>Correo Cliente</label>
                     <input asp-for="Cliente.CorreoCliente" class="form-control"/>
                 </div>
                 <div class="col-md-3">
@@ -52,6 +56,14 @@
                         <option selected disabled>--Seleccionar--</option>
                     </select>
                 </div>
+                    @if (Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
+                    {
+                        <div class="col-md-3">
+                            <label>Fecha de Entrega</label>
+                            <input type="date" asp-for="FechaEntrega" class="form-control"/>
+                        </div>
+                    }
+
             </div>
              </div>
          </div>
@@ -401,6 +413,7 @@
             var cantidad = $("#servicio-cantidad").val();
             var codigo = $("#servicio-codigo").val();
             var descripcion = $("#servicio-descripcion").val();
+            var garantia = $("#servicio-meses-garantia").val();
 
             if (servicioId === null || servicioId === undefined || servicioId.trim() === ""){
                 MensajeGrowl("Seleccione un servicio");
@@ -425,7 +438,8 @@
                     Descripcion: descripcion,
                     PrecioUnitario: precioUnitario,
                     Cantidad: cantidad,
-                    IvaPorcentaje: iva
+                    IvaPorcentaje: iva,
+                    MesesGarantia: garantia
                 },
                 ProductoClienteId: productoClienteId,
                 Cliente: cliente,

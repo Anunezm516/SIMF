@@ -37,6 +37,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "varchar(100)")]
         public string CorreoElectronico { get; set; }
         public DateTime? FechaEmision { get; set; }
+        public DateTime? FechaEntrega { get; set; }
         public DateTime FechaModificacion { get; set; }
 
         [Column(TypeName = "decimal(18,6)")]
@@ -51,6 +52,16 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public virtual ICollection<FacturaDetalle> FacturaDetalle { get; set; }
         public virtual ICollection<FacturaFormaPago> FacturaFormaPago { get; set; }
         public virtual ICollection<FacturaAdjunto> FacturaAdjunto { get; set; }
+
+        [Column(TypeName = "varchar(5)")]
+        public string Sucursal { get; set; }
+
+
+        [Column(TypeName = "varchar(5)")]
+        public string PuntoEmision { get; set; }
+
+
+        public long Secuencial { get; set; }
 
     }
 }

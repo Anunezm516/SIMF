@@ -9,6 +9,7 @@
         <thead class="thead-light">
             <tr>
                 <th class="text-center">Acciones</th>
+                <th class="text-center">Número Documento</th>
                 <th class="text-center">Fecha Facturación</th>
                 <th class="text-center">NIT Receptor</th>
                 <th class="text-center">Razón Social Receptor</th>
@@ -21,9 +22,10 @@
             {
                 <tr>
                     <td></td>
-                    <td>@row.Fecha</td>
-                    <td>@row.Identificacion</td>
-                    <td>@row.Adquiriente</td>
+                    <td class="text-center">@row.NumeroDocumento</td>
+                    <td class="text-center">@row.Fecha</td>
+                    <td class="text-center">@row.Identificacion</td>
+                    <td class="text-center">@row.Adquiriente</td>
                     <td class='text-center'>@row.ValorTotal</td>
                     <td class='text-center'>
                         <span class='badge bg-success' style='font-size: 12px'>@row.Estado</span>

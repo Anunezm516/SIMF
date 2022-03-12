@@ -15,7 +15,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
         public string Adquiriente { get; set; }
         public string ValorTotal { get; set; }
         public EstadoFactura Estado { get; set; }
-
+        public string NumeroDocumento { get; set; }
         public ComprasDomainServiceResultDto()
         {
 
@@ -29,7 +29,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
             Adquiriente = factura.RazonSocial;
             ValorTotal = Utilidades.DoubleToString_FrontCO(factura.ValorTotal, 2);
             Estado = factura.Estado;
-
+            NumeroDocumento = factura.NumeroDocumento;
         }
     }
 }

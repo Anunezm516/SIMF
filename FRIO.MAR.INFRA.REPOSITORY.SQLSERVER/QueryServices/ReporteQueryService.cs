@@ -21,7 +21,8 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices
             using var context = new SIFMContext(GlobalSettings.ConnectionString);
 
             return (from factura in context.Set<Factura>().AsNoTracking()
-                          where (estadoFactura == EstadoFactura.Todos || factura.Estado == estadoFactura)
+                    where factura.Estado != EstadoFactura.Eliminado && factura.Estado != EstadoFactura.Borrador
+                    where (estadoFactura == EstadoFactura.Todos || factura.Estado == estadoFactura)
                           && (factura.FechaEmision >= fechaInicio && factura.FechaEmision <= fechaFin)
                           let fac = factura
                           select new VentasDomainServiceResultDto(fac)

@@ -1,5 +1,6 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Contants;
+using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices;
@@ -73,30 +74,41 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return PartialView("_ComprasDetalle", _reporteQueryService.GetFacturasCompras(Proveedor, FechaInicio, FechaFin));
         }
 
-        [HttpGet]
-        public IActionResult ImprimirFactura(string data)
+        public IActionResult ProductosCliente()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult ImprimirFactura(string data)
         {
             try
             {
                 long Id = long.Parse(Crypto.DescifrarId(data));
                 string NombreArchivo = Guid.NewGuid().ToString() + ".pdf";
-                var factura = _ventasRepository.GetFactura(Id, EstadoFactura.Facturado);
-                if (factura == null) throw new Exception("");
+                var factura = _ventasRepository.GetFactura(Id);
+                if (factura == null)
+                {
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "Documento no encontrado" });
+                }
 
                 var facturador = _accountRepository.GetFacturador();
-                if (facturador == null) throw new Exception("");
+                if (facturador == null)
+                {
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "No existen datos del facturador" });
+                }
 
                 byte[] archivo = _gemboxService.ConstruirFactura(factura, facturador, "pdf", GlobalSettings.FormatoReporte_RutaBase, GlobalSettings.FormatoReporte_NombreArchivo);
 
-                return File(archivo, "text/xml", NombreArchivo);
+                return Json(new ResponseToViewDto { Estado = true, Data = archivo.ToArray() });
+
+                //return File(archivo, "text/xml", NombreArchivo);
             }
             catch (Exception ex)
             {
-                RegistrarLogError(this.GetCaller(), ex);
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+
             }
-
-            return RedirectToAction("Index");
-
         }
     }
 }

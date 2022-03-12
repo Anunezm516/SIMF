@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220312050433_CamposGarantia")]
+    partial class CamposGarantia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -420,9 +422,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaEmision")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("FechaEntrega")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaModificacion")

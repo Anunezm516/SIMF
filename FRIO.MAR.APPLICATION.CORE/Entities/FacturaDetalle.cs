@@ -42,6 +42,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "decimal(18,6)")]
         public decimal Total { get; set; }
 
+        public int MesesGarantia { get; set; }
         public virtual Factura Factura { get; set; }
     }
 }

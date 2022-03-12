@@ -34,7 +34,11 @@
                     <label>Fecha</label>
                     <input type="date" asp-for="FechaEmision" class="form-control"/>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
+                    <label>Número de Factura</label>
+                    <input asp-for="NumeroDocumento" class="form-control"/>
+                </div>
+                <div class="col-md-3">
                     <label>Cliente</label>
                     <select asp-for="Cliente.ClienteId" class="form-control select2">
                         <option selected disabled>--Seleccionar--</option>
@@ -55,7 +59,7 @@
                     <label>Correo</label>
                     <input asp-for="Cliente.CorreoCliente" class="form-control"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Sucursal</label>
                     <select asp-for="SucursalId" class="form-control select2" asp-items="ViewBag.sucursales">
                         <option selected disabled>--Seleccionar--</option>

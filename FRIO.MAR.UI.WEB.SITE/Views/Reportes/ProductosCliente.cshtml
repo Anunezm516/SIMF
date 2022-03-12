@@ -1,8 +1,8 @@
 ﻿
 @{
     ViewBag.Title = "Reportes";
-    ViewBag.pTitle = "Ventas";
-    ViewBag.pageTitle = "Ventas";
+    ViewBag.pTitle = "Productos Cliente";
+    ViewBag.pageTitle = "Productos Cliente";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -88,9 +88,6 @@
                 </h6>
             </div>
             <div class="modal-body">
-                <div id="alert">
-
-                </div>
                 <div id="DivPdf">
                 </div>
             </div>
@@ -227,24 +224,6 @@
             });
         }
 
-        function ImprimirFactura(Id){
-            debugger;
-
-            IniciarLoading();
-
-            $.post('@Url.Action("ImprimirFactura", "Reportes")', { data: Id }).done(function(response){
-                DetenerLoading();
-                if (response.estado){
-                    $('#DivPdf').empty();
-                    $('#DivPdf').append("<embed id='ModalPDF' src='data:application/pdf;base64," + response.data + "' type='application/pdf' width='100%' height='1000px'/>");
-                    $('#ViewPDFModal').modal('show');
-                }else{
-                    MensajeErrorSwal(response.mensaje, '');
-                }
-            }).fail(function(error){
-                MsgAjaxError(error);
-            });
-        }
 
     </script>
 

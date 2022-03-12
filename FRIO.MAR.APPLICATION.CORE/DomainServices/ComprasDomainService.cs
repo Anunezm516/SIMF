@@ -124,7 +124,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 factura.Telefono = model.Cliente.Telefono;
 
                 factura.FechaModificacion = Utilities.Utilidades.GetHoraActual();
-                factura.NumeroDocumento = "";
+                factura.NumeroDocumento = model.NumeroDocumento;
                 factura.ValorTotal = model.Detalle.Sum(c => c.TotalDec);
 
                 factura.FacturaDetalle = model.Detalle.Select(c => new CFacturaDetalle
@@ -271,6 +271,13 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     if (decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.Totales.TotalAbono)) < decimal.Parse(Utilities.Utilidades.DepuraStrConvertNum(model.Totales.Total)))
                     {
                         responseDto.CodigoError = DomainConstants.ERROR_FACTURA_MONTO_PAGAR;
+                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        return responseDto;
+                    }
+
+                    if (string.IsNullOrEmpty(model.NumeroDocumento))
+                    {
+                        responseDto.CodigoError = DomainConstants.ERROR_FACTURA_NUMERO_DOCUMENTO;
                         responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
                         return responseDto;
                     }

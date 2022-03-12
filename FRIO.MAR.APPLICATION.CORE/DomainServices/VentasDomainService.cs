@@ -17,15 +17,18 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 {
     public class VentasDomainService : IVentasDomainService
     {
+        private readonly IAccountRepository _accountRepository;
         private readonly IStorageService _storageService;
         private readonly IClienteRepository _clienteRepository;
         private readonly IVentasRepository _ventasRepository;
 
         public VentasDomainService(
+            IAccountRepository accountRepository,
             IStorageService storageService,
             IClienteRepository clienteRepository,
             IVentasRepository ventasRepository)
         {
+            _accountRepository = accountRepository;
             _storageService = storageService;
             _clienteRepository = clienteRepository;
             _ventasRepository = ventasRepository;
@@ -110,6 +113,14 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     return responseDto;
                 }
 
+                var facturador = _accountRepository.GetFacturador();
+                if (facturador == null)
+                {
+                    responseDto.CodigoError = DomainConstants.ERROR_FACTURA_ANONIMA;
+                    responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                    return responseDto;
+                }
+
                 if (factura.FacturaDetalle != null && factura.FacturaDetalle.Any())
                 {
                     factura.FacturaDetalle.Clear();
@@ -158,7 +169,6 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 
 
                 factura.SucursalId = model.SucursalId;
-
                 factura.ClienteId = model.Cliente.ClienteId;
                 factura.Identificacion = model.Cliente.Identificacion;
                 factura.CorreoElectronico = model.Cliente.CorreoCliente;
@@ -169,9 +179,13 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 
                 factura.FechaModificacion = Utilities.Utilidades.GetHoraActual();
                 factura.FechaEmision = new DateTime(model.FechaEmision.Year, model.FechaEmision.Month, model.FechaEmision.Day, factura.FechaModificacion.Hour, factura.FechaModificacion.Minute, factura.FechaModificacion.Second);
+                factura.FechaEntrega = model.FechaEntrega;
 
+                factura.PuntoEmision = facturador.PuntoEmision;
+                factura.Sucursal = facturador.Sucursal;
+                factura.Secuencial = model.Secuencial;
 
-                factura.NumeroDocumento = "";
+                factura.NumeroDocumento = $"{factura.PuntoEmision}-{factura.Sucursal}-{factura.Secuencial.ToString().PadLeft(10, '0')}";
                 factura.ValorTotal = model.Detalle.Sum(c => c.TotalDec);
 
                 factura.FacturaDetalle = model.Detalle.Select(c => new FacturaDetalle
@@ -188,6 +202,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     PrecioUnitario = c.PrecioUnitarioDec,
                     SucursalId = 0,
                     BodegaId = 0,
+                    MesesGarantia = c.MesesGarantia
                 }).ToList();
 
                 factura.FacturaFormaPago = model.FormaPago.Select(c => new FacturaFormaPago
@@ -285,6 +300,30 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     {
                         responseDto.CodigoError = DomainConstants.ERROR_FACTURA_MONTO_PAGAR;
                         responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        return responseDto;
+                    }
+
+                    if (model.Secuencial <= 0)
+                    {
+                        responseDto.CodigoError = DomainConstants.ERROR_FACTURA_SECUENCIAL;
+                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        return responseDto;
+                    }
+
+                    var facturador = _accountRepository.GetFacturador();
+                    if (facturador == null)
+                    {
+                        responseDto.CodigoError = DomainConstants.ERROR_FACTURA_ANONIMA;
+                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        return responseDto;
+                    }
+
+                    var factura = _ventasRepository.GetFirstOrDefault(x => x.Sucursal == facturador.Sucursal && x.PuntoEmision == facturador.PuntoEmision && x.Secuencial == model.Secuencial);
+                    if (factura != null)
+                    {
+                        responseDto.CodigoError = DomainConstants.ERROR_FACTURA_REGISTRADA;
+                        responseDto.Mensaje = DomainConstants.ObtenerDescripcionError(responseDto.CodigoError);
+                        responseDto.Mensaje += $" El número de documento {factura.NumeroDocumento} fue registrado en la fecha {factura.FechaEmision}";
                         return responseDto;
                     }
                 }

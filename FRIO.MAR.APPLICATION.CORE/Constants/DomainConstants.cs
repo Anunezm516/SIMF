@@ -42,6 +42,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
         public const string ERROR_FACTURA_DETALLE = "P702";
         public const string ERROR_FACTURA_FORMA_PAGO = "P703";
         public const string ERROR_FACTURA_MONTO_PAGAR = "P704";
+        public const string ERROR_FACTURA_SECUENCIAL = "P705";
+        public const string ERROR_FACTURA_NUMERO_DOCUMENTO = "P706";
+        public const string ERROR_FACTURA_REGISTRADA = "P707";
 
         public const string ERROR_ENVIAR_MAIL = "P018";
 
@@ -87,6 +90,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
             ERROR_FACTURA_DETALLE => $"{CodigoError}: La factura no contiene detalle.",
             ERROR_FACTURA_FORMA_PAGO => $"{CodigoError}: La factura no contiene forma de pago.",
             ERROR_FACTURA_MONTO_PAGAR => $"{CodigoError}: La suma de las formas de pago es menor al valor total de la factura.",
+            ERROR_FACTURA_SECUENCIAL => $"{CodigoError}: El secuencial es requerido para facturar.",
+            ERROR_FACTURA_NUMERO_DOCUMENTO => $"{CodigoError}: El número de documento es requerido para facturar.",
+            ERROR_FACTURA_REGISTRADA => $"{CodigoError}: El número de documento ya se encuentra registrado.",
         };
     }
 

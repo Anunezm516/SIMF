@@ -31,16 +31,15 @@ namespace FRIO.MAR.INFRA.SERVICE.GEMBOX.Services
                 InsertarValorCelda(ws, "{Emisor_Razon_Social}", facturador.RazonSocial, ref Row, ref Col);
                 InsertarValorCelda(ws, "{Emisor_Direccion}", facturador.Direccion, ref Row, ref Col);
                 InsertarValorCelda(ws, "{Emisor_Telefono}", facturador.Telefono, ref Row, ref Col);
-                InsertarValorCelda(ws, "{Emisor_Telefono}", facturador.Telefono, ref Row, ref Col);
-                InsertarValorCelda(ws, "{Emisor_Telefono}", facturador.Telefono, ref Row, ref Col);
-                InsertarValorCelda(ws, "R.U.C. {Emisor_Ruc}", facturador.Identificacion, ref Row, ref Col);
+
+                InsertarValorCelda(ws, "R.U.C. {Emisor_Ruc}", "R.U.C. " + facturador.Identificacion, ref Row, ref Col);
 
                 InsertarValorCelda(ws, "{Fecha_Emision}", factura.FechaEmision.HasValue ? factura.FechaEmision.Value.ToString(FormatoFechaHora) : "", ref Row, ref Col);//Fecha de emision
                 InsertarValorCelda(ws, "{Cliente_Razon_Social}", factura.RazonSocial, ref Row, ref Col);
                 InsertarValorCelda(ws, "{Cliente_Telefono}", factura.Telefono, ref Row, ref Col);
                 InsertarValorCelda(ws, "{Cliente_Direccion}", factura.Direccion, ref Row, ref Col);
                 
-                InsertarValorCelda(ws, "Serie {Sucursal}-{Punto_Emision}-{Secuencial}", "Serie 001-001-0000000001", ref Row, ref Col);
+                InsertarValorCelda(ws, "Serie {Sucursal}-{Punto_Emision}-{Secuencial}", $"Serie {factura.NumeroDocumento ?? ""}", ref Row, ref Col);
                 //InsertarValorCelda(ws, "", factura.RazonSocial, ref Row, ref Col);
                 //InsertarValorCelda(ws, "", factura.RazonSocial, ref Row, ref Col);
                 
@@ -48,60 +47,68 @@ namespace FRIO.MAR.INFRA.SERVICE.GEMBOX.Services
 
                 if (InsertarValorCelda(ws, "{Detalle_Item}", "", ref Row, ref Col))
                 {
-                    int cantidadLineas = factura.FacturaDetalle.Count;
-                    ws.Rows.InsertCopy(Row, cantidadLineas, ws.Rows[Row]);
-                    int cont = 0;
-                    foreach (var line in factura.FacturaDetalle)
+                    if (factura.FacturaDetalle != null && factura.FacturaDetalle.Any())
                     {
-                        cont++;
-                        ////Nro.
-                        //ws.Cells[Row, 0].Value = cont.ToString();
-                        //ws.Cells[Row, 0].Style.WrapText = true;
+                        int cantidadLineas = factura.FacturaDetalle?.Count ?? 0;
+                        ws.Rows.InsertCopy(Row, cantidadLineas, ws.Rows[Row]);
+                        int cont = 0;
+                        foreach (var line in factura.FacturaDetalle)
+                        {
+                            cont++;
+                            ////Nro.
+                            //ws.Cells[Row, 0].Value = cont.ToString();
+                            //ws.Cells[Row, 0].Style.WrapText = true;
 
-                        //Descripcion
-                        ws.Cells[Row, 0].Value = Utilidades.DoubleToString_FrontCO(line.Cantidad, 2);
-                        ws.Cells[Row, 0].Style.WrapText = true;
+                            //Descripcion
+                            ws.Cells[Row, 0].Value = Utilidades.DoubleToString_FrontCO(line.Cantidad, 2);
+                            ws.Cells[Row, 0].Style.WrapText = true;
 
-                        //Codigo
-                        ws.Cells[Row, 1].Value = line.Descripcion;
-                        ws.Cells[Row, 1].Style.WrapText = true;
+                            //Codigo
+                            ws.Cells[Row, 1].Value = line.Descripcion;
+                            ws.Cells[Row, 1].Style.WrapText = true;
 
-                        //U/M
-                        ws.Cells[Row, 3].Value = Utilidades.DoubleToString_FrontCO(line.PrecioUnitario, 2);
-                        ws.Cells[Row, 3].Style.WrapText = true;
+                            //U/M
+                            ws.Cells[Row, 3].Value = Utilidades.DoubleToString_FrontCO(line.PrecioUnitario, 2);
+                            ws.Cells[Row, 3].Style.WrapText = true;
 
-                        //Cantidad;
-                        ws.Cells[Row, 4].Value = Utilidades.DoubleToString_FrontCO(line.Total, 2);
-                        ws.Cells[Row, 4].Style.WrapText = true;
+                            //Cantidad;
+                            ws.Cells[Row, 4].Value = Utilidades.DoubleToString_FrontCO(line.Total, 2);
+                            ws.Cells[Row, 4].Style.WrapText = true;
 
-                        Row++;
+                            Row++;
+                        }
                     }
                 }
 
                 if (InsertarValorCelda(ws, "{Detalle_Pago}", "", ref Row, ref Col))
                 {
-                    int cantidadLineas = factura.FacturaFormaPago.Count;
-                    ws.Rows.InsertCopy(Row, cantidadLineas, ws.Rows[Row]);
-                    int cont = 0;
-                    foreach (var line in factura.FacturaFormaPago)
+                    if (factura.FacturaFormaPago != null && factura.FacturaFormaPago.Any())
                     {
-                        cont++;
+                        int cantidadLineas = factura.FacturaFormaPago.Count;
+                        ws.Rows.InsertCopy(Row, cantidadLineas, ws.Rows[Row]);
+                        int cont = 0;
+                        foreach (var line in factura.FacturaFormaPago)
+                        {
+                            cont++;
 
-                        ws.Cells[Row, 0].Value = line.DescripcionFormaPago;
-                        ws.Cells[Row, 0].Style.WrapText = true;
+                            ws.Cells[Row, 0].Value = line.DescripcionFormaPago;
+                            ws.Cells[Row, 0].Style.WrapText = true;
 
-                        //Codigo
-                        ws.Cells[Row, 1].Value = Utilidades.DoubleToString_FrontCO(line.Valor, 2);
-                        ws.Cells[Row, 1].Style.WrapText = true;
+                            //Codigo
+                            ws.Cells[Row, 1].Value = Utilidades.DoubleToString_FrontCO(line.Valor, 2);
+                            ws.Cells[Row, 1].Style.WrapText = true;
 
-                        Row++;
+                            Row++;
+                        }
                     }
                 }
 
-
-                InsertarValorCelda(ws, "{Subtotal}", Utilidades.DoubleToString_FrontCO(factura.FacturaDetalle.Sum(x => (x.Cantidad * x.PrecioUnitario)), 2), ref Row, ref Col);
-                InsertarValorCelda(ws, "{TotalIva}", Utilidades.DoubleToString_FrontCO(factura.FacturaDetalle.Sum(x => (x.IvaValor)), 2), ref Row, ref Col);
-                InsertarValorCelda(ws, "{Total}", Utilidades.DoubleToString_FrontCO(factura.ValorTotal, 2), ref Row, ref Col);
+                if (factura.FacturaDetalle != null && factura.FacturaDetalle.Any())
+                {
+                    InsertarValorCelda(ws, "{Subtotal}", Utilidades.DoubleToString_FrontCO(factura.FacturaDetalle.Sum(x => (x.Cantidad * x.PrecioUnitario)), 2), ref Row, ref Col);
+                    InsertarValorCelda(ws, "{TotalIva}", Utilidades.DoubleToString_FrontCO(factura.FacturaDetalle.Sum(x => (x.IvaValor)), 2), ref Row, ref Col);
+                    InsertarValorCelda(ws, "{Total}", Utilidades.DoubleToString_FrontCO(factura.ValorTotal, 2), ref Row, ref Col);
+                }
 
                 SaveOptions options = GetSaveOptions(format);
 

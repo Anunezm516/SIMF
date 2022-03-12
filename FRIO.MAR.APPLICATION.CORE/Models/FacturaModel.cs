@@ -14,6 +14,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public string Id { get; set; }
         public string Fecha { get; set; }
         public DateTime FechaEmision { get; set; }
+        public DateTime? FechaEntrega { get; set; }
         public ClienteFacturaModel Cliente { get; set; }
         public long SucursalId { get; set; }
         public List<DetalleFacturaModel> Detalle { get; set; }
@@ -21,6 +22,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public List<AdjuntoDto> Adjunto { get; set; }
         public TotalesFacturaModel Totales { get; set; }
         public EstadoFactura EstadoFactura { get; set; }
+        public long Secuencial { get; set; }
+        public string NumeroDocumento { get; set; }
 
         public FacturaModel()
         {
@@ -49,8 +52,10 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             Adjunto = factura.FacturaAdjunto.Select(c => new AdjuntoDto { Identificador = c.ImagenBase64, Nombre = c.Nombre, Ruta = c.Ruta }).ToList();
             Totales = new TotalesFacturaModel(Detalle, FormaPago);
             EstadoFactura = factura.Estado;
+            NumeroDocumento = factura.NumeroDocumento;
+            Secuencial = factura.Secuencial;
+            FechaEntrega = factura.FechaEntrega;
         }
-
 
         public FacturaModel(CFactura factura)
         {
@@ -73,8 +78,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             Adjunto = factura.FacturaAdjunto.Select(c => new AdjuntoDto { Identificador = c.ImagenBase64, Nombre = c.Nombre, Ruta = c.Ruta }).ToList();
             Totales = new TotalesFacturaModel(Detalle, FormaPago);
             EstadoFactura = factura.Estado;
+            NumeroDocumento = factura.NumeroDocumento;
         }
-
 
         public string Ip { get; set; }
         public long Usuario { get; set; }
@@ -117,6 +122,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
         public decimal TotalDec { get; set; }
         public string Total { get; set; }
+        public int MesesGarantia { get; set; }
 
         public DetalleFacturaModel()
         {
@@ -149,6 +155,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
             Total = Utilities.Utilidades.DoubleToString_FrontCO(detalle.Total, 2);
             TotalDec = detalle.Total;
+
+            MesesGarantia = detalle.MesesGarantia;
         }
 
         public DetalleFacturaModel(CFacturaDetalle detalle)
