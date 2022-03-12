@@ -51,7 +51,7 @@
             $(".btn-eliminar").click(function () {
                 var id = $(this).val();
                 console.log(id)
-                ConfirmacionEliminar("@Url.Action("EliminarFactura", "Ventas")", '@Url.Action("Index", "Ventas")', { Id: id } );
+                ConfirmacionEliminar("@Url.Action("EliminarFactura", "Compras")", '@Url.Action("Index", "Compras")', { Id: id } );
             });
         });
     </script>
