@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220313154006_CambioProcesoInventario")]
+    partial class CambioProcesoInventario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,9 +224,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 
                     b.Property<long>("SucursalId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("TipoProducto")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,6)");
@@ -547,14 +546,8 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                     b.Property<long>("SucursalId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("TipoProducto")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,6)");
-
-                    b.Property<string>("UnidadMedida")
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("FacturaDetalleId");
 
@@ -691,17 +684,20 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("ControlInventarioEmision")
+                    b.Property<bool?>("ControlInventarioEmision")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ControlInventarioSucursal")
+                    b.Property<bool?>("ControlInventarioSucursal")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("DescontarStockAutomatico")
+                    b.Property<bool?>("DescontarStockAutomatico")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime");
+
+                    b.Property<long>("IdCompania")
+                        .HasColumnType("bigint");
 
                     b.HasKey("IdInventarioConfiguracionesGenerales")
                         .HasName("PK__Invent__2D482365639E2D77");

@@ -175,23 +175,21 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                                     productos = model.ProductoId,
                                     cantidad = model.Cantidad,
                                     precio = model.PrecioUnitario,
-                                    tipoInventario = ((int)model.TipoInventario),
-                                    tipoMovimiento = 1,
-                                    subTipoMovimiento = (int)TipoMovimientoInventario.Manual,
+                                    tipoInventario = model.TipoInventario,
+                                    tipoMovimiento = TipoMovimientoInventario.Entrada,
+                                    subTipoMovimiento = SubtipoMovimientoInventario.Manual,
                                     bodegas = model.Bodega ?? 0,
                                     sucursal = model.Sucursal ?? 0,
                                     //mantenimiento.cufeFactura = productoForm.cufe;
-                                    //mantenimiento.numeroFactura = productoForm.numeroDocumento;
+                                    //numeroFactura = productoForm.numeroDocumento,
                                     unidadMedida = model.UnidadMedida,
                                     proveedor = model.Proveedor ?? 0,
                                     motivo = "Registro de nuevo producto"
                                 };
 
                                 long IdInventarioMovimiento = 0;
-                                string mensaje = "";
-                                string mensajeError = "";
 
-                                var resultInventario = _inventarioDomainService.QryInventarioMovimiento(mantenimiento, usr.IdUsuario, usr.IPLogin, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
+                                var resultInventario = _inventarioDomainService.QryInventarioMovimiento(mantenimiento, usr.IdUsuario, usr.IPLogin, ref IdInventarioMovimiento);
 
                             }
 

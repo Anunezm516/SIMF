@@ -167,7 +167,6 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     });
                 }
 
-
                 factura.SucursalId = model.SucursalId;
                 factura.ClienteId = model.Cliente.ClienteId;
                 factura.Identificacion = model.Cliente.Identificacion;
@@ -200,9 +199,10 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     Subtotal = c.SubTotalDec,
                     Total =c.TotalDec,
                     PrecioUnitario = c.PrecioUnitarioDec,
-                    SucursalId = 0,
-                    BodegaId = 0,
-                    MesesGarantia = c.MesesGarantia
+                    SucursalId = c.SucursalId,
+                    BodegaId = c.BodegaId,
+                    MesesGarantia = c.MesesGarantia,
+                    UnidadMedida = c.UnidadMedida,
                 }).ToList();
 
                 factura.FacturaFormaPago = model.FormaPago.Select(c => new FacturaFormaPago
@@ -234,7 +234,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     _ventasRepository.Update(factura);
                 }
 
-                
+                responseDto.Data = factura;
                 responseDto.Estado = _ventasRepository.Save() > 0;
             }
             catch (Exception ex)

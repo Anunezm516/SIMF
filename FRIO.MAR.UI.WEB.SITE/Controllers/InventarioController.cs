@@ -17,6 +17,7 @@ using FRIO.MAR.APPLICATION.CORE.Models;
 using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.UI.WEB.SITE.Constants;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using FRIO.MAR.APPLICATION.CORE.DTOs;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
@@ -28,7 +29,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private readonly IConfiguration _configuration;
         private readonly IInventarioDomainService inventarioService;
         private readonly IInventarioRepository inventarioRepositorio;
-        private string mensaje = "";
+        //private string mensaje = "";
 
         public InventarioController(
             ILogInfraServices logInfraServices,
@@ -97,7 +98,18 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         public IActionResult MovimientoInventario() => View();
 
         [HttpPost]
-        public JsonResult MovimientoInventario(int TipoInventarioOrigen, long BodegaOrigen, long Producto, int SucursalOrigen, int TipoInventarioDestino, int SucursalDestino, long BodegaDestino, string Cantidad, string Motivo, string PrecioStr)
+        public JsonResult MovimientoInventario(
+            TipoInventario TipoInventarioOrigen, 
+            long BodegaOrigen, 
+            long Producto, 
+            int SucursalOrigen,
+            TipoInventario TipoInventarioDestino, 
+            int SucursalDestino, 
+            long BodegaDestino, 
+            string Cantidad, 
+            string Motivo, 
+            string PrecioStr
+            )
         {
             try
             {
@@ -115,13 +127,12 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     Cantidad = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(Cantidad)),
                     Motivo = Motivo,
                     PrecioStr = PrecioStr,
-                    SubTipoMovimiento = (int)APPLICATION.CORE.Constants.TipoMovimientoInventario.Tranferencia
+                    SubTipoMovimiento = SubtipoMovimientoInventario.Tranferencia
                 };
                 long IdUsuario = UsuarioSesion.IdUsuario;
                 string IP = UsuarioSesion.IPLogin;
-                string mensajeError = "";
 
-                var result = inventarioService.QryInventarioTransferencia(IdUsuario, IP, transferencia, ref mensaje, ref mensajeError);
+                var result = inventarioService.QryInventarioTransferencia(IdUsuario, IP, transferencia);
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
                 {
@@ -129,14 +140,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(mensajeError))
-                    {
-                        return Json(new { status = "error", mensaje = $"{DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), mensajeError)} [<a href='{_configuration["InformeCertificado:LinkSoporte"]}'>Soporte</a>]" });
-                    }
-                    else
-                    {
-                        return Json(new { status = "error", mensaje });
-                    }
+                    return Json(new { status = "error", result.Mensaje });
+                    //if (result.TieneErrores)
+                    //{
+                    //    return Json(new { status = "error", mensaje = $"{DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), mensajeError)} [<a href='{_configuration["InformeCertificado:LinkSoporte"]}'>Soporte</a>]" });
+                    //}
+                    //else
+                    //{
+                    //    return Json(new { status = "error", mensaje });
+                    //}
                 }
             }
             catch (Exception ex)
@@ -146,7 +158,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public JsonResult MovimientoInventarioV2(int TipoInventarioOrigen, int TipoInventarioDestino, int SucursalDestino, long BodegaDestino, string Motivo, List<ProductoMovimientoDto> productosArray)
+        public JsonResult MovimientoInventarioV2(
+            TipoInventario TipoInventarioOrigen,
+            TipoInventario TipoInventarioDestino, 
+            int SucursalDestino, 
+            long BodegaDestino, 
+            string Motivo, 
+            List<ProductoMovimientoDto> productosArray)
         {
             var UsuarioSesion = GetUserLogin();
             List<ProductoMovimientoDto> respuestas = new List<ProductoMovimientoDto>();
@@ -159,11 +177,12 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 transferencia.SucursalDestino = SucursalDestino;
                 transferencia.BodegaDestino = BodegaDestino;
                 transferencia.Motivo = Motivo;
-                transferencia.SubTipoMovimiento = (int)APPLICATION.CORE.Constants.TipoMovimientoInventario.Tranferencia;
+                transferencia.SubTipoMovimiento = APPLICATION.CORE.Constants.SubtipoMovimientoInventario.Tranferencia;
                 //decimal Precio = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(PrecioStr));
                 long IdUsuario = UsuarioSesion.IdUsuario;
                 string IP = UsuarioSesion.IPLogin;
-                string mensajeError = "";
+
+                MethodResponseDto result = new MethodResponseDto();
 
                 foreach (var item in productosArray)
                 {
@@ -172,11 +191,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     transferencia.SucursalOrigen = item.sucursal;
                     transferencia.Cantidad = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(item.cantidad));
 
-                    var result = inventarioService.QryInventarioTransferencia(IdUsuario, IP, transferencia, ref mensaje, ref mensajeError);
+                    result = inventarioService.QryInventarioTransferencia(IdUsuario, IP, transferencia);
                     if (result.TieneErrores) throw new Exception(result.MensajeError);
                     item.tieneError = !result.Estado;
                     item.mensaje = result.Mensaje;
-                    item.mensajeError = mensajeError;
+                    item.mensajeError = result.MensajeError;
 
                     respuestas.Add(item);
                 }
@@ -187,14 +206,15 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(mensajeError))
-                    {
-                        return Json(new { status = "error", mensaje = $"{DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), mensajeError)} [<a href='{_configuration["InformeCertificado:LinkSoporte"]}'>Soporte</a>]" });
-                    }
-                    else
-                    {
-                        return Json(new { status = "error", mensaje });
-                    }
+                    return Json(new { status = "error", result.Mensaje });
+                    //if (!string.IsNullOrEmpty(mensajeError))
+                    //{
+                    //    return Json(new { status = "error", mensaje = $"{DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), mensajeError)} [<a href='{_configuration["InformeCertificado:LinkSoporte"]}'>Soporte</a>]" });
+                    //}
+                    //else
+                    //{
+                    //    return Json(new { status = "error", mensaje });
+                    //}
                 }
             }
             catch (Exception ex)
@@ -224,7 +244,19 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public JsonResult MantenimientoInventarioCompras(long Proveedor, int TipoInventario, int Sucursal, long Bodega, long Producto, string PrecioStr, string UnidadMedida, string Cantidad, string Cufe, string NumeroFactura, long Item, string NitProveedor)
+        public JsonResult MantenimientoInventarioCompras(
+            long Proveedor,
+            TipoInventario TipoInventario, 
+            int Sucursal, 
+            long Bodega, 
+            long Producto, 
+            string PrecioStr,
+            string UnidadMedida, 
+            string Cantidad, 
+            string Cufe, 
+            string NumeroFactura, 
+            long Item, 
+            string NitProveedor)
         {
             try
             {
@@ -244,13 +276,16 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 mantenimiento.cantidadStr = Cantidad;
                 mantenimiento.cufeFactura = Cufe;
                 mantenimiento.numeroFactura = NumeroFactura;
-                mantenimiento.tipoMovimiento = 1;
+                mantenimiento.tipoMovimiento = TipoMovimientoInventario.Entrada;
                 mantenimiento.motivo = "Ingreso de producto por factura Nº " + NumeroFactura;
                 mantenimiento.precio = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(PrecioStr));
                 decimal vIn = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(mantenimiento.cantidadStr));
                 mantenimiento.cantidad = Convert.ToInt64(vIn);
-                mantenimiento.subTipoMovimiento = (int)APPLICATION.CORE.Constants.TipoMovimientoInventario.Factura;
+                mantenimiento.subTipoMovimiento = APPLICATION.CORE.Constants.SubtipoMovimientoInventario.Factura;
+
                 string mensajeError = "";
+                string mensaje = "";
+
                 long IdInventarioMovimiento = 0;
                 int cont = 0;
                 bool res = GuardarMantenimiento(mantenimiento, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
@@ -265,7 +300,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                         cont = _contextEmps.SaveChanges();
                     }
                     */
-                    if (mantenimiento.tipoMovimiento == 1)
+                    if (mantenimiento.tipoMovimiento == TipoMovimientoInventario.Entrada)
                     {
                         return Json(new { status = "success", mensaje = "Se ha registrado la nueva entrada", cont });
                     }
@@ -298,8 +333,10 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             var UsuarioSesion = GetUserLogin();
             long IdUsuario = UsuarioSesion.IdUsuario;
             string IP = UsuarioSesion.IPLogin;
-            var result = inventarioService.QryInventarioMovimiento(mantenimiento, IdUsuario, IP, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
+            var result = inventarioService.QryInventarioMovimiento(mantenimiento, IdUsuario, IP, ref IdInventarioMovimiento);
             if (result.TieneErrores) throw new Exception(result.MensajeError);
+            mensaje = result.Mensaje;
+            mensajeError = result.MensajeError;
             return result.Estado;
         }
         /*
@@ -372,14 +409,17 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 mantenimiento.precio = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(mantenimiento.precioStr));
                 mantenimiento.cantidad = Convert.ToDecimal(Utilidades.DepuraStrConvertNum(mantenimiento.cantidadStr));
 
-                mantenimiento.subTipoMovimiento = (int)APPLICATION.CORE.Constants.TipoMovimientoInventario.Manual;
+                mantenimiento.subTipoMovimiento = APPLICATION.CORE.Constants.SubtipoMovimientoInventario.Manual;
+                
                 string mensajeError = "";
+                string mensaje = "";
+
                 long IdInventarioMovimiento = 0;
 
                 bool res = GuardarMantenimiento(mantenimiento, ref IdInventarioMovimiento, ref mensaje, ref mensajeError);
                 if (res)
                 {
-                    if (mantenimiento.tipoMovimiento == 1)
+                    if (mantenimiento.tipoMovimiento == TipoMovimientoInventario.Entrada)
                     {
                         return Json(new { status = "success", mensaje = "Se ha registrado la nueva entrada" });
                     }
@@ -415,15 +455,17 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 {
                     if (TipoInventario == (int)APPLICATION.CORE.Constants.TipoInventario.proveedor)
                     {
-                        var sucursalesArray = _context.InventarioProveedor.Where(x => x.Estado == true).Select(c => c.IdSucursal).ToArray();
-                        var sucursales = _context.Sucursal.Where(x => sucursalesArray.Contains(x.SucursalId) ).ToList();
+                        //var sucursalesArray = _context.InventarioProveedor.Where(x => x.Estado == true).Select(c => c.IdSucursal).ToArray();
+                        //var sucursales = _context.Sucursal.Where(x => sucursalesArray.Contains(x.SucursalId) ).ToList();
+                        var sucursales = _context.Sucursal.Where(x => x.Estado).ToList();
 
                         return Json(new { status = "success", sucursales = sucursales.Where(x => x.Estado == true).ToList() });
                     }
                     else if (TipoInventario == (int)APPLICATION.CORE.Constants.TipoInventario.venta)
                     {
-                        var sucursalesArray = _context.InventarioVenta.Where(x => x.Estado == true).Select(c => c.IdSucursal).ToArray();
-                        var sucursales = _context.Sucursal.Where(x => sucursalesArray.Contains(x.SucursalId) ).ToList();
+                        //var sucursalesArray = _context.InventarioVenta.Where(x => x.Estado == true).Select(c => c.IdSucursal).ToArray();
+                        //var sucursales = _context.Sucursal.Where(x => sucursalesArray.Contains(x.SucursalId) ).ToList();
+                        var sucursales = _context.Sucursal.Where(x => x.Estado).ToList();
                         return Json(new { status = "success", sucursales = sucursales.Where(x => x.Estado == true).ToList() });
                     }
                 }
@@ -546,7 +588,16 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
         }
 
-        public ActionResult GetDetalleReporteInventario(long Proveedor, int TipoInventario, int TipoMovimiento, int SubtipoMovimiento, long producto, int sucursal, long bodega, DateTime fechaInicio, DateTime fechaFin)
+        public ActionResult GetDetalleReporteInventario(
+            long Proveedor,
+            TipoInventario TipoInventario, 
+            int TipoMovimiento,
+            SubtipoMovimientoInventario SubtipoMovimiento, 
+            long producto, 
+            int sucursal, 
+            long bodega, 
+            DateTime fechaInicio, 
+            DateTime fechaFin)
         {
             List<ReporteInventarioEntradaSalidaDto> inventario = new List<ReporteInventarioEntradaSalidaDto>();
             fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);
@@ -722,9 +773,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             NumeroFactura = movimiento.NumeroFactura;
             Cufe = movimiento.Cufe;
             Motivo = movimiento.Motivo??"--";
-            TipoInventario = movimiento.TipoInventario??0; //
-            TipoMovimiento = 1; //Entrada
-            SubTipoMovimiento = movimiento.TipoMovimiento ?? 0;
+            TipoInventario = movimiento.TipoInventario; //
+            TipoMovimiento = TipoMovimientoInventario.Entrada; //Entrada
+            SubTipoMovimiento = movimiento.TipoMovimiento;
             Fecha = movimiento.FechaCreacion == null ? "--" : ((DateTime)movimiento.FechaCreacion).ToString("yyyy-MM-dd HH:mm:ss");
         }
 
@@ -745,9 +796,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             NumeroFactura = movimiento.NumeroFactura;
             Cufe = movimiento.Cufe;
             Motivo = movimiento.Motivo ?? "--";
-            TipoInventario = movimiento.TipoInventario ?? 0; //
-            TipoMovimiento = 2; //Salida
-            SubTipoMovimiento = movimiento.TipoMovimiento??0;
+            TipoInventario = movimiento.TipoInventario; //
+            TipoMovimiento = TipoMovimientoInventario.Salida; //Salida
+            SubTipoMovimiento = movimiento.TipoMovimiento;
             Fecha = movimiento.FechaCreacion == null ? "--" : ((DateTime)movimiento.FechaCreacion).ToString("yyyy-MM-dd HH:mm:ss");
         }
 
@@ -767,9 +818,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         public string Cufe { get; set; }
         public string Motivo { get; set; }
         public string Fecha { get; set; }
-        public int TipoInventario { get; set; }
-        public int TipoMovimiento { get; set; }
-        public int SubTipoMovimiento { get; set; }
+        public TipoInventario TipoInventario { get; set; }
+        public TipoMovimientoInventario TipoMovimiento { get; set; }
+        public SubtipoMovimientoInventario SubTipoMovimiento { get; set; }
 
     }
 }

@@ -20,11 +20,11 @@
         <tr>
             <td class="text-center">@item.Fecha</td>
             <td>
-                @if (item.TipoMovimiento == 1)
+                @if (item.TipoMovimiento == FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Entrada)
                 {
                     <p>Entrada</p>
                 }
-                else if (item.TipoMovimiento == 2)
+                else if (item.TipoMovimiento == FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Salida)
                 {
                     <p>Salida</p>
                 }
@@ -34,11 +34,11 @@
                 }
             </td>
             <td>
-                @if (item.TipoInventario == 1)
+                @if (item.TipoInventario == FRIO.MAR.APPLICATION.CORE.Constants.TipoInventario.proveedor)
                 {
                     <p>Proveedor</p>
                 }
-                else if (item.TipoInventario == 2)
+                else if (item.TipoInventario == FRIO.MAR.APPLICATION.CORE.Constants.TipoInventario.venta)
                 {
                     <p>Venta</p>
                 }
@@ -49,15 +49,15 @@
             </td>
 
             <td>
-                @if (item.SubTipoMovimiento == (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Factura)
+                @if (item.SubTipoMovimiento == FRIO.MAR.APPLICATION.CORE.Constants.SubtipoMovimientoInventario.Factura)
                 {
                     <p>Factura</p>
                 }
-                else if (item.SubTipoMovimiento == (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Manual)
+                else if (item.SubTipoMovimiento == FRIO.MAR.APPLICATION.CORE.Constants.SubtipoMovimientoInventario.Manual)
                 {
                     <p>Manual</p>
                 }
-                else if (item.SubTipoMovimiento == (int)FRIO.MAR.APPLICATION.CORE.Constants.TipoMovimientoInventario.Tranferencia)
+                else if (item.SubTipoMovimiento == FRIO.MAR.APPLICATION.CORE.Constants.SubtipoMovimientoInventario.Tranferencia)
                 {
                     <p>Tranferencia</p>
                 }

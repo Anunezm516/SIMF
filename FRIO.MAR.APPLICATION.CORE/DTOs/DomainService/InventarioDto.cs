@@ -1,4 +1,5 @@
-﻿using FRIO.MAR.APPLICATION.CORE.Entities;
+﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,11 +14,11 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
     public class InventarioTransferenciaDto
     {
         public int TipoMovimientoOrigen { get; set; }
-        public int TipoInventarioOrigen { get; set; }
+        public TipoInventario TipoInventarioOrigen { get; set; }
         public long BodegaOrigen { get; set; }
         public long Producto { get; set; }
         public int TipoMovimientoDestino { get; set; }
-        public int TipoInventarioDestino { get; set; }
+        public TipoInventario TipoInventarioDestino { get; set; }
         public int SucursalOrigen { get; set; }
         public int SucursalDestino { get; set; }
         public long BodegaDestino { get; set; }
@@ -31,15 +32,15 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
         public string CantidadDescripcion { get; set; }
         public long Proveedor { get; set; }
         public long Cliente { get; set; }
-        public int SubTipoMovimiento { get; set; }
+        public SubtipoMovimientoInventario SubTipoMovimiento { get; set; }
 
     }
 
     public class InventarioMantenimientoDto
     {
-        public int tipoInventario { get; set; }
-        public int tipoMovimiento { get; set; }
-        public int subTipoMovimiento { get; set; }
+        public TipoInventario tipoInventario { get; set; }
+        public TipoMovimientoInventario tipoMovimiento { get; set; }
+        public SubtipoMovimientoInventario subTipoMovimiento { get; set; }
         public long productos { get; set; }
         public decimal cantidad { get; set; }
         public string cantidadStr { get; set; }

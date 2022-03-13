@@ -84,14 +84,7 @@
                                                 <li><a id="btn-open-modal-producto" class="dropdown-item" href="#">Agregar producto</a></li>
                                                 <li><a id="btn-open-modal-servicio" class="dropdown-item" href="#">Agregar servicio</a></li>
                                             </ul>
-
                                         </div>
-                                        @*<button type="button"   class="btn btn-success " title="agregar producto">
-                                            <i class="fa fa-plus"></i> 
-                                        </button>
-                                        <button type="button" id="btn-open-modal-servicio" class="btn btn-info " title="agregar servicio">
-                                            <i class="fa fa-plus"></i> 
-                                        </button>*@
                                     </th>
 
                                     <th colspan="7" >
@@ -248,6 +241,13 @@
 
             $("#btn-open-modal-producto").click(function(){
                 $("#modal-agregar-producto").modal("show");
+                $.get('@Url.Action("GetModalProductos", "Ventas")', { Sucursal: 0 }).done(function(response){
+                    $("#div-modal-producto").empty();
+                    $("#div-modal-producto").html(response);
+                })
+                .fail(function(error){
+                    MsgAjaxError(error);
+                });
             });
             
             $("#btn-open-modal-servicio").click(function(){
@@ -269,13 +269,9 @@
                 ActualizarProductosCliente($("#Cliente_ClienteId").val());
             });
             
-            $("#producto").change(function(){
-                $("#producto-iva").val($("#producto option:selected").attr("data-iva"));
-                $("#producto-unidad-medida").val($("#producto option:selected").attr("data-unidad-medida"));
-                $("#producto-precio-unitario").val($("#producto option:selected").attr("data-precio-unitario"));
-                $("#producto-codigo").val($("#producto option:selected").attr("data-codigo"));
-                $("#producto-descripcion").val($("#producto option:selected").attr("data-descripcion"));
-            });
+            //$("#producto").change(function(){
+                
+            //});
 
             $("#servicio").change(function(){
                 $("#servicio-iva").val($("#servicio option:selected").attr("data-iva"));
@@ -285,14 +281,27 @@
                 $("#servicio-descripcion").val($("#servicio option:selected").attr("data-descripcion"));
             });
             
-            $("#btn-agrega-producto").click(function(){
-                AgregarProducto();
-            });
+            //$("#btn-agrega-producto").click(function(){
+            //    ;
+            //});
 
             $("#btn-agrega-servicio").click(function(){
                 AgregarServicio();
             });
         });
+
+        function ActualizarCamposModalProducto(){
+            $("#producto-iva").val($("#producto option:selected").attr("data-iva"));
+            $("#producto-unidad-medida").val($("#producto option:selected").attr("data-unidad-medida"));
+            $("#producto-precio-unitario").val($("#producto option:selected").attr("data-precio-unitario"));
+            $("#producto-codigo").val($("#producto option:selected").attr("data-codigo"));
+            $("#producto-descripcion").val($("#producto option:selected").attr("data-descripcion"));
+            $("#producto-sucursal").val($("#producto option:selected").attr("data-sucursal"));
+            $("#producto-bodega").val($("#producto option:selected").attr("data-bodega"));
+            $("#producto-stock").val($("#producto option:selected").attr("data-stock"));
+            $("#producto-stock-dec").val($("#producto option:selected").attr("data-stock-dec"));
+            $("#producto-stock-des").val($("#producto option:selected").attr("data-stock"));
+        }
 
         function GuardarBorrador(){
             var formContainer = $('form#form-factura');
@@ -465,6 +474,11 @@
             var codigo = $("#producto-codigo").val();
             var descripcion = $("#producto-descripcion").val();
 
+            var sucursal = $("#producto-sucursal").val();
+            var bodega = $("#producto-bodega").val();
+            var stock = $("#producto-stock").val();
+            var stockDec = $("#producto-stock-dec").val();
+
             if (productoId === null || productoId === undefined || productoId.trim() === ""){
                 MensajeGrowl("Seleccione un producto");
                 return;
@@ -488,12 +502,16 @@
                     Descripcion: descripcion,
                     PrecioUnitario: precioUnitario,
                     Cantidad: cantidad,
-                    IvaPorcentaje: iva
+                    IvaPorcentaje: iva,
+                    SucursalId: sucursal,
+                    BodegaId: bodega,
+                    UnidadMedida: unidadMedida
                 }
             }, function(response){
                 if (response.estado){
                     ConstruirDetalles();
                     LimpiarModal();
+                    $("#modal-agregar-producto").modal("hide");
                 }else{
                     MensajeErrorSwal(response.mensaje, "");
                 }

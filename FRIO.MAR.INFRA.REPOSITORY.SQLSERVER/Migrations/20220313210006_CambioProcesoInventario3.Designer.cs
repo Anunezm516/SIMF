@@ -4,14 +4,16 @@ using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 {
     [DbContext(typeof(SIFMContext))]
-    partial class SIFMContextModelSnapshot : ModelSnapshot
+    [Migration("20220313210006_CambioProcesoInventario3")]
+    partial class CambioProcesoInventario3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,9 +224,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 
                     b.Property<long>("SucursalId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("TipoProducto")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,6)");
@@ -546,9 +545,6 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Migrations
 
                     b.Property<long>("SucursalId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("TipoProducto")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,6)");

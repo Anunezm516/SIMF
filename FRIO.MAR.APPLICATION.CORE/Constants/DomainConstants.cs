@@ -125,6 +125,12 @@ namespace FRIO.MAR.APPLICATION.CORE.Constants
 
     public enum TipoMovimientoInventario
     {
+        Entrada = 1,
+        Salida = 2
+    }
+    
+    public enum SubtipoMovimientoInventario
+    {
         Manual = 1,
         Tranferencia = 2,
         Factura = 3

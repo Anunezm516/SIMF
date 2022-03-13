@@ -123,6 +123,10 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public decimal TotalDec { get; set; }
         public string Total { get; set; }
         public int MesesGarantia { get; set; }
+        public long BodegaId { get; set; }
+        public long SucursalId { get; set; }
+        public string UnidadMedida { get; set; }
+        public TipoProducto TipoProducto { get; set; }
 
         public DetalleFacturaModel()
         {
@@ -157,6 +161,10 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             TotalDec = detalle.Total;
 
             MesesGarantia = detalle.MesesGarantia;
+            BodegaId = detalle.BodegaId;
+            SucursalId = detalle.SucursalId;
+            UnidadMedida = detalle.UnidadMedida;
+            TipoProducto = detalle.TipoProducto;
         }
 
         public DetalleFacturaModel(CFacturaDetalle detalle)
@@ -185,6 +193,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
             Total = Utilities.Utilidades.DoubleToString_FrontCO(detalle.Total, 2);
             TotalDec = detalle.Total;
+
+            TipoProducto = detalle.TipoProducto;
+
         }
     }
 

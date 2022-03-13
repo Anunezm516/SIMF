@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,6 +42,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
 
         [Column(TypeName = "decimal(18,6)")]
         public decimal Total { get; set; }
+        public TipoProducto TipoProducto { get; set; }
 
         public virtual CFactura Factura { get; set; }
     }

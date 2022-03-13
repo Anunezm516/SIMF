@@ -58,7 +58,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
 
 
         //[Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
-        public TipoInventario? TipoInventario { get; set; }
+        public TipoInventario TipoInventario { get; set; }
 
         public bool RegistrarInventario { get; set; }
 

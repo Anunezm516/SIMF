@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using System;
 using System.Collections.Generic;
 
 namespace FRIO.MAR.APPLICATION.CORE.Entities
@@ -16,8 +17,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public string Cufe { get; set; }
         public string Motivo { get; set; }
         public string CodigoTransferencia { get; set; }
-        public int? TipoInventario { get; set; }
-        public int? TipoMovimiento { get; set; }
+        public TipoInventario TipoInventario { get; set; }
+        public SubtipoMovimientoInventario TipoMovimiento { get; set; }
         
 
         public virtual Bodega Bodega { get; set; } 

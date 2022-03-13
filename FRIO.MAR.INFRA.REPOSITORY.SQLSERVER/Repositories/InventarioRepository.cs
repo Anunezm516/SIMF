@@ -35,7 +35,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                         .Where(x => x.FechaCreacion >= fechaInicio && x.FechaCreacion <= fechaFin)
                         .ToList();
 
-                    if(InventarioMovimientoEntradas != null && InventarioMovimientoEntradas.Any())
+                    if (InventarioMovimientoEntradas != null && InventarioMovimientoEntradas.Any())
                     {
                         foreach (var item in InventarioMovimientoEntradas)
                         {
@@ -220,7 +220,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     return false;
                 }
 
-                if (mantenimientoDto.tipoInventario == 1) //Proveedor
+                if (mantenimientoDto.tipoInventario == TipoInventario.proveedor) //Proveedor
                 {
                     InventarioProveedor Inventario = _context.InventarioProveedor.FirstOrDefault(x => x.IdProducto == mantenimientoDto.productos && x.IdInventarioBodega == mantenimientoDto.bodegas && x.IdSucursal == mantenimientoDto.sucursal && x.Estado == true);
                     if (Inventario == null)
@@ -229,7 +229,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                         {
                             IdProducto = mantenimientoDto.productos,
                             IdInventarioBodega = mantenimientoDto.bodegas,
-                            StockActual = mantenimientoDto.tipoMovimiento == 1 ? mantenimientoDto.cantidad : -mantenimientoDto.cantidad,
+                            StockActual = mantenimientoDto.tipoMovimiento == TipoMovimientoInventario.Entrada ? mantenimientoDto.cantidad : -mantenimientoDto.cantidad,
                             UnidadMedida = mantenimientoDto.unidadMedida,
                             CantidadDescripcion = mantenimientoDto.cantidadDescripcion,
                             IdSucursal = mantenimientoDto.sucursal,
@@ -242,7 +242,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     }
                     else
                     {
-                        if (mantenimientoDto.tipoMovimiento == 1)
+                        if (mantenimientoDto.tipoMovimiento == TipoMovimientoInventario.Entrada)
                         {
                             Inventario.StockActual += mantenimientoDto.cantidad;
                         }
@@ -287,7 +287,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                         Inventario = new InventarioVenta();
                         Inventario.IdProducto = mantenimientoDto.productos;
                         Inventario.IdInventarioBodega = mantenimientoDto.bodegas;
-                        Inventario.StockActual = mantenimientoDto.tipoMovimiento == 1 ? mantenimientoDto.cantidad : -mantenimientoDto.cantidad;
+                        Inventario.StockActual = mantenimientoDto.tipoMovimiento == TipoMovimientoInventario.Entrada ? mantenimientoDto.cantidad : -mantenimientoDto.cantidad;
                         Inventario.UnidadMedida = mantenimientoDto.unidadMedida;
                         Inventario.CantidadDescripcion = mantenimientoDto.cantidadDescripcion;
                         Inventario.IdSucursal = mantenimientoDto.sucursal;
@@ -299,7 +299,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     }
                     else
                     {
-                        if (mantenimientoDto.tipoMovimiento == 1)
+                        if (mantenimientoDto.tipoMovimiento == TipoMovimientoInventario.Entrada)
                         {
                             Inventario.StockActual += mantenimientoDto.cantidad;
                         }
@@ -337,7 +337,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     }
                 }
 
-                if (mantenimientoDto.tipoMovimiento == 1)
+                if (mantenimientoDto.tipoMovimiento == TipoMovimientoInventario.Entrada)
                 {
                     InventarioMovimientoEntrada movimiento = new InventarioMovimientoEntrada
                     {
@@ -430,7 +430,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             try
             {
                 int cont = 0;
-                
+
 
                 codigoTransferenciaEntrada = codigo.Replace("{Fecha}", DateTime.Now.ToString("yyyyMMdd")).Replace("{Hora}", DateTime.Now.ToString("HHmmss"))
                                             .Replace("{Usuario}", IdUsuario.ToString()).Replace("{Compania}", "")
@@ -466,7 +466,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     return false;
                 }
 
-                if (inventarioTransferenciaDto.TipoInventarioOrigen == (int)TipoInventario.proveedor)
+                if (inventarioTransferenciaDto.TipoInventarioOrigen == TipoInventario.proveedor)
                 {
                     InventarioProveedor InventarioOrigen = _context.InventarioProveedor
                         .FirstOrDefault(x => x.IdProducto == inventarioTransferenciaDto.Producto && x.IdInventarioBodega == inventarioTransferenciaDto.BodegaOrigen && x.IdSucursal == inventarioTransferenciaDto.SucursalOrigen && x.Estado == true);
@@ -493,7 +493,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                         }
                     }
 
-                    if (inventarioTransferenciaDto.TipoInventarioDestino == (int)TipoInventario.proveedor)
+                    if (inventarioTransferenciaDto.TipoInventarioDestino == TipoInventario.proveedor)
                     {
                         InventarioProveedor InventarioDestino = _context.InventarioProveedor
                             .FirstOrDefault(x => x.IdProducto == inventarioTransferenciaDto.Producto && x.IdInventarioBodega == inventarioTransferenciaDto.BodegaDestino && x.IdSucursal == inventarioTransferenciaDto.SucursalDestino && x.Estado == true);
@@ -536,7 +536,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                             codigoTransferenciaEntrada = codigoTransferenciaEntrada.Replace("{Id_Inventario}", InventarioDestino.IdInventarioProveedor.ToString());
                         }
                     }
-                    else if (inventarioTransferenciaDto.TipoInventarioDestino == (int)TipoInventario.venta)
+                    else if (inventarioTransferenciaDto.TipoInventarioDestino == TipoInventario.venta)
                     {
                         InventarioVenta InventarioDestino = _context.InventarioVenta
                             .FirstOrDefault(x => x.IdProducto == inventarioTransferenciaDto.Producto && x.IdInventarioBodega == inventarioTransferenciaDto.BodegaDestino && x.IdSucursal == inventarioTransferenciaDto.SucursalDestino && x.Estado == true);
@@ -583,7 +583,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                         }
                     }
                 }
-                else if(inventarioTransferenciaDto.TipoInventarioOrigen == (int)TipoInventario.venta)
+                else if (inventarioTransferenciaDto.TipoInventarioOrigen == TipoInventario.venta)
                 {
                     InventarioVenta InventarioOrigen = _context.InventarioVenta
                         .FirstOrDefault(x => x.IdProducto == inventarioTransferenciaDto.Producto && x.IdInventarioBodega == inventarioTransferenciaDto.BodegaOrigen && x.IdSucursal == inventarioTransferenciaDto.SucursalOrigen && x.Estado == true);
@@ -609,7 +609,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                         }
                     }
 
-                    if (inventarioTransferenciaDto.TipoInventarioDestino == (int)TipoInventario.proveedor)
+                    if (inventarioTransferenciaDto.TipoInventarioDestino == TipoInventario.proveedor)
                     {
                         InventarioProveedor InventarioDestino = _context.InventarioProveedor
                             .FirstOrDefault(x => x.IdProducto == inventarioTransferenciaDto.Producto && x.IdInventarioBodega == inventarioTransferenciaDto.BodegaDestino && x.IdSucursal == inventarioTransferenciaDto.SucursalDestino && x.Estado == true);
@@ -656,7 +656,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                             codigoTransferenciaEntrada = codigoTransferenciaEntrada.Replace("{Id_Inventario}", InventarioDestino.IdInventarioProveedor.ToString());
                         }
                     }
-                    else if (inventarioTransferenciaDto.TipoInventarioDestino == (int)TipoInventario.venta)
+                    else if (inventarioTransferenciaDto.TipoInventarioDestino == TipoInventario.venta)
                     {
                         InventarioVenta InventarioDestino = _context.InventarioVenta
                             .FirstOrDefault(x => x.IdProducto == inventarioTransferenciaDto.Producto && x.IdInventarioBodega == inventarioTransferenciaDto.BodegaDestino && x.IdSucursal == inventarioTransferenciaDto.SucursalDestino && x.Estado == true);
@@ -774,6 +774,30 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             }
         }
 
+        public List<ProductoInventarioDto> GetProductosInventario(TipoInventario tipoInventario, long Sucursal)
+        {
+            if  (tipoInventario == TipoInventario.venta)
+            {
+                return _context.InventarioVenta
+                    .Include(c => c.IdProductoNavigation)
+                    .Include(c => c.IdSucursalNavigation)
+                    .Include(c => c.Bodega)
+                    .Where(x => x.StockActual > 0 && x.Estado && (Sucursal == 0 || Sucursal == x.IdSucursal))
+                    .Select(c => new ProductoInventarioDto(c.IdProductoNavigation, c.IdSucursalNavigation, c.Bodega, c.StockActual ?? 0))
+                    .ToList();
+            }
+            else
+            {
+                return _context.InventarioProveedor
+                    .Include(c => c.IdProductoNavigation)
+                    .Include(c => c.IdSucursalNavigation)
+                    .Include(c => c.Bodega)
+                    .Where(x => x.StockActual > 0 && x.Estado && (Sucursal == 0 || Sucursal == x.IdSucursal))
+                    .Select(c => new ProductoInventarioDto(c.IdProductoNavigation, c.IdSucursalNavigation, c.Bodega, c.StockActual ?? 0))
+                    .ToList();
+            }
+        }
+        
         public List<ProductoBodegaDto> SelProductosBodega(long IdBodega, int Sucursal, int TipoInventario)
         {
             List<ProductoBodegaDto> productosDto = new List<ProductoBodegaDto>();
@@ -898,6 +922,11 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                                                                         && x.Bodega.Estado == true
                                                                      ).ToList();
             }
+        }
+
+        public InventarioConfiguracionesGenerales GetConfiguracionesGenerales()
+        {
+            return _context.InventarioConfiguracionesGenerales.FirstOrDefault();
         }
     }
 }

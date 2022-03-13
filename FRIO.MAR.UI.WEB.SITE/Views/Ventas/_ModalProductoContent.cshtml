@@ -1,0 +1,64 @@
+﻿<input id="producto-unidad-medida" type="hidden" />
+<input id="producto-codigo" type="hidden" />
+<input id="producto-descripcion" type="hidden" />
+<input id="producto-sucursal" type="hidden" />
+<input id="producto-bodega" type="hidden" />
+<input id="producto-stock" type="hidden" />
+<input id="producto-stock-dec" type="hidden" />
+
+<div class="row">
+    <div class="col-md-8">
+        <label>Producto</label>
+        <select id="producto" class="form-control select2 limiar-select-modal" style="width: 100%" onchange="ActualizarCamposModalProducto()">
+            <option disabled selected>--Seleccionar--</option>
+            @foreach(FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.ProductoInventarioDto item in ViewBag.Producto)
+            {
+                <option 
+                value='@item.Producto.ProductoId' 
+                data-stock-dec="@item.StockDec"
+                data-stock="@item.Stock"
+                data-sucursal="@item.Sucursal.SucursalId"
+                data-bodega="@item.Bodega.BodegaId"
+                data-descripcion='@item.Producto.Descripcion' 
+                data-codigo='@item.Producto.Codigo' 
+                data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.Producto.PrecioUnitario, 2)' 
+                data-unidad-medida='@item.Producto.UnidadMedida' 
+                data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.Producto.IvaPorcentaje, 2)' >
+                @item.NombreProducto
+            </option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Stock</label>
+        <input readonly type="text" id="producto-stock-des" class="form-control limiar-input-modal" />
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <label>IVA</label>
+        <input id="producto-iva" class="form-control limiar-input-modal" readonly />
+    </div>
+    <div class="col-md-4">
+        <label>Precio Unitario</label>
+        <input id="producto-precio-unitario" class="form-control decimal limiar-input-modal" />
+    </div>
+    <div class="col-md-4">
+        <label>Cantidad</label>
+        <input id="producto-cantidad" class="form-control decimal limiar-input-modal" />
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-12 d-grid">
+        <button  type="button"  id="btn-agrega-producto" class='btn btn-success btn-block' onclick="AgregarProducto()">
+            <i class='fa fa-plus'></i> Agregar Producto
+        </button>
+    </div>
+</div>
+
+<script>
+    $(".select2").select2();
+            $(".decimal").maskMoney();
+</script>

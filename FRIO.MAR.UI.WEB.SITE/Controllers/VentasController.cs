@@ -2,6 +2,7 @@
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
+using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Models;
@@ -24,6 +25,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.Sucursales)]
     public class VentasController : BaseController
     {
+        private readonly IInventarioDomainService _inventarioDomainService;
         private readonly IUtilidadRepository _utilidadRepository;
         private readonly IProductoClienteRepository _productoClienteRepository;
         private readonly IProductoRepository _productoRepository;
@@ -32,6 +34,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private readonly IVentasDomainService _ventasDomainService;
 
         public VentasController(
+            IInventarioDomainService inventarioDomainService,
             IUtilidadRepository utilidadRepository,
             IProductoClienteRepository productoClienteRepository,
             IProductoRepository productoRepository,
@@ -40,6 +43,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             IVentasDomainService ventasDomainService, 
             ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _inventarioDomainService = inventarioDomainService;
             _utilidadRepository = utilidadRepository;
             _productoClienteRepository = productoClienteRepository;
             _productoRepository = productoRepository;
@@ -183,6 +187,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     Servicio.CodigoSeguimiento = _utilidadRepository.GenerarCodigoSeguimientoProducto(producto.ProductoClienteId);
                 }
 
+                Servicio.TipoProducto = TipoProducto.Servicio;
                 detalles.Add(CalcularLinea(Servicio));
                 HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
 
@@ -200,7 +205,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+                var productos = _inventarioDomainService.GetProductosInventario(TipoInventario.venta, 0);
 
+                Producto.TipoProducto = TipoProducto.Bien;
                 detalles.Add(CalcularLinea(Producto));
 
                 HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
@@ -211,6 +218,30 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
             }
+        }
+
+        [HttpGet]
+        public PartialViewResult GetModalProductos(long Sucursal)
+        {
+            List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
+
+            var productos = _inventarioDomainService.GetProductosInventario(TipoInventario.venta, Sucursal);
+
+            productos.ForEach(producto =>
+            {
+                var pro = detalles.Where(x => x.ProductoId == producto.Producto.ProductoId);
+                if (pro != null && pro.Any())
+                {
+                    foreach (var item in pro)
+                    {
+                        producto.StockDec -= item.CantidadDec;
+                        producto.Stock = Utilidades.DoubleToString_FrontCO(producto.StockDec, 2);
+                    }
+                }
+            });
+
+            ViewBag.Producto = productos;
+            return PartialView("_ModalProductoContent");
         }
 
         [HttpPost]
@@ -365,6 +396,22 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
                 {
+                    Factura factura = result.Data;
+
+                    RespuestaVentaDto respuestaVentaDto = new RespuestaVentaDto()
+                    {
+                        NumDocumento = factura.NumeroDocumento,
+                    };
+
+                    _inventarioDomainService.ActualizarInventarioEmision(
+                        usr.IdUsuario, 
+                        usr.IPLogin, 
+                        TipoMovimientoInventario.Salida, 
+                        model.Cliente.ClienteId,
+                        respuestaVentaDto, 
+                        model.Detalle
+                        );
+
                     HttpContext.Session.Remove("Detalle");
                     HttpContext.Session.Remove("FormaPago");
                     HttpContext.Session.Remove("Adjuntos");
@@ -479,7 +526,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
 
             ViewBag.Clientes = _clienteRepository.GetClientes();
-            ViewBag.Producto = _productoRepository.GetProductos().Where(x => x.TipoProducto == TipoProducto.Bien).ToList();
+            
             ViewBag.Servicios = _productoRepository.GetProductos().Where(x => x.TipoProducto == TipoProducto.Servicio).ToList();
         }
 
