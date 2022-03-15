@@ -24,6 +24,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.Sucursales)]
     public class ComprasController : BaseController
     {
+        private readonly IInventarioDomainService _inventarioDomainService;
         private readonly IUtilidadRepository _utilidadRepository;
         private readonly IProductoClienteRepository _productoClienteRepository;
         private readonly IProductoRepository _productoRepository;
@@ -32,6 +33,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private readonly IComprasDomainService _comprasDomainService;
 
         public ComprasController(
+            IInventarioDomainService inventarioDomainService,
             IUtilidadRepository utilidadRepository,
             IProductoClienteRepository productoClienteRepository,
             IProductoRepository productoRepository,
@@ -40,6 +42,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             IComprasDomainService comprasDomainService, 
             ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _inventarioDomainService = inventarioDomainService;
             _utilidadRepository = utilidadRepository;
             _productoClienteRepository = productoClienteRepository;
             _productoRepository = productoRepository;
@@ -342,6 +345,13 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 if (result.TieneErrores) throw new Exception(result.MensajeError);
                 if (result.Estado)
                 {
+                    model.Detalle.ForEach(x =>
+                    {
+                        x.BodegaId = model.BodegaId;
+                        x.SucursalId = model.SucursalId;
+                    });
+                    _inventarioDomainService.ActualizarInventarioRecepcion(usr.IdUsuario, usr.IPLogin, model.Cliente.ClienteId, model.NumeroDocumento, model.Detalle);
+
                     HttpContext.Session.Remove("Detalle");
                     HttpContext.Session.Remove("FormaPago");
                     HttpContext.Session.Remove("Adjuntos");

@@ -17,6 +17,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public DateTime? FechaEntrega { get; set; }
         public ClienteFacturaModel Cliente { get; set; }
         public long SucursalId { get; set; }
+        public long BodegaId { get; set; }
         public List<DetalleFacturaModel> Detalle { get; set; }
         public List<FormaPagoFacturaModel> FormaPago { get; set; }
         public List<AdjuntoDto> Adjunto { get; set; }

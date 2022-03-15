@@ -70,6 +70,47 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             return responseDto;
         }
         
+        public MethodResponseDto ActualizarInventarioRecepcion(
+            long IdUsuario,
+            string IP,
+            long ProveedorId,
+            string NumeroDocumento,
+            List<DetalleFacturaModel> productos
+            )
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+
+            try
+            {
+                InventarioMantenimientoDto mantenimiento = new InventarioMantenimientoDto();
+                mantenimiento.tipoInventario = TipoInventario.proveedor;
+                mantenimiento.tipoMovimiento = TipoMovimientoInventario.Entrada;
+                mantenimiento.subTipoMovimiento = SubtipoMovimientoInventario.Factura;
+                mantenimiento.proveedor = ProveedorId;
+                //mantenimiento.cufeFactura = respuestaVentaDto.UUID;
+                mantenimiento.numeroFactura = NumeroDocumento;
+                mantenimiento.motivo = "Ingreso por registro de factura de compras " + mantenimiento.numeroFactura;
+
+                long IdInventarioMovimiento = 0;
+                foreach (var item in productos/*.Where(x => x.TipoProducto == TipoProducto.Bien)*/)
+                {
+                    mantenimiento.bodegas = item.BodegaId;
+                    mantenimiento.sucursal = item.SucursalId;
+                    mantenimiento.productos = item.ProductoId;
+                    mantenimiento.cantidad = item.CantidadDec;
+                    mantenimiento.unidadMedida = item.UnidadMedida;
+                    responseDto = QryInventarioMovimiento(mantenimiento, IdUsuario, IP, ref IdInventarioMovimiento);
+                }
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
+        }
+
         public MethodResponseDto ActualizarInventarioEmision(
             long IdUsuario,
             string IP,

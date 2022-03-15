@@ -233,6 +233,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                             UnidadMedida = mantenimientoDto.unidadMedida,
                             CantidadDescripcion = mantenimientoDto.cantidadDescripcion,
                             IdSucursal = mantenimientoDto.sucursal,
+                            //IdInventarioProveedor = mantenimientoDto.proveedor,
                             UsuarioCreacion = IdUsuario,
                             FechaCreacion = DateTime.Now,
                             Ip = IP,
@@ -284,17 +285,19 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
                     InventarioVenta Inventario = _context.InventarioVenta.FirstOrDefault(x => x.IdProducto == mantenimientoDto.productos && x.IdInventarioBodega == mantenimientoDto.bodegas && x.IdSucursal == mantenimientoDto.sucursal && x.Estado == true);
                     if (Inventario == null)
                     {
-                        Inventario = new InventarioVenta();
-                        Inventario.IdProducto = mantenimientoDto.productos;
-                        Inventario.IdInventarioBodega = mantenimientoDto.bodegas;
-                        Inventario.StockActual = mantenimientoDto.tipoMovimiento == TipoMovimientoInventario.Entrada ? mantenimientoDto.cantidad : -mantenimientoDto.cantidad;
-                        Inventario.UnidadMedida = mantenimientoDto.unidadMedida;
-                        Inventario.CantidadDescripcion = mantenimientoDto.cantidadDescripcion;
-                        Inventario.IdSucursal = mantenimientoDto.sucursal;
-                        Inventario.UsuarioCreacion = IdUsuario;
-                        Inventario.FechaCreacion = DateTime.Now;
-                        Inventario.Ip = IP;
-                        Inventario.Estado = true;
+                        Inventario = new InventarioVenta
+                        {
+                            IdProducto = mantenimientoDto.productos,
+                            IdInventarioBodega = mantenimientoDto.bodegas,
+                            StockActual = mantenimientoDto.tipoMovimiento == TipoMovimientoInventario.Entrada ? mantenimientoDto.cantidad : -mantenimientoDto.cantidad,
+                            UnidadMedida = mantenimientoDto.unidadMedida,
+                            CantidadDescripcion = mantenimientoDto.cantidadDescripcion,
+                            IdSucursal = mantenimientoDto.sucursal,
+                            UsuarioCreacion = IdUsuario,
+                            FechaCreacion = DateTime.Now,
+                            Ip = IP,
+                            Estado = true
+                        };
                         _context.InventarioVenta.Add(Inventario);
                     }
                     else

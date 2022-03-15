@@ -30,15 +30,15 @@
                 <input asp-for="Cliente.NombreComercial" type="hidden" />
                 <input asp-for="Cliente.Telefono" type="hidden" />
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label>Fecha</label>
                     <input type="date" asp-for="FechaEmision" class="form-control"/>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label>Número de Factura</label>
                     <input asp-for="NumeroDocumento" class="form-control"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label>Cliente</label>
                     <select asp-for="Cliente.ClienteId" class="form-control select2">
                         <option selected disabled>--Seleccionar--</option>
@@ -55,14 +55,20 @@
                         }
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label>Correo</label>
                     <input asp-for="Cliente.CorreoCliente" class="form-control"/>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label>Sucursal</label>
                     <select asp-for="SucursalId" class="form-control select2" asp-items="ViewBag.sucursales">
                         <option selected disabled>--Seleccionar--</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Bodega</label>
+                    <select class="form-control select2" asp-for="BodegaId" style="width: 100%">
+                        <option value="0">-- SELECCIONAR --</option>
                     </select>
                 </div>
             </div>
@@ -277,6 +283,26 @@
             $("#btn-agrega-servicio").click(function(){
                 AgregarServicio();
             });
+
+            $("#SucursalId").change(function () {
+                var id = $(this).attr("data-id");
+                var value = $(this).val();
+                 IniciarLoading();
+                $.post("@Url.Action("ActualizarComboProductosBodega", "Inventario")", { Sucursal: value }, function (response) {
+                    DetenerLoading();
+                    if (isEmpty(response)) {
+                        MensajeSesionFinalizada();
+                        setTimeout(function () {
+                            window.location.href = "@Url.Action("index", "Auth")";
+                        }, 3000);
+                    } else {
+                        if (response.status === "success") {
+                            addOptionsBodegas("BodegaId", response.bodegas);
+                            //LimpiarSelect("productosOrigen-" + id);
+                        }
+                    }
+                });
+             });
         });
 
         function GuardarBorrador(){

@@ -19,6 +19,15 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices
             long IdCliente,
             RespuestaVentaDto respuestaVentaDto,
             List<DetalleFacturaModel> productos);
+
+        MethodResponseDto ActualizarInventarioRecepcion(
+            long IdUsuario,
+            string IP,
+            long ProveedorId,
+            string NumeroDocumento,
+            List<DetalleFacturaModel> productos
+            );
+
         MethodResponseDto ListarInventarios(long BodegaId);
         List<ProductoInventarioDto> GetProductosInventario(TipoInventario tipoInventario, long Sucursal);
     }
