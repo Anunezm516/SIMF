@@ -185,6 +185,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 {
                     Servicio.Descripcion += $" de {producto.Codigo} - {producto.Nombre}";
                     Servicio.CodigoSeguimiento = _utilidadRepository.GenerarCodigoSeguimientoProducto(producto.ProductoClienteId);
+                    Servicio.ProductoClienteId = producto.ProductoClienteId;
                 }
 
                 Servicio.TipoProducto = TipoProducto.Servicio;

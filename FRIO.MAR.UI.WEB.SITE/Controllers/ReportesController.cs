@@ -21,6 +21,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     //[Filters.MenuFilter(Constants.VentanasSoporte.ReportesVentas)]
     public class ReportesController : BaseController
     {
+        private readonly IClienteRepository _clienteRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IVentasRepository _ventasRepository;
         private readonly IGemboxService _gemboxService;
@@ -29,6 +30,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private readonly IUtilidadRepository _utilidadRepository;
 
         public ReportesController(
+            IClienteRepository clienteRepository,
             IAccountRepository accountRepository,
             IVentasRepository ventasRepository,
             IGemboxService gemboxService,
@@ -37,6 +39,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             IUtilidadRepository utilidadRepository, 
             ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _clienteRepository = clienteRepository;
             _accountRepository = accountRepository;
             _ventasRepository = ventasRepository;
             _gemboxService = gemboxService;
@@ -50,13 +53,16 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return View();
         }
 
+        #region Ventas
         public IActionResult Ventas() => View();    
 
         public PartialViewResult ReporteVentas(EstadoFactura EstadoFactura, DateTime FechaInicio, DateTime FechaFin)
         {
             return PartialView("_VentasDetalle", _reporteQueryService.GetFacturasVentas(EstadoFactura, FechaInicio, FechaFin));
         }
+        #endregion
 
+        #region Compras
         public IActionResult Compras()
         {
             //ViewBag.Proveedores = new SelectList(_proveedorRepository.GetProveedores().Select(c => new SelectListItem
@@ -73,11 +79,22 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         {
             return PartialView("_ComprasDetalle", _reporteQueryService.GetFacturasCompras(Proveedor, FechaInicio, FechaFin));
         }
+        #endregion
 
+        #region Producto-Servicios
+        [ActionName("Producto-Servicios")]
         public IActionResult ProductosCliente()
         {
-            return View();
+            ViewBag.Clientes = _clienteRepository.GetClientes();
+            return View("ProductosCliente");
         }
+
+        public IActionResult ReporteProductosCliente(long Cliente, DateTime FechaInicio, DateTime FechaFin)
+        {
+            return PartialView("_ProductosClienteDetalle", _reporteQueryService.GetProductosFactura(Cliente, FechaInicio, FechaFin));
+        }
+
+        #endregion
 
         [HttpPost]
         public JsonResult ImprimirFactura(string data)

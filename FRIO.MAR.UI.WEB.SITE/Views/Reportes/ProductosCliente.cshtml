@@ -39,13 +39,21 @@
                         <!-- Estado EDOC -->
                         <div class="col-md-3">
                             <div class="form-group mb-0">
-                                <select id="estadoFactura" class="form-control select2" data-placeholder="Escoger ...">
-                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Todos">Todos</option>
-                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Facturado">Facturado</option>
-                                    <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma">Proforma</option>
-
+                                <select id="cliente" class="form-control select2">
+                                    <option selected disabled>--Seleccionar--</option>
+                                    @foreach (FRIO.MAR.APPLICATION.CORE.Entities.Cliente cliente in ViewBag.Clientes)
+                                    {
+                                        <option value="@cliente.ClienteId">@cliente.Identificacion - @cliente.RazonSocial</option>
+                                    }
                                 </select>
-                                <small>Estado del Documento</small>
+
+                                @*<select id="estadoFactura" class="form-control select2" data-placeholder="Escoger ...">
+                                        <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Todos">Todos</option>
+                                        <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Facturado">Facturado</option>
+                                        <option value="@FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma">Proforma</option>
+
+                                    </select>*@
+                                <small>Cliente</small>
                             </div>
                         </div>
 
@@ -53,7 +61,7 @@
                         <div class="col-md-3">
                             <div class="form-group mb-0">
                                 <div>
-                                    <div class="input-daterange input-group align-baseline" >
+                                    <div class="input-daterange input-group align-baseline">
                                         <input style="cursor: pointer" readonly placeholder="Desde" id="fechaInicio2" type="text" class="datepicker form-control" name="start" />
                                         <input style="cursor: pointer" readonly placeholder="Hasta" id="fechaFin2" type="text" class="datepicker form-control" name="end" />
                                     </div>
@@ -120,7 +128,8 @@
     @*<script src="~/assets/js/pages/form-advanced.init.js"></script>*@
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
+            $(".select2").select2();
             $("#fechaInicio2").datepicker({
                 format: 'yyyy-mm-dd',
                 orientation: 'bottom auto',
@@ -154,13 +163,13 @@
 
             $("#idBotonConsultarEmitidos").click(function () {
 
-                var estadoFactura = $("#estadoFactura").val();
+                var cliente = $("#cliente").val();
                 var valorFechaInicio = $("#fechaInicio2").val();
                 var valorFechaFin = $("#fechaFin2").val();
 
-                if (ValidarCampos(estadoFactura, valorFechaInicio, valorFechaFin)) {
+                if (ValidarCampos(cliente, valorFechaInicio, valorFechaFin)) {
                     GetDetalleDocumento(
-                        estadoFactura,
+                        cliente,
                         valorFechaInicio,
                         valorFechaFin
                     );
@@ -177,9 +186,9 @@
             });
         });
 
-        function ValidarCampos(estadoFactura, valorFechaInicio, valorFechaFin) {
+        function ValidarCampos(cliente, valorFechaInicio, valorFechaFin) {
 
-            if (estadoFactura <= 0) {
+            if (cliente <= 0) {
                 return false;
             }
             if (valorFechaInicio == "") {
@@ -191,7 +200,7 @@
             return true;
         }
 
-        function GetDetalleDocumento(estadoFactura, valorFechaInicio, valorFechaFin ) {
+        function GetDetalleDocumento(cliente, valorFechaInicio, valorFechaFin ) {
             Swal.fire({
                 icon: "info",
                 allowOutsideClick: false,
@@ -200,9 +209,9 @@
                 timer: 150000
             });
             Swal.showLoading();
-            $.get("@Url.Action("ReporteVentas", "Reportes")", {
-                
-                EstadoFactura: estadoFactura,
+            $.get("@Url.Action("ReporteProductosCliente", "Reportes")", {
+
+                Cliente: cliente,
                 FechaInicio: valorFechaInicio,
                 FechaFin: valorFechaFin
 

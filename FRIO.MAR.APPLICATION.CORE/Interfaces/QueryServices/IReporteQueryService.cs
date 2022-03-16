@@ -1,5 +1,6 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
+using FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices
     {
         List<ComprasDomainServiceResultDto> GetFacturasCompras(long ProveedorId, DateTime fechaInicio, DateTime fechaFin);
         List<VentasDomainServiceResultDto> GetFacturasVentas(EstadoFactura estadoFactura, DateTime fechaInicio, DateTime fechaFin);
+        List<ReporteProductosFacturaQueryDto> GetProductosFactura(long ClienteId, DateTime fechaInicio, DateTime fechaFin);
     }
 }

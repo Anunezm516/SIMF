@@ -128,6 +128,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public long SucursalId { get; set; }
         public string UnidadMedida { get; set; }
         public TipoProducto TipoProducto { get; set; }
+        public long ProductoClienteId { get; set; }
 
         public DetalleFacturaModel()
         {
@@ -166,6 +167,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             SucursalId = detalle.SucursalId;
             UnidadMedida = detalle.UnidadMedida;
             TipoProducto = detalle.TipoProducto;
+            ProductoClienteId = detalle.ProductoClienteId;
         }
 
         public DetalleFacturaModel(CFacturaDetalle detalle)

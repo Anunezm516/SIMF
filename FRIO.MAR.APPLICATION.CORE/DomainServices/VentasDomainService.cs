@@ -203,6 +203,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     BodegaId = c.BodegaId,
                     MesesGarantia = c.MesesGarantia,
                     UnidadMedida = c.UnidadMedida,
+                    ProductoClienteId = c.ProductoClienteId,
                 }).ToList();
 
                 factura.FacturaFormaPago = model.FormaPago.Select(c => new FacturaFormaPago

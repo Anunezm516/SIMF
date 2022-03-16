@@ -50,6 +50,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public string UnidadMedida { get; set; }
         public TipoProducto TipoProducto { get; set; }
 
+        public long? FacturaId { get; set; }
+        public long ProductoClienteId { get; set; }
         public virtual Factura Factura { get; set; }
     }
 }

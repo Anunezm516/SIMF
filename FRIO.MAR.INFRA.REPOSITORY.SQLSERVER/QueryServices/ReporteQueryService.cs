@@ -1,6 +1,7 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
+using FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.QueryServices;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Data;
@@ -47,10 +48,31 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices
                         let fac = factura
                     select new ComprasDomainServiceResultDto(fac)
                     ).ToList();
-            /*
-            return context.Set<Factura>().AsNoTracking().Where(x => (estadoFactura == EstadoFactura.Todos || x.Estado == estadoFactura) 
-                        && (x.FechaEmision >= fechaInicio && x.FechaEmision <= fechaFin)).ToList();
-            */
+        }
+
+        public List<ReporteProductosFacturaQueryDto> GetProductosFactura(long ClienteId, DateTime fechaInicio, DateTime fechaFin)
+        {
+            fechaFin = fechaFin.AddDays(1);
+
+            using var context = new SIFMContext(GlobalSettings.ConnectionString);
+
+            List<ReporteProductosFacturaQueryDto> results = new List<ReporteProductosFacturaQueryDto>();
+
+            //var r1 = context.Factura.Include(x => x.FacturaDetalle)
+            //    .Where(x => x.Estado == EstadoFactura.Facturado && (x.FechaEmision >= fechaInicio && x.FechaEmision <= fechaFin)).Select(c => c.FacturaDetalle).ToList();
+
+            var r = (from factura in context.Set<Factura>().AsNoTracking()
+                     join detalle in context.Set<FacturaDetalle>().AsNoTracking() on factura.FacturaId equals detalle.FacturaId
+                     join producto in context.Set<ProductoCliente>().AsNoTracking() on detalle.ProductoClienteId equals producto.ProductoClienteId
+                     where factura.Estado == EstadoFactura.Facturado
+                          && (factura.FechaEmision >= fechaInicio && factura.FechaEmision <= fechaFin)
+                     let fac = factura
+                     let det = detalle
+                     let pro = producto
+                     select new ReporteProductosFacturaQueryDto(fac, det, pro)
+                          ).ToList();
+
+            return r;
         }
     }
 }
