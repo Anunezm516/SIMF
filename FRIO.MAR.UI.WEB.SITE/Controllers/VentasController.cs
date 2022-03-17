@@ -201,12 +201,19 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public JsonResult AgregarProducto(DetalleFacturaModel Producto)
+        public JsonResult AgregarProducto(DetalleFacturaModel Producto, long Sucursal)
         {
             try
             {
                 List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
-                var productos = _inventarioDomainService.GetProductosInventario(TipoInventario.venta, 0);
+                var productos = _inventarioDomainService.GetProductosInventario(TipoInventario.venta, Sucursal);
+
+                productos = CalcularStockActual(productos, detalles);
+
+                if (decimal.Parse(Utilidades.DepuraStrConvertNum(Producto.Cantidad)) > (productos.FirstOrDefault(x => x.Producto.ProductoId == Producto.ProductoId && x.Sucursal.SucursalId == Producto.SucursalId && x.Bodega.BodegaId == Producto.BodegaId)?.StockDec ?? 0))
+                {
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "El valor ingresado es mayor al valor actual del stock" });
+                }
 
                 Producto.TipoProducto = TipoProducto.Bien;
                 detalles.Add(CalcularLinea(Producto));
@@ -228,18 +235,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
             var productos = _inventarioDomainService.GetProductosInventario(TipoInventario.venta, Sucursal);
 
-            productos.ForEach(producto =>
-            {
-                var pro = detalles.Where(x => x.ProductoId == producto.Producto.ProductoId);
-                if (pro != null && pro.Any())
-                {
-                    foreach (var item in pro)
-                    {
-                        producto.StockDec -= item.CantidadDec;
-                        producto.Stock = Utilidades.DoubleToString_FrontCO(producto.StockDec, 2);
-                    }
-                }
-            });
+            productos = CalcularStockActual(productos, detalles);
 
             ViewBag.Producto = productos;
             return PartialView("_ModalProductoContent");
@@ -282,20 +278,29 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         }
 
         [HttpPost]
-        public JsonResult ActualizarItem(string Tipo, string Id, string Valor)
+        public JsonResult ActualizarItem(string Tipo, string Id, string Valor, long Sucursal)
         {
             try
             {
+                bool superaStock = false;
                 List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
-
+                var productos = _inventarioDomainService.GetProductosInventario(TipoInventario.venta, Sucursal);
+                productos = CalcularStockActual(productos, detalles);
                 detalles.ForEach(item =>
                 {
                     if (item.Id == Id)
                     {
                         if (Tipo == "Cantidad")
                         {
-                            item.Cantidad = Valor;
-                            item.CantidadDec = decimal.Parse(Utilidades.DepuraStrConvertNum(Valor));
+                            if (decimal.Parse(Utilidades.DepuraStrConvertNum(item.Cantidad)) > (productos.FirstOrDefault(x => x.Producto.ProductoId == item.ProductoId && x.Sucursal.SucursalId == item.SucursalId && x.Bodega.BodegaId == item.BodegaId)?.StockDec ?? 0))
+                            {
+                                superaStock = true;
+                            }
+                            else
+                            {
+                                item.Cantidad = Valor;
+                                item.CantidadDec = decimal.Parse(Utilidades.DepuraStrConvertNum(Valor));
+                            }
                         }
                         if (Tipo == "Precio")
                         {
@@ -306,6 +311,11 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
                     item = CalcularLinea(item);
                 });
+
+                if (superaStock)
+                {
+                    return Json(new ResponseToViewDto { Estado = false, Mensaje = "El valor ingresado es mayor al valor actual del stock" });
+                }
 
                 HttpContext.Session.SetString("Detalle", JsonConvert.SerializeObject(detalles));
 
@@ -522,6 +532,25 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
 
         #region metodos privados
+
+        private List<ProductoInventarioDto> CalcularStockActual(List<ProductoInventarioDto> productos, List<DetalleFacturaModel> detalles)
+        {
+            productos.ForEach(producto =>
+            {
+                var pro = detalles.Where(x => x.ProductoId == producto.Producto.ProductoId && x.SucursalId == producto.Sucursal.SucursalId && x.BodegaId == producto.Bodega.BodegaId);
+                if (pro != null && pro.Any())
+                {
+                    foreach (var item in pro)
+                    {
+                        producto.StockDec -= item.CantidadDec;
+                        producto.Stock = Utilidades.DoubleToString_FrontCO(producto.StockDec, 2);
+                    }
+                }
+            });
+
+            return productos;
+        }
+
         private void CargarDatos()
         {
             ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");

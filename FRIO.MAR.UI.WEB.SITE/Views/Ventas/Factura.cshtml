@@ -401,11 +401,10 @@
                 Valor: Valor
             })
             .done(function(response){
-                if (response.estado){
-                    ConstruirDetalles();
-                }else{
+                if (!response.estado) {
                     MensajeErrorSwal(response.mensaje, "");
                 }
+                ConstruirDetalles();
             })
             .fail(function(error){
                 MsgAjaxError(error);

@@ -56,6 +56,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             NumeroDocumento = factura.NumeroDocumento;
             Secuencial = factura.Secuencial;
             FechaEntrega = factura.FechaEntrega;
+            
         }
 
         public FacturaModel(CFactura factura)
