@@ -76,6 +76,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IComprasDomainService, ComprasDomainService>();
             services.AddScoped<IInitialData, InitialData>();
             services.AddScoped<IReporteQueryService, ReporteQueryService>();
+            services.AddScoped<IDashboardAppService, DashboardAppService>();
 
         }
 

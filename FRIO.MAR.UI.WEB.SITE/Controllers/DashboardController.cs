@@ -1,6 +1,9 @@
-﻿using FRIO.MAR.APPLICATION.CORE.Contants;
+﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Contants;
+using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.AppServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
+using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Services;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using GS.TOOLS;
@@ -18,18 +21,35 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     [Filters.MenuFilter(Constants.VentanasSoporte.Dashboard)]
     public class DashboardController : BaseController
     {
+        private readonly IClienteRepository _clienteRepository;
+        private readonly IProveedorRepository _proveedorRepository;
+        private readonly IProductoRepository _productoRepository;
+        private readonly IProductoClienteRepository _productoClienteRepository;
+        private readonly IDashboardAppService _dashboardAppService;
         private readonly IStorageService _storageService;
         private readonly INotificacionAppService _notificacionAppService;
         private readonly IAccountAppService _accountAppService;
+        private readonly ILogInfraServices logInfraServices;
 
         public DashboardController(
+            IClienteRepository clienteRepository,
+            IProveedorRepository proveedorRepository,
+            IProductoRepository productoRepository,
+            IProductoClienteRepository productoClienteRepository,
+            IDashboardAppService dashboardAppService,
             IStorageService storageService,
             INotificacionAppService notificacionAppService,
             IAccountAppService accountAppService, ILogInfraServices logInfraServices) : base(logInfraServices)
         {
+            _clienteRepository = clienteRepository;
+            _proveedorRepository = proveedorRepository;
+            _productoRepository = productoRepository;
+            _productoClienteRepository = productoClienteRepository;
+            _dashboardAppService = dashboardAppService;
             _storageService = storageService;
             _notificacionAppService = notificacionAppService;
             _accountAppService = accountAppService;
+            this.logInfraServices = logInfraServices;
         }
 
         public IActionResult Index()
@@ -57,7 +77,31 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                     //HttpContext.Session.SetString("Roles", 0);
                 }
             }
+
+            ViewBag.CantidadCliente = _clienteRepository.Find(x => x.Estado).Count();
+            ViewBag.CantidadProveedor = _proveedorRepository.Find(x => x.Estado).Count();
+
+            var productos = _productoRepository.Find(x => x.Estado);
+            ViewBag.CantidadProducto = productos.Where(x => x.TipoProducto == TipoProducto.Bien).Count();
+            ViewBag.CantidadServicio = productos.Where(x => x.TipoProducto == TipoProducto.Servicio).Count();
+
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult GetGraficos()
+        {
+            try
+            {
+                var result =_dashboardAppService.GetGraficoLineaComportamientoLineaVentasCompras(DateTime.Now.Year);
+                if (result.TieneErrores) throw new Exception(result.MensajeError);
+
+                return Json(new ResponseToViewDto { Estado = result.Estado, Data = result.Data, Mensaje = result.Mensaje });
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseToViewDto { Estado = false, Mensaje = DomainConstants.ObtenerDescripcionError(DomainConstants.ERROR_GENERAL) + RegistrarLogError(this.GetCaller(), ex) });
+            }
         }
 
         public PartialViewResult GetNotificaciones()

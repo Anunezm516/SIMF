@@ -63,13 +63,16 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices
 
             var r = (from factura in context.Set<Factura>().AsNoTracking()
                      join detalle in context.Set<FacturaDetalle>().AsNoTracking() on factura.FacturaId equals detalle.FacturaId
-                     join producto in context.Set<ProductoCliente>().AsNoTracking() on detalle.ProductoClienteId equals producto.ProductoClienteId
+                     join productoCliente in context.Set<ProductoCliente>().AsNoTracking() on detalle.ProductoClienteId equals productoCliente.ProductoClienteId
+                     join producto in context.Set<Producto>().AsNoTracking() on detalle.ProductoId equals producto.ProductoId
                      where factura.Estado == EstadoFactura.Facturado
                           && (factura.FechaEmision >= fechaInicio && factura.FechaEmision <= fechaFin)
+                          && factura.ClienteId == ClienteId
                      let fac = factura
                      let det = detalle
+                     let proCli = productoCliente
                      let pro = producto
-                     select new ReporteProductosFacturaQueryDto(fac, det, pro)
+                     select new ReporteProductosFacturaQueryDto(fac, det, proCli, pro)
                           ).ToList();
 
             return r;

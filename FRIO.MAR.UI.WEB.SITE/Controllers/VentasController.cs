@@ -285,14 +285,20 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                 bool superaStock = false;
                 List<DetalleFacturaModel> detalles = JsonConvert.DeserializeObject<List<DetalleFacturaModel>>(HttpContext.Session.GetString("Detalle") ?? "[]");
                 var productos = _inventarioDomainService.GetProductosInventario(TipoInventario.venta, Sucursal);
-                productos = CalcularStockActual(productos, detalles);
+
+                var producto = detalles.FirstOrDefault(x => x.Id == Id);
+
+                productos = CalcularStockActual(productos, detalles, producto.ProductoId, producto.SucursalId, producto.BodegaId);
                 detalles.ForEach(item =>
                 {
                     if (item.Id == Id)
                     {
                         if (Tipo == "Cantidad")
                         {
-                            if (decimal.Parse(Utilidades.DepuraStrConvertNum(item.Cantidad)) > (productos.FirstOrDefault(x => x.Producto.ProductoId == item.ProductoId && x.Sucursal.SucursalId == item.SucursalId && x.Bodega.BodegaId == item.BodegaId)?.StockDec ?? 0))
+                            var pro = (productos.FirstOrDefault(x => x.Producto.ProductoId == item.ProductoId && x.Sucursal.SucursalId == item.SucursalId && x.Bodega.BodegaId == item.BodegaId));
+                            if (
+                            item.TipoProducto == TipoProducto.Bien && 
+                            decimal.Parse(Utilidades.DepuraStrConvertNum(Valor)) > (pro?.StockDec ?? 0))
                             {
                                 superaStock = true;
                             }
@@ -533,17 +539,20 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
 
         #region metodos privados
 
-        private List<ProductoInventarioDto> CalcularStockActual(List<ProductoInventarioDto> productos, List<DetalleFacturaModel> detalles)
+        private List<ProductoInventarioDto> CalcularStockActual(List<ProductoInventarioDto> productos, List<DetalleFacturaModel> detalles, long omitirProductoId = 0, long omitirSucursal = 0, long omitirBodegaId = 0)
         {
             productos.ForEach(producto =>
             {
-                var pro = detalles.Where(x => x.ProductoId == producto.Producto.ProductoId && x.SucursalId == producto.Sucursal.SucursalId && x.BodegaId == producto.Bodega.BodegaId);
-                if (pro != null && pro.Any())
+                var prods = detalles.Where(x => x.ProductoId == producto.Producto.ProductoId && x.SucursalId == producto.Sucursal.SucursalId && x.BodegaId == producto.Bodega.BodegaId);
+                if (prods != null && prods.Any())
                 {
-                    foreach (var item in pro)
+                    foreach (var item in prods)
                     {
-                        producto.StockDec -= item.CantidadDec;
-                        producto.Stock = Utilidades.DoubleToString_FrontCO(producto.StockDec, 2);
+                        if (item.ProductoId != omitirProductoId && item.BodegaId != omitirBodegaId && item.SucursalId != omitirSucursal)
+                        {
+                            producto.StockDec -= item.CantidadDec;
+                            producto.Stock = Utilidades.DoubleToString_FrontCO(producto.StockDec, 2);
+                        }
                     }
                 }
             });

@@ -240,3 +240,8 @@ function uuid() {
         return v.toString(16);
     });
 }
+
+var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});

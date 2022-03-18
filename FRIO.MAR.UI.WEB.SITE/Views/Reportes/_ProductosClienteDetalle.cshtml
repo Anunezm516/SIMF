@@ -13,31 +13,54 @@
                 <th class="text-center">Fecha Facturación</th>
                 <th class="text-center">Identificación Cliente</th>
                 <th class="text-center">Razón Social Cliente</th>
-                <th class="text-center">Código Servicio</th>
-                <th class="text-center">Producto</th>
+                <th class="text-center">Servicio</th>
+                <th class="text-center">Producto Cliente</th>
                 <th class="text-center">Garantía (meses)</th>
                 <th class="text-center">Código seguimiento</th>
 
             </tr>
         </thead>
         <tbody>
-            @foreach (FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices.ReporteProductosFacturaQueryDto row in Model)
+            @*@foreach (var group in Model.GroupBy(x => x.NumeroDocumento).ToList())
+        {
+            int cont = 0;
+            @foreach (FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices.ReporteProductosFacturaQueryDto row in group)
             {
+                cont++;
                 <tr>
-                    @*<td class="text-center">
-                        <button class="btn btn-outline-danger" onclick="ImprimirFactura('@row.Id')">
-                            <i class="fa fa-file"></i>
-                        </button>
-                    </td>*@
-                    <td class="text-center">@row.NumeroDocumento</td>
+                    @if (cont == 1)
+                    {
+                        <td rowspan="@group.Count()" class="text-center">@group.Key</td>
+                    }
                     <td class="text-center">@row.Fecha</td>
                     <td class="text-center">@row.Identificacion</td>
                     <td class="text-center">@row.Adquiriente</td>
-                    <td class="text-center">@row.ProductoCodigo</td>
-                    <td class="text-center">@row.ProductoNombre</td>
+                    <td class="text-center">@row.ProductoCodigo - @row.ProductoNombre</td>
+                    <td class="text-center">@row.ProductoClienteNombre</td>
                     <td class="text-center">@row.MesesGarantia</td>
                     <td class="text-center">@row.ProductoCodigoSeguimiento</td>
                 </tr>
+
+            }
+        }*@
+            @foreach (var group in Model.GroupBy(x => x.NumeroDocumento).ToList())
+            {
+                int cont = 0;
+                @foreach (FRIO.MAR.APPLICATION.CORE.DTOs.QueryServices.ReporteProductosFacturaQueryDto row in group)
+                {
+                    cont++;
+                    <tr>
+                        <td class="text-center">@group.Key</td>
+                        <td class="text-center">@row.Fecha</td>
+                        <td class="text-center">@row.Identificacion</td>
+                        <td class="text-center">@row.Adquiriente</td>
+                        <td class="text-center">@row.ProductoCodigo - @row.ProductoNombre</td>
+                        <td class="text-center">@row.ProductoClienteNombre</td>
+                        <td class="text-center">@row.MesesGarantia</td>
+                        <td class="text-center">@row.ProductoCodigoSeguimiento</td>
+                    </tr>
+
+                }
             }
         </tbody>
     </table>
@@ -82,6 +105,9 @@ else
                         next: 'Siguiente',
                         last: 'Último'
                     }
+                },
+                rowsGroup: {
+                    dataSrc: 0
                 },
                 lengthChange: !1,
                 buttons: [{

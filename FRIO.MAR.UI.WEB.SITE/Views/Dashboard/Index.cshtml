@@ -4,3 +4,217 @@
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <a asp-controller="Clientes" asp-action="Index" class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Clientes</p>
+                                <h4 class="mb-0">@ViewBag.CantidadCliente</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+                                    <span class="avatar-title">
+                                        <i class="bx bx-user-pin font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <a asp-controller="Proveedores" asp-action="Index"  class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Proveedores</p>
+                                <h4 class="mb-0">@ViewBag.CantidadProveedor</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center ">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-user font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <a asp-controller="Productos" asp-action="Index"  class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Productos</p>
+                                <h4 class="mb-0">@ViewBag.CantidadProducto</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-archive-in font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <a asp-controller="Productos" asp-action="Index"  class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Servicios</p>
+                                <h4 class="mb-0">@ViewBag.CantidadServicio</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body" id="graphLineas">
+                <h4 class="card-title mb-4">Comportamiento de Ventas y Compras</h4>
+
+                <div id="line_chart_datalabel" class="apex-charts" dir="ltr"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <!-- apexcharts -->
+    <script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            CargarGraficos();
+
+        });
+
+        function CargarGraficos() {
+            var urlGraficos = '@Html.Raw(Url.Action("GetGraficos"))';
+            $.post(urlGraficos)
+                .done(function (response) {
+                    console.log(response);
+                    if (response.estado) {
+                        var seriesLinea = response.data.series;
+                        var xaxisLinea = response.data.xaxis.categories;
+                        GraficarLineas(seriesLinea, xaxisLinea);
+                    } else {
+                        var para = document.createElement("p");
+                        para.className = "alert alert-danger";
+                        var node = document.createTextNode("Ha ocurrido un error al cargar el presente Gráfico. Por favor, notifique el incidente en el Menú de Soporte/Déjanos tus comentarios.");
+                        para.appendChild(node);
+                        var element = document.getElementById("graphLineas");
+                        element.appendChild(para);
+                    }
+                })
+                .fail(function (error) { MsgAjaxError(error); });
+        }
+
+        function GraficarLineas(series, categories) {
+            console.log(series);
+            var Linea = {
+                chart: {
+                    height: 380,
+                    type: "line",
+                    zoom: {
+                        enabled: !1
+                    },
+                    toolbar: {
+                        show: !1
+                    }
+                },
+                colors: ["#556ee6", "#34c38f"],
+                dataLabels: {
+                    enabled: !0
+                },
+                stroke: {
+                    width: [3, 3],
+                    curve: "straight"
+                },
+                series: series,
+                title: {
+                    text: "Correspondiente al año " + new Date().getFullYear(),
+                    align: "left"
+                },
+                grid: {
+                    row: {
+                        colors: ["transparent", "transparent"],
+                        opacity: .2
+                    },
+                    borderColor: "#f1f1f1"
+                },
+                markers: {
+                    style: "inverted",
+                    size: 6
+                },
+                xaxis: {
+                    categories: categories,
+                    title: {
+                        text: "Mensual"
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: "$"
+                    }, labels: {
+                        formatter: function (value) {
+                            return formatter.format(value);
+                        }
+                    },
+                    min: 0
+                },
+                legend: {
+                    position: "top",
+                    horizontalAlign: "right",
+                    floating: !0,
+                    offsetY: -25,
+                    offsetX: -5
+                },
+                responsive: [{
+                    breakpoint: 600,
+                    options: {
+                        chart: {
+                            toolbar: {
+                                show: !1
+                            }
+                        },
+                        legend: {
+                            show: !1
+                        }
+                    }
+                }]
+            };
+            (chart = new ApexCharts(document.querySelector("#line_chart_datalabel"), Linea)).render();
+        }
+    </script>
+
+}
