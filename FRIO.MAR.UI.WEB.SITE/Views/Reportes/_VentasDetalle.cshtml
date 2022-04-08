@@ -25,10 +25,12 @@
                         <button class="btn btn-outline-danger" onclick="ImprimirFactura('@row.Id')">
                             <i class="fa fa-file"></i>
                         </button>
+                        <button class="btn btn-outline-success" onclick="Donwload('@row.Id')" title="descargar adjuntos">
+                            <i class="fa fa-download"></i>
+                        </button>
                     </td>
                     <td class="text-center">@row.NumeroDocumento</td>
                     <td class="text-center">@row.Fecha</td>
-                    
                     <td class="text-center">@row.Identificacion</td>
                     <td class="text-center">@row.Adquiriente</td>
                     <td class='text-center'>@row.ValorTotal</td>
@@ -44,7 +46,7 @@ else
 {
     <div class="card">
         <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-            La consulta no devolvió ningún resultado.
+            No existe ventas
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>

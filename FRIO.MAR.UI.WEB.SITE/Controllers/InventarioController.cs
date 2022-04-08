@@ -21,15 +21,14 @@ using FRIO.MAR.APPLICATION.CORE.DTOs;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class InventarioController : BaseController
     {
         private readonly ILogInfraServices logInfraServices;
         private readonly SIFMContext _context;
-        //private readonly GSEDOC_ColombiaContext _contextEmps;
         private readonly IConfiguration _configuration;
         private readonly IInventarioDomainService inventarioService;
         private readonly IInventarioRepository inventarioRepositorio;
-        //private string mensaje = "";
 
         public InventarioController(
             ILogInfraServices logInfraServices,
@@ -46,7 +45,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             inventarioService = inventarioServices;
         }
 
-        //[Helper.PermisoPantalla("Inventario", "ListaInventario")]
+        [Filters.MenuFilter(Constants.VentanasSoporte.InventarioLista)]
         public ActionResult ListaInventario(string data)
         {
             ListaInventarioViewModel model = new ListaInventarioViewModel();
@@ -69,7 +68,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return View(model);
         }
 
-        //[Helper.PermisoPantalla("Inventario", "ListaInventario")]
+        [Filters.MenuFilter(Constants.VentanasSoporte.InventarioLista)]
         public ActionResult GetDetalleProveedor(long IdProducto)
         {
             var ProductoQuery = _context.Producto.Find(IdProducto);
@@ -94,7 +93,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return PartialView("DetalleProveedorInventario", model);
         }
 
-        //[Helper.PermisoPantalla("Inventario", "ListaInventario")]
+        [Filters.MenuFilter(Constants.VentanasSoporte.InventarioMovimiento)]
         public IActionResult MovimientoInventario() => View();
 
         [HttpPost]
@@ -223,7 +222,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
         }
 
-        //[Helper.PermisoPantalla("Inventario", "ListaInventario")]
+        [Filters.MenuFilter(Constants.VentanasSoporte.InventarioMantenimiento)]
         public IActionResult MantenimientoInventario()
         {
             try
@@ -339,69 +338,9 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             mensajeError = result.MensajeError;
             return result.Estado;
         }
-        /*
-        private long CrearProveedor(string NitProveedor, long Item)
-        {
-            try
-            {
-                Edcompania edcompania = _contextEmps.Edcompania.FirstOrDefault(x => x.Ruc == UsuarioSesion.Nit && x.Estado == true);
-                DATA_GSEDOC_COLOMBIA.Data.Erproveedor proveedor = _contextEmps.Erproveedor.FirstOrDefault(x => x.Nitcliente == NitProveedor && x.Estado == true);
-                if (proveedor == null)
-                {
-                    proveedor = new DATA_GSEDOC_COLOMBIA.Data.Erproveedor();
 
-                    long IdFact = _contextEmps.ErfactLine.FirstOrDefault(x => x.IdFactLine == Item)?.IdFact??0;
-                    DATA_GSEDOCPYME.Data.Erfact Erfact = _contextEmps.Erfact.FirstOrDefault(x => x.IdFact == IdFact);
-                    if (Erfact != null)
-                    {
-                        proveedor.FirstName = Erfact.SupplierPartyRegistrationName;
-                        proveedor.FamilyName = Erfact.SupplierPartyName;
-                        proveedor.AdditionalAccountId = Erfact.SupplierPartyAdditionalAccountId;
-                        proveedor.IdentificationSchemeId = Erfact.SupplierPartyIdentificationSchemeId;
-                        proveedor.IdentificationValue = Erfact.SupplierPartyIdentificationValue;
-                        proveedor.DigitoVerificacion = string.IsNullOrEmpty(Erfact.SupplierIdentificationDv)? 0: (int.Parse(Erfact.SupplierIdentificationDv));
-                        proveedor.CountrySubentityCode = Erfact.SupplierPhysicalLocationCountrySubentityCode;
-                        proveedor.Idmunicipio = Erfact.SupplierPhysicalLocationId;
-                        proveedor.Line = Erfact.SupplierPartyAddressLine;
-                        proveedor.CountryCodeAlfa2 = "CO";
-                        proveedor.TaxLevelCode = Erfact.SupplierPartyTaxLevelCode;
-                        proveedor.Telefono = Erfact.SupplierContactTelephone;
-                        proveedor.Correo = Erfact.SupplierContactElectronicMail;
-                        proveedor.DefinicionesRut = Erfact.SupplierTaxLevelCodeObligations;
-                        proveedor.PostalZone = Erfact.SupplierPhysicalLocationPostalZone;
-                        proveedor.TaxSchemeId = Erfact.SupplierTaxScheme;
-                        proveedor.IdCompania = edcompania.IdCompania;
-                        proveedor.Nitcliente = NitProveedor;
-                        proveedor.FechaCreacion = DateTime.Now;
-                        proveedor.Estado = true;
-                        _contextEmps.Erproveedor.Add(proveedor);
-                        int cont = _contextEmps.SaveChanges();
-                        if (cont > 0)
-                        {
-                            return proveedor.IdProveedor;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-                else
-                {
-                    return proveedor.IdProveedor;
-                }
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-        }
-        */
         [HttpPost]
+        [Filters.MenuFilter(Constants.VentanasSoporte.InventarioMantenimiento)]
         public JsonResult MantenimientoInventario(InventarioMantenimientoDto mantenimiento)
         {
             try
@@ -554,8 +493,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             return new SelectList(data, "text", "value", Pais);
         }
 
-        //[Helper.PermisoPantalla("Inventario", "ReportesInventarioMovimiento")]
-
+        [Filters.MenuFilter(Constants.VentanasSoporte.ReportesInventario)]
         public ActionResult Reporte()
         {
             ViewBag.Productos = _context.Producto.Where(x => x.Estado == true).ToList();
@@ -588,6 +526,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
         }
 
+        [Filters.MenuFilter(Constants.VentanasSoporte.ReportesInventario)]
         public ActionResult GetDetalleReporteInventario(
             long Proveedor,
             TipoInventario TipoInventario, 

@@ -22,7 +22,7 @@ using System.IO;
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    //[Filters.MenuFilter(Constants.VentanasSoporte.ProductosInternos)]
+    [Filters.MenuFilter(Constants.VentanasSoporte.ProductosInternos)]
     public class ProductosController : BaseController
     {
         private readonly IConfiguration _configuration;

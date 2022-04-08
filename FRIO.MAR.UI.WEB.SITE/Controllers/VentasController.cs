@@ -22,7 +22,7 @@ using System.Linq;
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    //[Filters.MenuFilter(Constants.VentanasSoporte.Sucursales)]
+    [Filters.MenuFilter(Constants.VentanasSoporte.Ventas)]
     public class VentasController : BaseController
     {
         private readonly IInventarioDomainService _inventarioDomainService;

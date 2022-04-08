@@ -13,7 +13,6 @@ using System;
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
     [Authorize]
-    //[Filters.MenuFilter(Constants.VentanasSoporte.Permisos)]
     public class PerfilController : BaseController
     {
         private readonly IUsuarioAppService _usuarioAppService;

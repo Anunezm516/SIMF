@@ -13,6 +13,8 @@ using System.Linq;
 
 namespace FRIO.MAR.UI.WEB.SITE.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Filters.MenuFilter(Constants.VentanasSoporte.Facturador)]
     public class FacturadorController : BaseController
     {
         private readonly IUtilidadRepository _utilidadRepository;

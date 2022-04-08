@@ -1,11 +1,11 @@
 ﻿//LOADINNG
-function IniciarLoading() {
+function IniciarLoading(timer = 50000) {
     Swal.fire({
         icon: "info",
         allowOutsideClick: false,
         title: 'Procesando Información',
         text: 'Espere, por favor!...',
-        timer: 50000
+        timer: timer
     });
     Swal.showLoading();
 }

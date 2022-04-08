@@ -21,7 +21,11 @@
             @foreach (FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.ComprasDomainServiceResultDto row in Model)
             {
                 <tr>
-                    <td></td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-success" onclick="Donwload('@row.Id')" title="descargar adjuntos">
+                            <i class="fa fa-download"></i>
+                        </button>
+                    </td>
                     <td class="text-center">@row.NumeroDocumento</td>
                     <td class="text-center">@row.Fecha</td>
                     <td class="text-center">@row.Identificacion</td>
@@ -39,7 +43,7 @@ else
 {
     <div class="card">
         <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-            La consulta no devolvió ningún resultado.
+            No existe compras
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>

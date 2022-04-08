@@ -16,6 +16,11 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         {
         }
 
+        public List<FacturaAdjunto> GetAdjuntosFactura(long FacturaId)
+        {
+            return _context.FacturaAdjunto.Where(x => x.FacturaId == FacturaId).ToList();
+        }
+
         public Factura GetFactura(long Id)
         {
             return _context.Factura

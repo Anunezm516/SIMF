@@ -23,30 +23,42 @@ namespace FRIO.MAR.UI.WEB.SITE.Constants
     {
         Dashboard = 100,
 
-        Configuracion=200,
-        Usuarios,
-        Permisos, 
-        Rol,
+        //Configuración
+        Configuracion               = 200,
+        Usuarios                    = 201,
+        Permisos                    = 202, 
+        Rol                         = 203,
+        Facturador                  = 204,
         
+        //Mantenimiento
+        Mantenimiento               = 300,
+        Clientes                    = 301,
+        Proveedores                 = 302,
+        Bodegas                     = 303,
+        Sucursales                  = 304,
+        ProductosInternos           = 305,
+        //ProductosCliente        = 306,
 
-        Mantenimiento=300,
-        Clientes,
-        Proveedores,
-        Bodegas,
-        Sucursales,
-        ProductosInternos,
-        ProductosCliente,
+        //Ventas
+        Ventas                      = 400,
 
-        Ventas=400,
+        //Compras
+        Compras                     = 500,
 
-        Compras=500,
+        //Inventario
+        Inventario                  = 600,
+        InventarioLista             = 601,
+        InventarioMantenimiento     = 602,
+        InventarioMovimiento        = 603,
 
-        Inventario=600,
+        //Reportes
+        Reportes                    = 700,
+        ReportesVentas              = 701,
+        ReportesCompras             = 702,
+        ReportesInventario          = 703,
+        ReportesProductoServicio    = 704,
 
-        Reportes=700,
-        ReportesVentas=701,
-        ReportesCompras=702,
-        ReportesInventario=703,
+
         
     }
 }

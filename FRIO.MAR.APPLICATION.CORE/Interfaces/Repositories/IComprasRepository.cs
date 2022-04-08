@@ -11,5 +11,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories
         CFactura GetFactura(long Id, EstadoFactura Estado);
         CFactura GetFacturaNoIgualEstado(long Id, EstadoFactura Estado);
         List<CFactura> GetFacturas(EstadoFactura[] Estados);
+        List<CFacturaAdjunto> GetAdjuntosFactura(long IdFactura);
     }
 }

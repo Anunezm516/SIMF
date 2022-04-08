@@ -22,6 +22,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         public string ImagenBase64 { get; set; }
 
         public bool Estado { get; set; }
+        public long FacturaId { get; set; }
         public virtual Factura Factura { get; set; }
     }
 }

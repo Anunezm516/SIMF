@@ -14,5 +14,6 @@ namespace FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices
         MethodResponseDto GuardarFactura(FacturaModel model);
         MethodResponseDto EliminarFactura(long Id);
         MethodResponseDto ValidarFactura(FacturaModel model);
+        MethodResponseDto DescargarAdjuntos(long FacturaId);
     }
 }

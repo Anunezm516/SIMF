@@ -16,7 +16,7 @@
     <!-- DataTables -->
     <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/css/doc-emitido.css" rel="stylesheet" />
+    @*<link href="~/assets/css/doc-emitido.css" rel="stylesheet" />*@
 
     <!-- Responsive datatable examples -->
     <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -106,7 +106,7 @@
     <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.es.js"></script>
     @*<script src="~/assets/js/pages/form-advanced.init.js"></script>*@
 
-    <script>
+<script>
         $(document).ready(function(){
             $(".select2").select2();
             $("#fechaInicio2").datepicker({
@@ -189,7 +189,7 @@
             });
             Swal.showLoading();
             $.get("@Url.Action("ReporteCompras", "Reportes")", {
-                
+
                 Proveedor: proveedor,
                 FechaInicio: valorFechaInicio,
                 FechaFin: valorFechaFin
@@ -211,7 +211,60 @@
                 });
             });
         }
-    </script>
+
+        function Donwload(id) {
+
+            try {
+                IniciarLoading(500000);
+                $.post('@Url.Action("DescargaAdjuntosCompra", "Reportes")',
+                    {
+                        FacturaId: id
+                    })
+                    .done(function (response) {
+                        responseURL = response.data;
+
+                        if (!response.estado) {
+                            switch (response.mensaje) {
+                                case "--NO_ZIP":
+                                    Swal.fire({
+                                        title: '¡No ZIP!',
+                                        text: 'No se ha podido generar el .zip del documento.',
+                                        type: "warning",
+                                        confirmButtonText: 'OK',
+                                        allowOutsideClick: false,
+                                    });
+                                    break;
+                                case "--NO_ADJUNTOS_SERVICIO":
+                                    Swal.fire({
+                                        title: '¡No existen adjuntos!',
+                                        text: 'El documento no posee adjuntos.',
+                                        type: "info",
+                                        confirmButtonText: 'OK',
+                                        allowOutsideClick: false,
+                                    });
+                                    break;
+                                case "--ZIP_VACIO":
+                                    Swal.fire({
+                                        title: '¡El .zip vacío!',
+                                        text: 'El .zip está vacío.',
+                                        type: "info",
+                                        confirmButtonText: 'OK',
+                                        allowOutsideClick: false,
+                                    });
+                                    break;
+                            }
+                        } else {
+                            window.location = "@Url.Action("DownloadZip", "Reportes")" + '?fileGuid=' + responseURL + '&filename=' + responseURL;
+                            DetenerLoading();
+                        }
+                    })
+                    .fail(function (error) { MsgAjaxError(error); } )
+
+            } catch (e) {
+                MsgAjaxError(e)
+            }
+        }
+</script>
 
 
 }

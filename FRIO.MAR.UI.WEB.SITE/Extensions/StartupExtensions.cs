@@ -24,6 +24,8 @@ using FRIO.MAR.APPLICATION.CORE.Interfaces;
 using FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices;
 using FRIO.MAR.INFRA.SERVICE.STORAGE.Services;
 using FRIO.MAR.INFRA.SERVICE.GEMBOX.Services;
+using FRIO.MAR.APPLICATION.CORE.Services;
+using APLICATIONCORE_GSEDOCPYME.Interfaces.General;
 
 namespace FRIO.MAR.UI.WEB.SITE.Extensions
 {
@@ -77,6 +79,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Extensions
             services.AddScoped<IInitialData, InitialData>();
             services.AddScoped<IReporteQueryService, ReporteQueryService>();
             services.AddScoped<IDashboardAppService, DashboardAppService>();
+            services.AddScoped<IEscribirArchivoService, EscribirArchivoService>();
 
         }
 

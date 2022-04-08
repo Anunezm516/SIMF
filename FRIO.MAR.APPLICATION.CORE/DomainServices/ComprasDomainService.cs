@@ -1,6 +1,8 @@
-﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+﻿using APLICATIONCORE_GSEDOCPYME.Interfaces.General;
+using FRIO.MAR.APPLICATION.CORE.Constants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.DTOs.DomainService;
+using FRIO.MAR.APPLICATION.CORE.DTOs.Services;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.DomainServices;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.Repositories;
@@ -17,14 +19,17 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
 {
     public class ComprasDomainService : IComprasDomainService
     {
+        private readonly IEscribirArchivoService _escribirArchivoService;
         private readonly IStorageService _storageService;
         private readonly IComprasRepository _comprasRepository;
 
         public ComprasDomainService(
+            IEscribirArchivoService escribirArchivoService,
             IStorageService storageService,
             IComprasRepository comprasRepository
             )
         {
+            _escribirArchivoService = escribirArchivoService;
             _storageService = storageService;
             _comprasRepository = comprasRepository;
         }
@@ -294,5 +299,66 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
             return responseDto;
         }
 
+        public MethodResponseDto DescargarAdjuntos(long FacturaId)
+        {
+            MethodResponseDto responseDto = new MethodResponseDto();
+            try
+            {
+                List<ArchivoResponseDTO> archivos = new List<ArchivoResponseDTO>();
+                string NombreArchivo = Guid.NewGuid().ToString();
+                var adjuntos = _comprasRepository.GetAdjuntosFactura(FacturaId);
+                if (adjuntos != null && adjuntos.Any())
+                {
+                    foreach (var item in adjuntos)
+                    {
+                        if (!string.IsNullOrEmpty(item.Ruta))
+                        {
+                            try
+                            {
+                                var fileStream = System.IO.File.ReadAllBytes(item.Ruta);
+                                archivos.Add(new ArchivoResponseDTO { Archivo = fileStream, NombreArchivo = item.Nombre });
+
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        }
+                        
+                    }
+
+                    string directorioDocumentosPyme = @"wwwroot\reportes\";
+                    string subdirectorioAdjuntosRecibidos = @"adjuntos_compras\";
+                    string carpetaAzipear = NombreArchivo;
+                    EscribirZipResponseDTO responseEscribirDTO = _escribirArchivoService.ResponseEscribirZip(archivos, directorioDocumentosPyme, subdirectorioAdjuntosRecibidos, carpetaAzipear);
+                    if (responseEscribirDTO.EstadoSolicitud && responseEscribirDTO.TieneZip)
+                    {
+                        if (responseEscribirDTO.LenghtBytes < 30)
+                        {
+                            responseDto.Mensaje = "--ZIP_VACIO";
+                            return responseDto;
+                            //return Json("--ZIP_VACIO");
+                        }
+
+                        string file = responseEscribirDTO.RutaLocal;
+                        responseDto.Estado = true;
+                        responseDto.Data = file;
+                        return responseDto;
+                    }
+                    else
+                    {
+                        responseDto.Mensaje = "--NO_ZIP";
+                        return responseDto;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                responseDto.MensajeError = string.Format("{0} => {1}", this.GetCaller(), GSConversions.ExceptionToString(ex));
+                responseDto.TieneErrores = true;
+            }
+
+            return responseDto;
+        }
     }
 }
