@@ -1,4 +1,5 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.DTOs;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Interfaces.AppServices;
@@ -77,6 +78,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 cliente = new Cliente
                 {
+                    TipoPersona = model.TipoPersona,
                     TipoIdentificacion = model.TipoIdentificacion,
                     Identificacion = model.Identificacion,
                     RazonSocial = model.RazonSocial,
@@ -127,6 +129,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     }
                 }
 
+                cliente.TipoPersona = model.TipoPersona;
                 cliente.TipoIdentificacion = model.TipoIdentificacion;
                 cliente.Identificacion = model.Identificacion;
                 cliente.RazonSocial = model.RazonSocial;

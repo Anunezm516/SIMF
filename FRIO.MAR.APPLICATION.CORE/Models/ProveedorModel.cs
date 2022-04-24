@@ -1,4 +1,5 @@
 ﻿using FRIO.MAR.APPLICATION.CORE.Constants;
+using FRIO.MAR.APPLICATION.CORE.Contants;
 using FRIO.MAR.APPLICATION.CORE.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
     public class ProveedorModel
     {
         public string Id { get; set; }
+
+        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        public TipoPersona TipoPersona { get; set; }
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
         public string TipoIdentificacion { get; set; }
@@ -31,7 +35,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         [MaxLength(100, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string CorreoElectronico { get; set; }
 
-        [MaxLength(50, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
+        [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string Telefono { get; set; }
 
         public string Ip { get; set; }
@@ -52,6 +56,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             CorreoElectronico = cliente.CorreoElectronico;
             Direccion = cliente.Direccion;
             Telefono = cliente.Telefono;
+            TipoPersona = cliente.TipoPersona ?? TipoPersona.Natural;
+
         }
     }
 }

@@ -76,6 +76,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
 
                 Proveedor = new Proveedor
                 {
+                    TipoPersona = model.TipoPersona,
                     TipoIdentificacion = model.TipoIdentificacion,
                     Identificacion = model.Identificacion,
                     RazonSocial = model.RazonSocial,
@@ -126,6 +127,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                     }
                 }
 
+                Proveedor.TipoPersona = model.TipoPersona;
                 Proveedor.TipoIdentificacion = model.TipoIdentificacion;
                 Proveedor.Identificacion = model.Identificacion;
                 Proveedor.RazonSocial = model.RazonSocial;

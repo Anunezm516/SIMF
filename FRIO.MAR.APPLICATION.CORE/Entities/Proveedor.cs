@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FRIO.MAR.APPLICATION.CORE.Contants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,6 +11,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
     {
         [Key]
         public long ProveedorId { get; set; }
+
+        public TipoPersona? TipoPersona { get; set; }
 
         [Column(TypeName = "varchar(3)")]
         public string TipoIdentificacion { get; set; }

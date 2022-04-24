@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace FRIO.MAR.APPLICATION.CORE.Contants
 {
@@ -37,6 +38,15 @@ namespace FRIO.MAR.APPLICATION.CORE.Contants
         Devuelta = -1,
         PendienteEnvio = 0,
         Enviado = 1
+    }
+
+    public enum TipoPersona
+    {
+        [Display(Name = "Jurídica")]
+        Juridica = 1,
+
+        [Display(Name = "Natural")]
+        Natural = 2
     }
 
 }

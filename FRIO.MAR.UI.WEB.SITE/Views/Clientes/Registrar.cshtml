@@ -19,32 +19,43 @@
             <div class="row">
                 <div class="col-md-2">
                     <div class="form-group">
+                        <label asp-for="TipoPersona" class="control-label">Tipo de Identificacion <span class="text-danger">*</span></label>
+                        <select asp-for="TipoPersona" class=" form-control" asp-items="@Html.GetEnumSelectList<FRIO.MAR.APPLICATION.CORE.Contants.TipoPersona>()">
+                            <option value="" selected disabled>--Seleccionar--</option>
+                        </select>
+                        <span asp-validation-for="TipoPersona" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
                         <label asp-for="TipoIdentificacion" class="control-label">Tipo de Identificacion <span class="text-danger">*</span></label>
-                        <select asp-for="TipoIdentificacion" class=" form-control" asp-items="ViewBag.tipoIdentificacion" >
+                        <select asp-for="TipoIdentificacion" class=" form-control" asp-items="ViewBag.tipoIdentificacion">
                             <option value="" selected disabled>--Seleccionar--</option>
                         </select>
                         <span asp-validation-for="TipoIdentificacion" class="text-danger"></span>
                     </div>
                 </div>
+
                 <div class="col-md-2">
                     <div class="form-group">
                         <label asp-for="Identificacion" class="control-label">Identificación <span class="text-danger">*</span></label>
-                        <input asp-for="Identificacion" class="form-control"  />
+                        <input asp-for="Identificacion" class="form-control" />
                         <span asp-validation-for="Identificacion" class="text-danger"></span>
                     </div>
                 </div>
-               
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <div class="form-group">
-                        <label asp-for="RazonSocial" class="control-label">Razón Social <span class="text-danger">*</span></label>
-                        <input asp-for="RazonSocial" class="form-control"  />
+                        <label id="label-RazonSocial" asp-for="RazonSocial" class="control-label">Razón Social <span class="text-danger">*</span></label>
+                        <input asp-for="RazonSocial" class="form-control" />
                         <span asp-validation-for="RazonSocial" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
-                        <label asp-for="NombreComercial" class="control-label">Nombre Comercial </label>
-                        <input asp-for="NombreComercial" class="form-control"  />
+                        <label id="label-NombreComercial" asp-for="NombreComercial" class="control-label">Nombre Comercial </label>
+                        <input asp-for="NombreComercial" class="form-control" />
                         <span asp-validation-for="NombreComercial" class="text-danger"></span>
                     </div>
                 </div>
@@ -97,11 +108,12 @@
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
+    <script src="~/js/person.js"></script>
     <script>
         $(document).ready(function () {
             
         });
+
     </script>
     @Html.Raw(TempData["msg"])
 }
