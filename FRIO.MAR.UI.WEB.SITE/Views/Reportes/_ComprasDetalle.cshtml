@@ -22,9 +22,12 @@
             {
                 <tr>
                     <td class="text-center">
-                        <button class="btn btn-outline-success" onclick="Donwload('@row.Id')" title="descargar adjuntos">
-                            <i class="fa fa-download"></i>
-                        </button>
+                        @if (row.TieneAdjuntos)
+                        {
+                            <button class="btn btn-outline-success" onclick="Donwload('@row.Id')" title="descargar adjuntos">
+                                <i class="fa fa-download"></i>
+                            </button>
+                        }
                     </td>
                     <td class="text-center">@row.NumeroDocumento</td>
                     <td class="text-center">@row.Fecha</td>

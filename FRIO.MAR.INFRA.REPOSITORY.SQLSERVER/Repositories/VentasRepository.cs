@@ -50,6 +50,7 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
         public List<Factura> GetFacturas(EstadoFactura[] Estados)
         {
             return _context.Factura
+                .Include(x => x.FacturaAdjunto)
                 .Include(x => x.FacturaDetalle)
                 .Where(x => Estados.Contains(x.Estado)).ToList();
         }

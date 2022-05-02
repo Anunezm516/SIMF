@@ -3,6 +3,7 @@ using FRIO.MAR.APPLICATION.CORE.Entities;
 using FRIO.MAR.APPLICATION.CORE.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
@@ -16,6 +17,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
         public string ValorTotal { get; set; }
         public EstadoFactura Estado { get; set; }
         public string NumeroDocumento { get; set; }
+        public bool TieneAdjuntos { get; set; }
 
         public VentasDomainServiceResultDto()
         {
@@ -31,6 +33,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DTOs.DomainService
             ValorTotal = Utilidades.DoubleToString_FrontCO(factura.ValorTotal, 2);
             Estado = factura.Estado;
             NumeroDocumento = factura.NumeroDocumento;
+            TieneAdjuntos = factura.FacturaAdjunto == null ? false : (factura.FacturaAdjunto.Any());
         }
     }
 }

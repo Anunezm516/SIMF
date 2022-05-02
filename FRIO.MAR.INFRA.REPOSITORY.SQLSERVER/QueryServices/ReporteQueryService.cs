@@ -21,17 +21,24 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices
             List<VentasDomainServiceResultDto> facturas = new List<VentasDomainServiceResultDto>();
             using var context = new SIFMContext(GlobalSettings.ConnectionString);
 
-            return (from factura in context.Set<Factura>().AsNoTracking()
-                    where factura.Estado != EstadoFactura.Eliminado && factura.Estado != EstadoFactura.Borrador
-                    where (estadoFactura == EstadoFactura.Todos || factura.Estado == estadoFactura)
-                          && (factura.FechaEmision >= fechaInicio && factura.FechaEmision <= fechaFin)
-                          let fac = factura
-                          select new VentasDomainServiceResultDto(fac)
-                          ).ToList();
-            /*
-            return context.Set<Factura>().AsNoTracking().Where(x => (estadoFactura == EstadoFactura.Todos || x.Estado == estadoFactura) 
-                        && (x.FechaEmision >= fechaInicio && x.FechaEmision <= fechaFin)).ToList();
-            */
+            //return (from factura in context.Set<Factura>().AsNoTracking()
+            //        join adjuntos in context.FacturaAdjunto on factura.FacturaId equals adjuntos.FacturaId
+            //        where factura.Estado != EstadoFactura.Eliminado && factura.Estado != EstadoFactura.Borrador
+            //        where (estadoFactura == EstadoFactura.Todos || factura.Estado == estadoFactura)
+            //              && (factura.FechaEmision >= fechaInicio && factura.FechaEmision <= fechaFin)
+            //              let fac = factura
+            //              select new VentasDomainServiceResultDto(fac, adjuntos)
+            //              ).ToList();
+            
+            return context.Set<Factura>().AsNoTracking()
+                .Include(x => x.FacturaAdjunto)
+                .Where(x => 
+                (x.Estado != EstadoFactura.Eliminado && x.Estado != EstadoFactura.Borrador) &&
+                (estadoFactura == EstadoFactura.Todos || x.Estado == estadoFactura) &&
+                 (x.FechaEmision >= fechaInicio && x.FechaEmision <= fechaFin))
+                .Select(c => new VentasDomainServiceResultDto(c))
+                .ToList();
+            
         }
 
         public List<ComprasDomainServiceResultDto> GetFacturasCompras(long ProveedorId, DateTime fechaInicio, DateTime fechaFin)
@@ -40,14 +47,23 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.QueryServices
             List<VentasDomainServiceResultDto> facturas = new List<VentasDomainServiceResultDto>();
             using var context = new SIFMContext(GlobalSettings.ConnectionString);
 
-            return (from factura in context.Set<CFactura>().AsNoTracking()
-                    where 
-                        factura.Estado == EstadoFactura.Facturado 
-                        && (ProveedorId == 99 || factura.ProveedorId == ProveedorId)
-                        && (factura.FechaEmision >= fechaInicio && factura.FechaEmision <= fechaFin)
-                        let fac = factura
-                    select new ComprasDomainServiceResultDto(fac)
-                    ).ToList();
+            return context.CFactura.Include(x => x.FacturaAdjunto)
+                .Where(x =>
+                    x.Estado == EstadoFactura.Facturado
+                        && (ProveedorId == 99 || x.ProveedorId == ProveedorId)
+                        && (x.FechaEmision >= fechaInicio && x.FechaEmision <= fechaFin)
+                )
+                .Select(c => new ComprasDomainServiceResultDto(c))
+                .ToList();
+            //return (from factura in context.Set<CFactura>().AsNoTracking()
+            //        join adjuntos in context.FacturaAdjunto on factura.FacturaId equals adjuntos.FacturaId
+            //        where 
+            //            factura.Estado == EstadoFactura.Facturado 
+            //            && (ProveedorId == 99 || factura.ProveedorId == ProveedorId)
+            //            && (factura.FechaEmision >= fechaInicio && factura.FechaEmision <= fechaFin)
+            //            let fac = factura
+            //        select new ComprasDomainServiceResultDto(fac)
+            //        ).ToList();
         }
 
         public List<ReporteProductosFacturaQueryDto> GetProductosFactura(long ClienteId, DateTime fechaInicio, DateTime fechaFin)
