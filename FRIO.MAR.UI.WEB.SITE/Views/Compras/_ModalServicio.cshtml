@@ -14,7 +14,7 @@
                     <option disabled selected>--Seleccionar--</option>
                     @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Servicios)
                     {
-                        <option value='@item.ProductoId' data-descripcion='@item.Descripcion' data-codigo='@item.Codigo' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='@item.UnidadMedida' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
+                        <option value='@item.ProductoId' data-descripcion='@item.Descripcion' data-codigo='@item.Codigo' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='UNIDAD' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
                     }
                 </select>
                 <input id="servicio-unidad-medida" type="hidden" class="limiar-input-modal" />

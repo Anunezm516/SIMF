@@ -57,7 +57,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             List<ProductoModel> Productoes = new List<ProductoModel>();
             try
             {
-                ViewData["unidadMeida"] = _utilidadRepository.GetUnidadesMedida();
+                //ViewData["unidadMeida"] = _utilidadRepository.GetUnidadesMedida();
                 ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);
                 ViewData["sucursales"] = new SelectList(_sucursalRepository.GetSucursales(), "SucursalId", "Nombre");
 
@@ -182,7 +182,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
                                     sucursal = model.Sucursal ?? 0,
                                     //mantenimiento.cufeFactura = productoForm.cufe;
                                     //numeroFactura = productoForm.numeroDocumento,
-                                    unidadMedida = model.UnidadMedida,
+                                    unidadMedida = "", //model.UnidadMedida,
                                     proveedor = model.Proveedor ?? 0,
                                     motivo = "Registro de nuevo producto"
                                 };
@@ -253,16 +253,16 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private void CargarDatos()
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            foreach (var item in _utilidadRepository.GetUnidadesMedida())
-            {
-                items.Add(new SelectListItem
-                {
-                    Text = item.Simbolo + " - " + item.Comentario,
-                    Value = item.Simbolo,
-                });
-            }
+            //foreach (var item in _utilidadRepository.GetUnidadesMedida())
+            //{
+            //    items.Add(new SelectListItem
+            //    {
+            //        Text = item.Simbolo + " - " + item.Comentario,
+            //        Value = item.Simbolo,
+            //    });
+            //}
 
-            ViewData["unidadMeida"] = new SelectList(items, "Value", "Text");
+            //ViewData["unidadMeida"] = new SelectList(items, "Value", "Text");
 
 
             ViewData["IVA"] = _utilidadRepository.GetImpuestos(1);

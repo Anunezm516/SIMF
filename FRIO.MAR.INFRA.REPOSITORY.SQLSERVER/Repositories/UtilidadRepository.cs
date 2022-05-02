@@ -135,10 +135,10 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
             return _context.TipoIdentificacion.Where(x => x.Estado).ToList();
         }
 
-        public List<UnidadMedida> GetUnidadesMedida()
-        {
-            return _context.UnidadMedida.Where(x => x.Estado == true).ToList();
-        }
+        //public List<UnidadMedida> GetUnidadesMedida()
+        //{
+        //    return _context.UnidadMedida.Where(x => x.Estado == true).ToList();
+        //}
 
         public string GenerarCodigoSeguimientoProducto(long ProductoClienteId)
         {

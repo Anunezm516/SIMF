@@ -27,9 +27,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public string Descripcion { get; set; }
 
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
-        [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
-        public string UnidadMedida { get; set; }
+        //[Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        //[MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
+        //public string UnidadMedida { get; set; }
 
 
         [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
@@ -80,7 +80,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             Id = Utilities.Crypto.CifrarId(producto.ProductoId);
             Codigo = producto.Codigo;
             Descripcion = producto.Descripcion;
-            UnidadMedida = producto.UnidadMedida;
+            //UnidadMedida = producto.UnidadMedida;
             PrecioUnitarioStr = APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(producto.PrecioUnitario, 2);
             IVA = producto.IvaCodigo + "|" + producto.IvaPorcentaje;
             TipoProducto = producto.TipoProducto;

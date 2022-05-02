@@ -32,8 +32,8 @@ namespace FRIO.MAR.APPLICATION.CORE.Entities
         [Column(TypeName = "varchar(50)")]
         public string Modelo { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        public string UnidadMedida { get; set; }
+        //[Column(TypeName = "varchar(50)")]
+        //public string UnidadMedida { get; set; }
 
         public virtual long ClienteId { get; set; }
         public virtual Cliente Cliente { get; set; }

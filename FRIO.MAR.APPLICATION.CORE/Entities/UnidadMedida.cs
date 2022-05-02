@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FRIO.MAR.APPLICATION.CORE.Entities
 {
-    public class UnidadMedida
+    public class UnidadMedidas
     {
         public int UnidadMedidaId { get; set; }
 

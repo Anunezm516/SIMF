@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -161,41 +162,44 @@ namespace FRIO.MAR.INFRA.SERVICE.STORAGE.Services
             string path = Path.Combine(GlobalSettings.DirectorioImagenes, Tipo);
             List<ArchivoServiceDto> rutas = new List<ArchivoServiceDto>();
 
-            foreach (var item in imagenes)
+            if (imagenes != null && imagenes.Any())
             {
-                using MemoryStream ms = new MemoryStream();
-                item.CopyTo(ms);
-
-                NombreArchivo = string.IsNullOrEmpty(NombreArchivo) ? Guid.NewGuid().ToString() : NombreArchivo;
-                RutaImagen = Path.Combine(path, NombreArchivo + Path.GetExtension(item.FileName));
-
-                if (GlobalSettings.TipoAlmacenamiento == "1")
+                foreach (var item in imagenes)
                 {
-                    if (ms != null)
+                    using MemoryStream ms = new MemoryStream();
+                    item.CopyTo(ms);
+
+                    NombreArchivo = string.IsNullOrEmpty(NombreArchivo) ? Guid.NewGuid().ToString() : NombreArchivo;
+                    RutaImagen = Path.Combine(path, NombreArchivo + Path.GetExtension(item.FileName));
+
+                    if (GlobalSettings.TipoAlmacenamiento == "1")
                     {
-                        if (GuardarArchivo(ms, Path.Combine("wwwroot", RutaImagen), ref mensaje))
+                        if (ms != null)
                         {
-                            rutas.Add(new ArchivoServiceDto
+                            if (GuardarArchivo(ms, Path.Combine("wwwroot", RutaImagen), ref mensaje))
                             {
-                                Base64 = Convert.ToBase64String(ms.ToArray()),
-                                Nombre = item.FileName,
-                                Ruta = RutaImagen
-                            });
+                                rutas.Add(new ArchivoServiceDto
+                                {
+                                    Base64 = Convert.ToBase64String(ms.ToArray()),
+                                    Nombre = item.FileName,
+                                    Ruta = RutaImagen
+                                });
+                            }
                         }
                     }
-                }
-                else
-                {
-                    if (ms != null)
+                    else
                     {
-                        if (GuardarArchivo(ms, RutaImagen, ref mensaje, "images"))
+                        if (ms != null)
                         {
-                            rutas.Add(new ArchivoServiceDto
+                            if (GuardarArchivo(ms, RutaImagen, ref mensaje, "images"))
                             {
-                                Base64 = Convert.ToBase64String(ms.ToArray()),
-                                Nombre = item.FileName,
-                                Ruta = RutaImagen
-                            });
+                                rutas.Add(new ArchivoServiceDto
+                                {
+                                    Base64 = Convert.ToBase64String(ms.ToArray()),
+                                    Nombre = item.FileName,
+                                    Ruta = RutaImagen
+                                });
+                            }
                         }
                     }
                 }

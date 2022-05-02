@@ -172,7 +172,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 ViewBag.ClienteId = Id;
 
-                ViewData["unidadMeida"] = _utilidadRepository.GetUnidadesMedida();
+                //ViewData["unidadMeida"] = _utilidadRepository.GetUnidadesMedida();
 
                 long ClienteId = long.Parse(Crypto.DescifrarId(Id));
 
@@ -201,7 +201,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 model.ClienteId = ViewBag.ClienteId;
-                CargarDatos();
+                //CargarDatos();
 
                 if (!string.IsNullOrEmpty(Id))
                 {
@@ -233,7 +233,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             ViewBag.EsNuevo = string.IsNullOrEmpty(model.Id);
             try
             {
-                CargarDatos();
+                //CargarDatos();
 
                 if (ModelState.IsValid)
                 {
@@ -304,20 +304,20 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             }
         }
 
-        private void CargarDatos()
-        {
-            List<SelectListItem> items = new List<SelectListItem>();
-            foreach (var item in _utilidadRepository.GetUnidadesMedida())
-            {
-                items.Add(new SelectListItem
-                {
-                    Text = item.Simbolo + " - " + item.Comentario,
-                    Value = item.Simbolo,
-                });
-            }
+        //private void CargarDatos()
+        //{
+        //    List<SelectListItem> items = new List<SelectListItem>();
+        //    foreach (var item in _utilidadRepository.GetUnidadesMedida())
+        //    {
+        //        items.Add(new SelectListItem
+        //        {
+        //            Text = item.Simbolo + " - " + item.Comentario,
+        //            Value = item.Simbolo,
+        //        });
+        //    }
 
-            ViewData["unidadMeida"] = new SelectList(items, "Value", "Text");
+        //    ViewData["unidadMeida"] = new SelectList(items, "Value", "Text");
 
-        }
+        //}
     }
 }

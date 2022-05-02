@@ -100,7 +100,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 Producto = new ProductoCliente
                 {
                     Codigo = model.Codigo,
-                    UnidadMedida = model.UnidadMedida,
+                    //UnidadMedida = model.UnidadMedida,
                     Nombre = model.Nombre,
                     Descripcion = model.Descripcion,
                     Marca = model.Marca,
@@ -177,7 +177,7 @@ namespace FRIO.MAR.APPLICATION.CORE.AppServices
                 }
 
                 Producto.Codigo = model.Codigo;
-                Producto.UnidadMedida = model.UnidadMedida;
+                //Producto.UnidadMedida = model.UnidadMedida;
                 Producto.Nombre = model.Nombre;
                 Producto.Descripcion = model.Descripcion;
                 Producto.Marca = model.Marca;

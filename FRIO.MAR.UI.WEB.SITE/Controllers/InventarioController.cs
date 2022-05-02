@@ -229,7 +229,7 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             {
                 ViewBag.Productos = _context.Producto.Where(x => x.Estado == true).ToList();
                 ViewBag.Bodegas = _context.Bodega.Where(x => x.Estado == true).ToList();
-                ViewBag.UnidadesMedida = _context.UnidadMedida.Where(x => x.Estado == true).ToList();
+                //ViewBag.UnidadesMedida = _context.UnidadMedida.Where(x => x.Estado == true).ToList();
                 ViewBag.Sucursal = _context.Sucursal.Where(x => x.Estado == true).ToList();
                 ViewBag.Cliente = _context.Clientes.Where(x => x.Estado == true).ToList();
                 ViewBag.Proveedor = _context.Proveedores.Where(x => x.Estado == true).ToList();

@@ -31,9 +31,9 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         public string Descripcion { get; set; }
 
 
-        [Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
-        [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
-        public string UnidadMedida { get; set; }
+        //[Required(ErrorMessage = DomainConstants.MENSAJE_CAMPO_REQUIRED)]
+        //[MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
+        //public string UnidadMedida { get; set; }
 
         [MaxLength(50, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string Marca { get; set; }
@@ -59,7 +59,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
             Codigo = producto.Codigo;
             Nombre = producto.Nombre;
             Descripcion = producto.Descripcion;
-            UnidadMedida = producto.UnidadMedida;
+            //UnidadMedida = producto.UnidadMedida;
             Marca = producto.Marca;
             Modelo = producto.Modelo;
             ImagenRuta = producto.ProductoClienteImagen?.FirstOrDefault()?.Ruta ?? "";
