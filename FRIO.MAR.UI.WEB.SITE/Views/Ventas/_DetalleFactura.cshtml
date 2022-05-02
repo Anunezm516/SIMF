@@ -1,6 +1,6 @@
 ﻿@model FRIO.MAR.APPLICATION.CORE.Models.FacturaModel
 @{
-    int cantidadColumnas = 6;
+    int cantidadColumnas = 7;
 }
 @if(Model.Detalle != null)
 {
@@ -19,7 +19,7 @@
 
             @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
             {
-                cantidadColumnas = 7;
+                cantidadColumnas = 8;
                 <td>@item.CodigoSeguimiento</td>
             }
         
@@ -29,8 +29,9 @@
             <td class="text-end">
                 <input class="form-control decimal input-cantidad text-end" value="@item.Cantidad" data-id="@item.Id" onchange="ActualizarItem('Cantidad', $(this).val(), $(this).attr('data-id'))"/>
             </td>
+            <td>@item.IvaPorcentaje</td>
             <td>@item.IvaValor</td>
-            <td>@item.Total</td>
+            <td>@item.SubTotal</td>
         </tr>
     }
 }

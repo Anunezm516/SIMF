@@ -88,7 +88,7 @@
                                         </button>
                                     </th>
 
-                                    <th colspan="7">
+                                    <th colspan="8">
                                         <h5 style="color: #fff">Detalle</h5>
                                     </th>
                                 </tr>
@@ -97,14 +97,16 @@
                                     <th>Código</th>
                                     <th>Descripción</th>
 
-                                    @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma){
+                                    @if (Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
+                                    {
                                         <th>Código de Seguimiento</th>
                                     }
 
                                     <th>Precio Unitario</th>
                                     <th>Cantidad</th>
-                                    <th>IVA</th>
-                                    <th>Total</th>
+                                    <th>IVA (%)</th>
+                                    <th>IVA ($)</th>
+                                    <th>Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-detalle">
