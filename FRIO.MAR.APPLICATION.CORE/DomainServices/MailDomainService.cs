@@ -84,6 +84,17 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                 string asunto = _utilidadRepository.GetParametro(DomainConstants.MAIL_RECUPERAR_PASSWORD_ASUNTO)?.Valor ?? "";
                 string cuerpo = _utilidadRepository.GetParametro(DomainConstants.MAIL_RECUPERAR_PASSWORD_CUERPO)?.Valor ?? "";
 
+                StringBuilder info = new StringBuilder();
+                info.Append("<b>");
+                info.Append("Usuario: ");
+                info.Append("</b>");
+                info.Append($"{UsuarioNombreCompleto}");
+                info.Append("<br>");
+                info.Append("<b>");
+                info.Append($"Contraseña temporal: ");
+                info.Append("</b>");
+                info.Append($"{Password}");
+
                 MailDto mail = new MailDto
                 {
                     Tipo = TipoMail.RecuperarContraseña,
@@ -93,7 +104,7 @@ namespace FRIO.MAR.APPLICATION.CORE.DomainServices
                     Mensaje = BuildCuerpoCorreo(
                         CuerpoCorreo: cuerpo,
                         Usuario_Nombre_Completo: UsuarioNombreCompleto,
-                        Password_Temporal: Password)
+                        Password_Temporal: info.ToString())
                 };
 
                 return EnviarMail(mail);
