@@ -24,20 +24,24 @@ namespace FRIO.MAR.INFRA.REPOSITORY.SQLSERVER.Repositories
 
         public List<Rol> GetRoles()
         {
-            return _context.Rol.ToList();
+            return _context.Rol.Where(x => x.Estado == true).ToList();
         }
 
         public bool ActualizaRol(SPRol rol, ref string mensaje)
         {
             try
             {
-                using (var scope = serviceScopeFactory.CreateScope())
-                {
-                    using var edocCmdContext = scope.ServiceProvider.GetRequiredService<SIFMContext>();
-                    //edocCmdContext.ActualizarRol(rol);
-                }
+                //using (var scope = serviceScopeFactory.CreateScope())
+                //{
+                //    using var edocCmdContext = scope.ServiceProvider.GetRequiredService<SIFMContext>();
+                //    edocCmdContext.ActualizarRol(rol);
+                //}
+                var r = _context.Rol.FirstOrDefault(x => x.IdRol == rol.IdRol && x.Estado == true);
+                r.Estado = rol.Estado;
+                r.Nombre = rol.Nombre;
 
-                return true;
+                _context.Rol.Update(r);
+                return _context.SaveChanges() > 0;
             }
             catch (Exception ex)
             {
