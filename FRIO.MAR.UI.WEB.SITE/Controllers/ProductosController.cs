@@ -25,7 +25,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
     [Filters.MenuFilter(Constants.VentanasSoporte.ProductosInternos)]
     public class ProductosController : BaseController
     {
-        private readonly IConfiguration _configuration;
         private readonly IStorageService _storageService;
         private readonly IBodegaRepository _bodegaRepository;
         private readonly IInventarioDomainService _inventarioDomainService;
@@ -34,7 +33,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
         private readonly IProductoAppService _ProductoAppService;
 
         public ProductosController(
-            IConfiguration configuration,
             IStorageService storageService,
             IBodegaRepository bodegaRepository,
             IInventarioDomainService inventarioDomainService,
@@ -43,7 +41,6 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             IProductoAppService ProductoAppService, 
             ILogInfraServices logInfraServices) : base(logInfraServices)
         {
-            _configuration = configuration;
             _storageService = storageService;
             _bodegaRepository = bodegaRepository;
             _inventarioDomainService = inventarioDomainService;
