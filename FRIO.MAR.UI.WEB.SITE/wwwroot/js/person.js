@@ -27,7 +27,7 @@ function cambiarLabel() {
 function validarTipoIdentificacion() {
     const tipoIdentificacion = $("#TipoIdentificacion").val();
 
-    if (tipoIdentificacion === '04') { //RUC
+    if (tipoIdentificacion === '04' || tipoIdentificacion === "07") { //RUC || Consumidor final
         $("#Identificacion").attr("data-val-maxlength-max", 13);
         $("#Identificacion").attr("maxlength", 13);
         if ($("#Identificacion").val().length > 13) { $("#Identificacion").val(''); }
