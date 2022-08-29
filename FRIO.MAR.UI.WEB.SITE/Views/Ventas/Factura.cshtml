@@ -208,7 +208,9 @@
         }
 
         $(document).ready(function(){
+
             
+
             $(".dropzone").dropzone({
                 url: "@Url.Action("AgregarAdjuntos", "Ventas")",
                 paramName: myParamName, // The name that will be used to transfer the file
@@ -238,9 +240,15 @@
             });
 
             $(".select2").select2();
+            $(".select2-productos-clientes").select2({
+                dropdownParent: $("#modal-agregar-servicio")
+            });
+            $(".select2-servicios").select2({
+                dropdownParent: $("#modal-agregar-servicio")
+            });
             $(".decimal").maskMoney();
 
-            $("#btn-open-modal-producto").click(function(){
+            $("#btn-open-modal-producto").click(() => {
                 $("#modal-agregar-producto").modal("show");
                 $.get('@Url.Action("GetModalProductos", "Ventas")', { Sucursal: 0 }).done(function(response){
                     $("#div-modal-producto").empty();

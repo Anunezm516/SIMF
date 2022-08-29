@@ -8,10 +8,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section Styles{
-    <link href="~/assets/libs/select2/css/select2.min.css" />
-}
-
 <div class="card">
     <div class="card-body">
         @{await Html.RenderPartialAsync("_camposObligatorios");}
@@ -72,7 +68,6 @@
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script src="~/assets/libs/select2/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
             $(".select2").select2({

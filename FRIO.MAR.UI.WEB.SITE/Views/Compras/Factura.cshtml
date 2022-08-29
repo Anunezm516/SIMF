@@ -240,6 +240,9 @@
             });
 
             $(".select2").select2();
+            $(".select2-productos").select2({
+                dropdownParent: $("#modal-agregar-producto")
+            });
             $(".decimal").maskMoney();
 
             $("#btn-open-modal-producto").click(function(){

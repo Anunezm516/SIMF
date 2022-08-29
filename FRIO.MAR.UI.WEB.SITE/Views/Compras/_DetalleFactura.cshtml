@@ -2,7 +2,7 @@
 @{
     int cantidadColumnas = 7;
 }
-@if(Model.Detalle != null)
+@if (Model?.Detalle != null && Model.Detalle.Any())
 {
     @foreach (var item in Model.Detalle)
     {
@@ -17,50 +17,52 @@
             <td>@item.Codigo</td>
             <td>@item.Descripcion</td>
 
-            @if(Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
+            @if (Model.EstadoFactura == FRIO.MAR.APPLICATION.CORE.Constants.EstadoFactura.Proforma)
             {
                 cantidadColumnas = 8;
                 <td>@item.CodigoSeguimiento</td>
             }
-        
-             <td class="text-end">
-                <input class="form-control decimal input-precio-unitario text-end" value="@item.PrecioUnitario" data-id="@item.Id" onchange="ActualizarItem('Precio', $(this).val(), $(this).attr('data-id'))"/>
+
+            <td class="text-end">
+                <input class="form-control decimal input-precio-unitario text-end" value="@item.PrecioUnitario" data-id="@item.Id" onchange="ActualizarItem('Precio', $(this).val(), $(this).attr('data-id'))" />
             </td>
             <td class="text-end">
-                <input class="form-control decimal input-cantidad text-end" value="@item.Cantidad" data-id="@item.Id" onchange="ActualizarItem('Cantidad', $(this).val(), $(this).attr('data-id'))"/>
+                <input class="form-control decimal input-cantidad text-end" value="@item.Cantidad" data-id="@item.Id" onchange="ActualizarItem('Cantidad', $(this).val(), $(this).attr('data-id'))" />
             </td>
             <td>@item.IvaPorcentaje</td>
             <td>@item.IvaValor</td>
             <td>@item.SubTotal</td>
         </tr>
     }
-}
 
-<script>
-    $(document).ready(function(){
-        $(".decimal").maskMoney();
-    });
-</script>
 
-@*
-@section Sripts{
     <script>
-        $(document).ready(function(){
-            $(".input-precio-unitario").change(function(){
-                    var value = $(this).val();
-                    var id = $(this).attr("data-id");
-                    var tipo = "Precio";
-
-                    ActualizarItem(tipo, id, value );
-                });
-
-                $(".input-cantidad").change(function(){
-                    var value = $(this).val();
-                    var id = $(this).attr("data-id");
-                    var tipo = "Cantidad";
-
-                    ActualizarItem(tipo, id, value );
-                });
+        $(document).ready(function () {
+            $(".decimal").maskMoney();
         });
     </script>
-}*@
+}
+
+
+@*
+    @section Sripts{
+        <script>
+            $(document).ready(function(){
+                $(".input-precio-unitario").change(function(){
+                        var value = $(this).val();
+                        var id = $(this).attr("data-id");
+                        var tipo = "Precio";
+
+                        ActualizarItem(tipo, id, value );
+                    });
+
+                    $(".input-cantidad").change(function(){
+                        var value = $(this).val();
+                        var id = $(this).attr("data-id");
+                        var tipo = "Cantidad";
+
+                        ActualizarItem(tipo, id, value );
+                    });
+            });
+        </script>
+    }*@

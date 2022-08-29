@@ -6,26 +6,34 @@
 <input id="producto-stock" type="hidden" />
 <input id="producto-stock-dec" type="hidden" />
 
+@{
+    List<FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.ProductoInventarioDto> productos = ViewBag.Producto;
+}
+
 <div class="row">
     <div class="col-md-8">
         <label>Producto</label>
-        <select id="producto" class="form-control select2 limiar-select-modal" style="width: 100%" onchange="ActualizarCamposModalProducto()">
+        @*<input list="colores" name="colores" type="text">*@
+        <select id="producto" class="form-control select2-productos limiar-select-modal" style="width: 100%" onchange="ActualizarCamposModalProducto()">
             <option disabled selected>--Seleccionar--</option>
-            @foreach(FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.ProductoInventarioDto item in ViewBag.Producto)
+            @if (productos != null && productos.Any())
             {
-                <option 
-                value='@item.Producto.ProductoId' 
-                data-stock-dec="@item.StockDec"
-                data-stock="@item.Stock"
-                data-sucursal="@item.Sucursal.SucursalId"
-                data-bodega="@item.Bodega.BodegaId"
-                data-descripcion='@item.Producto.Descripcion' 
-                data-codigo='@item.Producto.Codigo' 
-                data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.Producto.PrecioUnitario, 2)' 
-                data-unidad-medida='UNIDAD' 
-                data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.Producto.IvaPorcentaje, 2)' >
-                @item.NombreProducto
-            </option>
+                @foreach (var item in productos)
+                {
+                    <option value='@item.Producto.ProductoId'
+                            data-stock-dec="@item.StockDec"
+                            data-stock="@item.Stock"
+                            data-sucursal="@item.Sucursal.SucursalId"
+                            data-bodega="@item.Bodega.BodegaId"
+                            data-descripcion='@item.Producto.Descripcion'
+                            data-codigo='@item.Producto.Codigo'
+                            data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.Producto.PrecioUnitario, 2)'
+                            data-unidad-medida='UNIDAD'
+                            data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.Producto.IvaPorcentaje, 2)'
+                            >
+                        @item.NombreProducto
+                    </option>
+                }
             }
         </select>
     </div>
@@ -52,13 +60,18 @@
 <br />
 <div class="row">
     <div class="col-12 d-grid">
-        <button  type="button"  id="btn-agrega-producto" class='btn btn-success btn-block' onclick="AgregarProducto()">
+        <button type="button" id="btn-agrega-producto" class='btn btn-success btn-block' onclick="AgregarProducto()">
             <i class='fa fa-plus'></i> Agregar Producto
         </button>
     </div>
 </div>
 
-<script>
-    $(".select2").select2();
-            $(".decimal").maskMoney();
-</script>
+@if (productos != null && productos.Any())
+{
+    <script>
+        $(".select2-productos").select2({
+            dropdownParent: $("#modal-agregar-producto")
+        });
+        $(".decimal").maskMoney();
+    </script>
+}
