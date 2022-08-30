@@ -1,61 +1,62 @@
-﻿
+﻿@{
+    List<FRIO.MAR.APPLICATION.CORE.Entities.Producto> productos = ViewBag.Producto;
+}
 <!-- Modal -->
-<div class="modal fade" id="modal-agregar-producto" aria-labelledby="agregarProductoModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h6 class="modal-title" id="agregarProductoModalLabel">Agregar Producto</h6>
-      </div>
-      <div class="modal-body">
-        <input id="producto-unidad-medida" type="hidden" />
-        <input id="producto-codigo" type="hidden" />
-        <input id="producto-descripcion" type="hidden" />
+<div id="modal-agregar-producto" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="agregarProductoModalLabel">Agregar Producto</h6>
+            </div>
+            <div class="modal-body">
+                <input id="producto-unidad-medida" type="hidden" />
+                <input id="producto-codigo" type="hidden" />
+                <input id="producto-descripcion" type="hidden" />
 
-        <div class="row">
-            <div class="col-md-12">
-                <label>Producto</label>
-                <select id="producto" class="form-control select2 limiar-select-modal" style="width: 100%">
-                    <option disabled selected>--Seleccionar--</option>
-                    @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Producto)
-                    {
-                        <option 
-                        value='@item.ProductoId' 
-                        data-descripcion='@item.Descripcion' 
-                        data-codigo='@item.Codigo' 
-                        data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' 
-                        data-unidad-medida='UNIDAD' 
-                        data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >
-                        @item.Codigo - @item.Descripcion
-                        </option>
-                    }
-                </select>
-                    
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Producto</label>
+                        <select id="producto" class="form-control select2-productos limiar-select-modal" style="width: 100%">
+                            <option disabled selected>--Seleccionar--</option>
+                            @foreach (var item in productos)
+                            {
+                                <option value='@item.ProductoId'
+                                        data-descripcion='@item.Descripcion'
+                                        data-codigo='@item.Codigo'
+                                        data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)'
+                                        data-unidad-medida='UNIDAD'
+                                        data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)'>
+                                    @item.Codigo - @item.Descripcion
+                                </option>
+                            }
+                        </select>
+
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>IVA</label>
+                        <input id="producto-iva" class="form-control limiar-input-modal" readonly />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Precio Unitario</label>
+                        <input id="producto-precio-unitario" class="form-control decimal limiar-input-modal" />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Cantidad</label>
+                        <input id="producto-cantidad" class="form-control decimal limiar-input-modal" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-12 d-grid">
+                        <button type="button" id="btn-agrega-producto" class='btn btn-success btn-block'>
+                            <i class='fa fa-plus'></i> Agregar Producto
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <br />
-        <div class="row">
-            <div class="col-md-4">
-                <label>IVA</label>
-                <input id="producto-iva" class="form-control limiar-input-modal" readonly />
-            </div>
-            <div class="col-md-4">
-                <label>Precio Unitario</label>
-                <input id="producto-precio-unitario" class="form-control decimal limiar-input-modal" />
-            </div>
-            <div class="col-md-4">
-                <label>Cantidad</label>
-                <input id="producto-cantidad" class="form-control decimal limiar-input-modal" />
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-12 d-grid">
-                <button  type="button"  id="btn-agrega-producto" class='btn btn-success btn-block'>
-                    <i class='fa fa-plus'></i> Agregar Producto
-                </button>
-            </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>

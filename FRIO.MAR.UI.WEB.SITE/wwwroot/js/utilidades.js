@@ -100,7 +100,6 @@ function MsgAjaxError(result) {
     DetenerLoading();
     var msg = "Existió un error, favor intentelo de nuevo.";
     var UrlBaseSite = $("#UrlBaseSite").val();
-    console.log(UrlBaseSite);
     try {
         if (result.status === 401) {
             MensajeSesionFinalizadaConfirmacionRedireccion(UrlBaseSite);
@@ -177,7 +176,6 @@ function isEmpty(val) {
 
 // Rutina para agregar opciones a un <select>
 function addOptionsProductos(domElement, result) {
-    console.log(result);
     var select = document.getElementById(domElement);
     LimpiarSelect(domElement);
     result.forEach(producto => {
@@ -190,7 +188,6 @@ function addOptionsProductos(domElement, result) {
 }
 
 function addOptionsSucursales(domElement, result) {
-    console.log(result);
     var select = document.getElementById(domElement);
     LimpiarSelect(domElement);
     result.forEach(sucursal => {
@@ -213,7 +210,6 @@ function addOptionsBodegas(domElement, result) {
 }
 
 function addOptionsProductosCliente(domElement, result) {
-    console.log(result);
     var select = document.getElementById(domElement);
     LimpiarSelect(domElement);
     result.forEach(producto => {

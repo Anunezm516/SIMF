@@ -1,0 +1,47 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "LOG": {
+    "Habilitar": true,
+    "Destino": 1, //1. DISK, 2. AZUREBLOBSTORAGE, 4. DATABASE
+    "Disk": {
+      "Ruta": "C:\\SIFM\\Exception\\${date:format=yyyy}\\${date:format=MM}\\${date:format=dd}\\",
+      "Layout": "${longdate} => [${mdlc:CodigoSeguimiento}] /${mdlc:Origen} || ${mdlc:Origen} Linea: ${mdlc:Linea} => Nombre Usuario: [${mdlc:Usuario}] => ${message}",
+      "FileName": "${gdc:item=Application}_${shortdate}"
+    }
+  },
+  "SIFM": {
+    //"DataSource": "tcp:frio-mar-server.database.windows.net,1433",
+    //"InitialCatalog": "frio-mar-database",
+    //"UserId": "frio-mar",
+    //"Password": "#lI$W6tc!wHO"
+    "DataSource": "DESKTOP-5K35U7M",
+    "InitialCatalog": "frio-mar-database",
+    "UserId": "sa",
+    "Password": "12345678"
+  },
+  "SITIOWEB": {
+    "TimeZoneId": "SA Pacific Standard Time",
+    "Footer": "",
+    "LimiteSesion": 60, //Minutos
+    "LimiteConsulta": "30[DD]", // DD=Dia, MM=Mes
+    "Recaptcha": {
+      "ClaveSitioWeb": "h3Jaz9AkILySwYFD7+ryMXgEdDxrQztuY2aYn39imMy4LfQJcJKdkUxGj3sngqGG",
+      "ClaveComGoogle": "h3Jaz9AkILxj5mh8AMoY1HkWQZMrEPLMriEEc7yhSflNQBlP9f+Xr0xGj3sngqGG"
+    }
+  },
+  "FormatoReporte": {
+    "RutaBase": "C:\\Users\\USUARIO\\OneDrive\\Tesis\\SIFM\\Material",
+    "NombreArchivo": "FormatoFactura.xlsx",
+    "Extension": "xlsx"
+  },
+  "TipoAlmacenamiento": 1, //1 = Disco ; 2 = Blob Storage
+  "DirectorioImagenes": "Images"
+
+}

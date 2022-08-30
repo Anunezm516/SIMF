@@ -20,7 +20,7 @@
 
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label asp-for="TipoPersona" class="control-label">Tipo de Identificacion <span class="text-danger">*</span></label>
+                        <label asp-for="TipoPersona" class="control-label">Tipo de Persona <span class="text-danger">*</span></label>
                         <select asp-for="TipoPersona" class=" form-control" asp-items="@Html.GetEnumSelectList<FRIO.MAR.APPLICATION.CORE.Contants.TipoPersona>()">
                             <option value="" selected disabled>--Seleccionar--</option>
                         </select>
@@ -30,7 +30,7 @@
 
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label asp-for="TipoIdentificacion" class="control-label">Tipo de Identificacion <span class="text-danger">*</span></label>
+                        <label asp-for="TipoIdentificacion" class="control-label">Tipo de Identificación <span class="text-danger">*</span></label>
                         <select asp-for="TipoIdentificacion" class=" form-control" asp-items="ViewBag.tipoIdentificacion">
                             <option value="" selected disabled>--Seleccionar--</option>
                         </select>
@@ -66,14 +66,14 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label asp-for="CorreoElectronico" class="control-label">Correo Electronico </label>
+                        <label asp-for="CorreoElectronico" class="control-label">Correo Electrónico </label>
                         <input asp-for="CorreoElectronico" class="form-control" />
                         <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label asp-for="Telefono" class="control-label">Telefono </label>
+                        <label asp-for="Telefono" class="control-label">Teléfono </label>
                         <input asp-for="Telefono" class="form-control" />
                         <span asp-validation-for="Telefono" class="text-danger"></span>
                     </div>
@@ -108,7 +108,7 @@
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/person.js"></script>
+    <script src="~/js/person.js?v=@FRIO.MAR.UI.WEB.SITE.Parameters.WebSiteParameters.Version"></script>
     <script>
         $(document).ready(function () {
 

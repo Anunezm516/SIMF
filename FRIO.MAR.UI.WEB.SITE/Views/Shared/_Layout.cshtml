@@ -8,7 +8,7 @@
 
 
     <!-- select2 css -->
-    <!--<link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />-->
+    @*<link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />*@
     <!-- sweetalert2 -->
     <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
@@ -22,7 +22,7 @@
     <!-- jquery.toast -->
     <link href="~/assets/libs/jquery.toast/jquery.toast.min.css" rel="stylesheet" type="text/css" />
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    @*<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />*@
     
 </head>
 <body data-sidebar="dark">
@@ -63,10 +63,9 @@
     @await Html.PartialAsync("~/Views/Shared/_footer.cshtml")
     @await Html.PartialAsync("~/Views/Shared/_vendor_scripts.cshtml")
 
-
     <!-- select 2 plugin -->
     @*<script src="~/assets/libs/select2/js/select2.min.js"></script>*@
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>*@
 
     <!-- sweetalert2 -->
     <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
@@ -78,12 +77,9 @@
     <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 
-    <script src="~/js/utilidades.js"></script>
-
+    <script src="~/js/utilidades.js?v=@FRIO.MAR.UI.WEB.SITE.Parameters.WebSiteParameters.Version"></script>
 
     <script>
-        
-
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 /***
@@ -99,20 +95,14 @@
                     $("#div-notificaciones").empty().html(result);
                 }).fail(function (error) { MsgAjaxError(error); });
             });
-
             setInterval(MostrarNotificaciones, 300000);
-
-
-
         });
 
         function MostrarNotificaciones() {
-            console.log("MostrarNotificaciones");
             $.get("@Url.Action("GetNotificaciones", "Dashboard")", function (result) {
                 $("#div-notificaciones").empty().html(result);
             }).fail(function (error) { MsgAjaxError(error); });
         }
-
     </script>
 
     @RenderSection("Scripts", required: false)

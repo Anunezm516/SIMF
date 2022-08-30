@@ -1,64 +1,74 @@
 ﻿
+@{
+    List<FRIO.MAR.APPLICATION.CORE.Entities.Producto> servicios = ViewBag.Servicios;
+}
+
 <!-- Modal -->
-<div class="modal fade" id="modal-agregar-servicio" aria-labelledby="agregarServicioModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h6 class="modal-title" id="agregarServicioModalLabel">Agregar Servicio</h6>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-md-12">
-                <label>Servicio</label>
-                <select id="servicio" class="form-control select2 limiar-select-modal" style="width: 100%">
-                    <option disabled selected>--Seleccionar--</option>
-                    @foreach(FRIO.MAR.APPLICATION.CORE.Entities.Producto item in ViewBag.Servicios)
-                    {
-                        <option value='@item.ProductoId' data-descripcion='@item.Descripcion' data-codigo='@item.Codigo' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='UNIDAD' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)' >@item.Codigo - @item.Descripcion</option>
-                    }
-                </select>
-                <input id="servicio-unidad-medida" type="hidden" class="limiar-input-modal" />
-                <input id="servicio-codigo" type="hidden" class="limiar-input-modal" />
-                <input id="servicio-descripcion" type="hidden" class="limiar-input-modal" />
+<div id="modal-agregar-servicio" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="agregarServicioModalLabel">Agregar Servicio</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Servicio</label>
+                        <select id="servicio" class="form-control select2-servicios limiar-select-modal" style="width: 100%">
+                            <option disabled selected>--Seleccionar--</option>
+                            @foreach (var item in servicios)
+                            {
+                                <option value='@item.ProductoId' data-descripcion='@item.Descripcion' data-codigo='@item.Codigo' data-precio-unitario='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.PrecioUnitario, 2)' data-unidad-medida='UNIDAD' data-iva='@FRIO.MAR.APPLICATION.CORE.Utilities.Utilidades.DoubleToString_FrontCO(item.IvaPorcentaje, 2)'>@item.Codigo - @item.Descripcion</option>
+                            }
+                        </select>
+                        <input id="servicio-unidad-medida" type="hidden" class="limiar-input-modal" />
+                        <input id="servicio-codigo" type="hidden" class="limiar-input-modal" />
+                        <input id="servicio-descripcion" type="hidden" class="limiar-input-modal" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-8">
+                        <label>Producto Cliente</label>
+                        <select id="producto-cliente" class="form-control select2-productos-clientes limiar-select-modal" style="width: 100%">
+                            <option disabled selected>--Seleccionar--</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Garantía (meses)</label>
+                        <input type="number" id="servicio-meses-garantia" class="form-control limiar-input-modal" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>IVA</label>
+                        <input id="servicio-iva" class="form-control limiar-input-modal" readonly />
+                    </div>
+                    <div class="col-md-4">
+                        <label>P. Unitario</label>
+                        <input id="servicio-precio-unitario" class="form-control decimal limiar-input-modal" />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Cantidad</label>
+                        <input id="servicio-cantidad" class="form-control decimal limiar-input-modal" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-12 d-grid">
+                        <button type="button" id="btn-agrega-servicio" class='btn btn-success btn-block'>
+                            <i class='fa fa-plus'></i> Agregar Servicio
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <br />
-        <div class="row">
-            <div class="col-md-8">
-                <label>Producto Cliente</label>
-                <select id="producto-cliente" class="form-control select2 limiar-select-modal" style="width: 100%">
-                    <option disabled selected>--Seleccionar--</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label>Garantía (meses)</label>
-                <input type="number" id="servicio-meses-garantia" class="form-control limiar-input-modal" />
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-4">
-                <label>IVA</label>
-                <input id="servicio-iva" class="form-control limiar-input-modal" readonly />
-            </div>
-            <div class="col-md-4">
-                <label>P. Unitario</label>
-                <input id="servicio-precio-unitario" class="form-control decimal limiar-input-modal" />
-            </div>
-            <div class="col-md-4">
-                <label>Cantidad</label>
-                <input id="servicio-cantidad" class="form-control decimal limiar-input-modal" />
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-12 d-grid">
-                <button  type="button"  id="btn-agrega-servicio" class='btn btn-success btn-block'>
-                    <i class='fa fa-plus'></i> Agregar Servicio
-                </button>
-            </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
+
+@*<script>
+        $(document).ready(function () {
+
+        });
+    </script>*@

@@ -11,13 +11,6 @@
     var Bodegas = @ViewBag.Bodegas;
 }
 
-@section Styles {
-    
-    <!-- select2 css -->
-    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-
-}
-
 @model FRIO.MAR.APPLICATION.CORE.DTOs.DomainService.InventarioMantenimientoDto
 
 <div class="card">
@@ -156,14 +149,8 @@
 
 @section Scripts {
 
-    <!-- select 2 plugin -->
-    <script src="~/assets/libs/select2/js/select2.min.js"></script>
-
     <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.min.js"></script>
-
-
     <script>
-
         function ActualizarComboEntrada(tipoInventario) {
             IniciarLoading();
             $.get("@Url.Action("ActualizarComboEntrada", "Inventario")", {}, function (response) {

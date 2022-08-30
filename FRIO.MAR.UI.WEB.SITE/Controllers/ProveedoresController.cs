@@ -6,6 +6,7 @@ using FRIO.MAR.APPLICATION.CORE.Models;
 using FRIO.MAR.CROSSCUTTING.Interfaces;
 using FRIO.MAR.UI.WEB.SITE.Constants;
 using GS.TOOLS;
+using Luilliarcec.Identification.Ecuador;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -89,6 +90,12 @@ namespace FRIO.MAR.UI.WEB.SITE.Controllers
             try
             {
                 ViewData["tipoIdentificacion"] = new SelectList(_utilidadRepository.GetTipoIdentificaciones(), "Codigo", "Nombre");
+
+                if (Identification.ValidateAllTypeIdentification(model.Identificacion) != model.TipoIdentificacion)
+                {
+                    ModelState.AddModelError("Identificacion", "La identificación ingresada no corresponde al tipo de identificación seleccionado");
+                    return View(model);
+                }
 
                 if (ModelState.IsValid)
                 {

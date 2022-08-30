@@ -112,7 +112,8 @@ namespace FRIO.MAR.UI.WEB.SITE
             WebSiteParameters.WebFooter = string.Format("{0} v{1}", settings.SITIOWEB.Footer, AppConstants.Version).Replace("{AnioActual}", APPLICATION.CORE.Utilities.Utilidades.GetHoraActual().Year.ToString());
             WebSiteParameters.WebReCaptchaClaveSitioWeb = GSCrypto.DescifrarClave(settings.SITIOWEB.Recaptcha.ClaveSitioWeb, DomainConstants.ENCRIPTA_KEY);
             WebSiteParameters.WebReCaptchaClaveComGoogle = GSCrypto.DescifrarClave(settings.SITIOWEB.Recaptcha.ClaveComGoogle, DomainConstants.ENCRIPTA_KEY);
-            
+            WebSiteParameters.Version = Guid.NewGuid().ToString();
+
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
 
         }

@@ -36,7 +36,7 @@ namespace FRIO.MAR.APPLICATION.CORE.Models
         [EmailAddress(ErrorMessage = DomainConstants.MENSAJE_CAMPO_EMAIL_ADDRESS)]
         public string CorreoElectronico { get; set; }
 
-        [MaxLength(50, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
+        [MaxLength(10, ErrorMessage = DomainConstants.MENSAJE_CAMPO_MAX_LENGTH)]
         public string Telefono { get; set; }
 
         public string Ip { get; set; }

@@ -9,6 +9,7 @@
         public static string WebLimiteConsulta { get; set; }
         public static string WebReCaptchaClaveSitioWeb { get; set; }
         public static string WebReCaptchaClaveComGoogle { get; set; }
+        public static string Version{ get; set; }
         //public static List<CompaniaQueryDto> CompaniasActivas { get; set; }
     }
 }
